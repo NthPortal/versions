@@ -9,6 +9,7 @@ case class ExtendedVersion[E](version: Version, extension: E, protected val exte
 }
 
 object ExtendedVersion {
+  @throws[VersionFormatException]
   def parseVersion[E](v: String)(implicit ed: ExtensionDef[E], ep: ExtensionParser[E]): ExtendedVersion[E] = {
     v.split("-", 2) match {
       case Array(version, extension) =>

@@ -21,6 +21,7 @@ object Version {
 
   def :>(major: Int): Dot[Version] = apply(major)
 
+  @throws[VersionFormatException]
   def parseVersion(v: String): Version = {
     v split '.' match {
       case Array(major, minor) =>
