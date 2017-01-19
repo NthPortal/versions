@@ -1,4 +1,5 @@
-package com.nthportal.versions.v2
+package com.nthportal.versions
+package v2
 
 import com.nthportal.versions.util.Dot
 
@@ -15,4 +16,16 @@ object Version {
   def apply(major: Int): Dot[Version] = (minor: Int) => apply(major, minor)
 
   def :>(major: Int): Dot[Version] = apply(major)
+
+  def parseVersion(v: String): Version = {
+    v split '.' match {
+      case Array(major, minor) =>
+        try {
+          apply(Integer.parseInt(major), Integer.parseInt(minor))
+        } catch {
+          case e@(_: IllegalArgumentException | _: NumberFormatException) => throw new VersionFormatException(v, e)
+        }
+      case _ => throw new VersionFormatException(v)
+    }
+  }
 }
