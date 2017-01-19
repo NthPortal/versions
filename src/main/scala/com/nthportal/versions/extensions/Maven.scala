@@ -6,7 +6,7 @@ sealed abstract class Maven(private val ord: Int) extends Ordered[Maven] {
 }
 
 object Maven extends ExtensionParser[Maven] {
-  implicit val extensionDef: ExtensionDef[Maven] = ExtensionDef(Some(Release), _ compare _)
+  implicit val extensionDef: ExtensionDef[Maven] = ExtensionDef.fromOrdered[Maven](Release)
 
   implicit def parser: ExtensionParser[Maven] = this
 
