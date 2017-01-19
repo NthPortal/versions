@@ -10,6 +10,8 @@ case class Version(major: Int, minor: Int) extends Ordered[Version] with Dash[Ex
   }
 
   override def compare(that: Version): Int = Version.ordering.compare(this, that)
+
+  override def toString = s"$major.$minor"
 }
 
 object Version {

@@ -8,15 +8,17 @@ sealed abstract class Maven(private val ord: Int) extends Ordered[Maven] {
 object Maven extends ExtensionParser[Maven] {
   implicit val extensionDef: ExtensionDef[Maven] = ExtensionDef(Some(Release), _ compare _)
 
-  implicit val parseDef: ExtensionParseDef[Maven] = ExtensionParseDef(extensionDef, this)
+  implicit def parser: ExtensionParser[Maven] = this
 
-  case object Snapshot extends Maven(0)
+  case object Snapshot extends Maven(0) {
+    override val toString = "SNAPSHOT"
+  }
 
   case object Release extends Maven(1)
 
   @throws[IllegalArgumentException]
   override def parse(extension: String): Maven = extension match {
-    case "SNAPSHOT" => Snapshot
+    case Snapshot.toString => Snapshot
     case _ => throw new IllegalArgumentException(s"Invalid extension: $extension")
   }
 }

@@ -10,6 +10,8 @@ case class Version(major: Int, minor: Int, patch: Int) extends Ordered[Version] 
   }
 
   override def compare(that: Version): Int = Version.ordering.compare(this, that)
+
+  override def toString = s"$major.$minor.$patch"
 }
 
 object Version {
