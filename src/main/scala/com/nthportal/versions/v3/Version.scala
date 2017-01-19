@@ -16,7 +16,7 @@ case class Version(major: Int, minor: Int, patch: Int)
   override def toString = s"$major.$minor.$patch"
 }
 
-object Version extends Of[Dot[Dot[Version]]] {
+object Version extends VersionCompanion[Version] with Of[Dot[Dot[Version]]] {
   private val ordering: Ordering[Version] = Ordering by (v => (v.major, v.minor, v.patch))
 
   def apply(major: Int): Dot[Dot[Version]] = (minor: Int) => (patch: Int) => apply(major, minor, patch)
