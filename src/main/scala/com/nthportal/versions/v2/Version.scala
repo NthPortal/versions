@@ -1,7 +1,7 @@
 package com.nthportal.versions
 package v2
 
-case class Version(major: Int, minor: Int) extends Ordered[Version] with Dash[ExtendedVersion] {
+case class Version(major: Int, minor: Int) extends VersionBase[Version] with Dash[Version, ExtendedVersion] {
   // Validate values
   require(major >= 0 && minor >= 0, "major and minor values must be >= 0")
 
