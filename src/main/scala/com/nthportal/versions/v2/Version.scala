@@ -1,9 +1,13 @@
 package com.nthportal.versions
 package v2
 
-case class Version(major: Int, minor: Int) extends Ordered[Version] {
+case class Version(major: Int, minor: Int) extends Ordered[Version] with Dash[ExtendedVersion] {
   // Validate values
   require(major >= 0 && minor >= 0, "major and minor values must be >= 0")
+
+  override def dash[E](extension: E)(implicit ed: ExtensionDef[E]): ExtendedVersion[E] = {
+    ExtendedVersion(this, extension, ed)
+  }
 
   override def compare(that: Version): Int = Version.ordering.compare(this, that)
 }
