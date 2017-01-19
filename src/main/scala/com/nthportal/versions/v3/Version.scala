@@ -14,12 +14,10 @@ case class Version(major: Int, minor: Int, patch: Int) extends Ordered[Version] 
   override def toString = s"$major.$minor.$patch"
 }
 
-object Version {
+object Version extends Of[Dot[Dot[Version]]] {
   private val ordering: Ordering[Version] = Ordering by (v => (v.major, v.minor, v.patch))
 
   def apply(major: Int): Dot[Dot[Version]] = (minor: Int) => (patch: Int) => apply(major, minor, patch)
-
-  def :>(major: Int): Dot[Dot[Version]] = apply(major)
 
   @throws[VersionFormatException]
   def parseVersion(v: String): Version = {
