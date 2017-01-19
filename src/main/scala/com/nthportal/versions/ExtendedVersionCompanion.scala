@@ -1,5 +1,7 @@
 package com.nthportal.versions
 
+import scala.language.higherKinds
+
 private[versions] abstract class ExtendedVersionCompanion[V <: VersionBase[V], EV[E] <: ExtendedVersionBase[V, E]]
 (c: VersionCompanion[V]) {
   def apply[E](v: V, e: E, ed: ExtensionDef[E]): EV[E]
