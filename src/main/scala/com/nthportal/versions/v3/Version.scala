@@ -1,9 +1,7 @@
 package com.nthportal.versions
 package v3
 
-case class Version(major: Int, minor: Int, patch: Int)
-  extends VersionBase[Version]
-          with Dash[Version, ExtendedVersion] {
+case class Version(major: Int, minor: Int, patch: Int) extends VersionBase[Version, ExtendedVersion] {
   // Validate values
   require(major >= 0 && minor >= 0 && patch >= 0, "major, minor, and patch values must all be >= 0")
 
@@ -16,7 +14,7 @@ case class Version(major: Int, minor: Int, patch: Int)
   override def toString = s"$major.$minor.$patch"
 }
 
-object Version extends VersionCompanion[Version] with Of[Dot[Dot[Version]]] {
+object Version extends VersionCompanion[Version, ExtendedVersion] with Of[Dot[Dot[Version]]] {
   private val ordering: Ordering[Version] = Ordering by (v => (v.major, v.minor, v.patch))
 
   override def of(major: Int): Dot[Dot[Version]] = (minor: Int) => (patch: Int) => apply(major, minor, patch)

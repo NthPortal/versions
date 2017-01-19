@@ -2,8 +2,9 @@ package com.nthportal.versions
 
 import scala.language.higherKinds
 
-private[versions] abstract class ExtendedVersionCompanion[V <: VersionBase[V], EV[E] <: ExtendedVersionBase[V, E]]
-(c: VersionCompanion[V]) {
+private[versions]
+abstract class ExtendedVersionCompanion[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV]]
+(c: VersionCompanion[V, EV]) {
   def apply[E](v: V, e: E, ed: ExtensionDef[E]): EV[E]
 
   @throws[VersionFormatException]

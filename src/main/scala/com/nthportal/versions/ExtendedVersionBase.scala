@@ -1,3 +1,5 @@
 package com.nthportal.versions
 
-private[versions] trait ExtendedVersionBase[V <: VersionBase[V], E]
+import scala.language.higherKinds
+
+private[versions] trait ExtendedVersionBase[V <: VersionBase[V, EV], E, EV[X] <: ExtendedVersionBase[V, X, EV]]
