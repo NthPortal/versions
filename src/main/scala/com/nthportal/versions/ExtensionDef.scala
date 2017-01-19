@@ -1,6 +1,6 @@
 package com.nthportal.versions
 
-case class ExtensionDef[E](default: E, ordering: Ordering[E]) {
+case class ExtensionDef[E](default: Option[E], ordering: Ordering[E]) {
   private implicit def eOrd = ordering
 
   lazy val ordering2: Ordering[v2.ExtendedVersion[E]] = Ordering by (ev => (ev.version, ev.extension))
