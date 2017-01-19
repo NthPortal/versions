@@ -1,8 +1,6 @@
 package com.nthportal.versions
 package v2
 
-import com.nthportal.versions.util.Dot
-
 case class Version(major: Int, minor: Int) extends Ordered[Version] {
   // Validate values
   require(major >= 0 && minor >= 0, "major and minor values must be >= 0")
@@ -11,7 +9,7 @@ case class Version(major: Int, minor: Int) extends Ordered[Version] {
 }
 
 object Version {
-  private val ordering: Ordering[Version] = Ordering by (v => (v.major, v.minor,))
+  private val ordering: Ordering[Version] = Ordering by (v => (v.major, v.minor))
 
   def apply(major: Int): Dot[Version] = (minor: Int) => apply(major, minor)
 

@@ -1,10 +1,9 @@
-package com.nthportal.versions.util
+package com.nthportal.versions
 
 trait Dot[A] {
   def apply(value: Int): A
 
   final def dot(value: Int): A = apply(value)
 
-  @inline
-  final def :*(value: Int): A = dot(value)
+  final def :*(value: Int): A = apply(value)
 }
