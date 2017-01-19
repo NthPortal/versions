@@ -19,7 +19,7 @@ case class Version(major: Int, minor: Int, patch: Int)
 object Version extends VersionCompanion[Version] with Of[Dot[Dot[Version]]] {
   private val ordering: Ordering[Version] = Ordering by (v => (v.major, v.minor, v.patch))
 
-  def apply(major: Int): Dot[Dot[Version]] = (minor: Int) => (patch: Int) => apply(major, minor, patch)
+  override def of(major: Int): Dot[Dot[Version]] = (minor: Int) => (patch: Int) => apply(major, minor, patch)
 
   @throws[VersionFormatException]
   def parseVersion(v: String): Version = {
