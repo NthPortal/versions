@@ -16,7 +16,10 @@ abstract class ExtendedVersionCompanion[V <: VersionBase[V, EV], EV[E] <: Extend
   /**
     * Parses a string into an extended version.
     *
-    * @param v the string to parse
+    * @param v  the string to parse
+    * @param ed the [[ExtensionDef extension definition]]
+    * @param ep a [[ExtensionParser parser]] for extensions
+    * @tparam E the type of the extension
     * @throws VersionFormatException if the given string is not a valid extended version
     * @return the extended version represented by the string
     */
