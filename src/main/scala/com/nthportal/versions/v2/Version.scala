@@ -5,17 +5,17 @@ case class Version(major: Int, minor: Int) extends VersionBase[Version, Extended
   // Validate values
   require(major >= 0 && minor >= 0, "major and minor values must be >= 0")
 
+  override def companion = Version
+
   override def dash[E](extension: E)(implicit ed: ExtensionDef[E]): ExtendedVersion[E] = {
     ExtendedVersion(this, extension, ed)
   }
-
-  override def compare(that: Version): Int = Version.ordering.compare(this, that)
 
   override def toString = s"$major.$minor"
 }
 
 object Version extends VersionCompanion[Version, ExtendedVersion] with Of[Dot[Version]] {
-  private val ordering: Ordering[Version] = Ordering by (v => (v.major, v.minor))
+  override private[versions] val ordering: Ordering[Version] = Ordering by (v => (v.major, v.minor))
 
   override def of(major: Int): Dot[Version] = minor => apply(major, minor)
 
