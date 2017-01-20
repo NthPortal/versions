@@ -5,7 +5,7 @@ import scala.language.higherKinds
 /**
   * Base trait for a version
   *
-  * @tparam V the type of the version
+  * @tparam V  the type of the version
   * @tparam EV the type of the extended version associated with the version
   */
 private[versions] trait VersionBase[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV]]

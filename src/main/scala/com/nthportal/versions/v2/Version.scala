@@ -17,7 +17,7 @@ case class Version(major: Int, minor: Int) extends VersionBase[Version, Extended
     * Creates an [[ExtendedVersion]] from this version with the specified extension.
     *
     * @param extension the extension for the ExtendedVersion
-    * @param ed the [[ExtensionDef extension definition]]
+    * @param ed        the [[ExtensionDef extension definition]]
     * @tparam E the type of the extension
     * @return an ExtendedVersion with this version and the specified extension
     */

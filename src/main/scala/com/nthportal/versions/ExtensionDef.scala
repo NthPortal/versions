@@ -6,7 +6,7 @@ package com.nthportal.versions
   * If this type has a default extension value, it means that a version string
   * without an extension (such as `2.2.7`) is considered to have that extension.
   *
-  * @param default the default extension value, if one exists
+  * @param default  the default extension value, if one exists
   * @param ordering an ordering for extensions of this type
   * @tparam E the type of the extension
   */

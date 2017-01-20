@@ -5,7 +5,7 @@ package com.nthportal.versions
   * from a string which is not a valid version string.
   *
   * @param version the invalid version string
-  * @param cause the root cause of this exception
+  * @param cause   the root cause of this exception
   */
 final class VersionFormatException(version: String, cause: Throwable)
   extends IllegalArgumentException(s"Invalid version string: $version", cause) {
