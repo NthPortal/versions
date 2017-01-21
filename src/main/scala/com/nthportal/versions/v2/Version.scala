@@ -23,16 +23,5 @@ object Version extends VersionCompanion[Version, ExtendedVersion] with Of[Dot[Ve
 
   override def of(major: Int): Dot[Version] = minor => apply(major, minor)
 
-  @throws[VersionFormatException]
-  def parseVersion(v: String): Version = {
-    v split '.' match {
-      case Array(major, minor) =>
-        try {
-          apply(Integer.parseInt(major), Integer.parseInt(minor))
-        } catch {
-          case e@(_: IllegalArgumentException | _: NumberFormatException) => throw new VersionFormatException(v, e)
-        }
-      case _ => throw new VersionFormatException(v)
-    }
-  }
+  override protected def versionFromArray = {case Array(major, minor) => apply(major, minor)}
 }
