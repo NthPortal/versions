@@ -5,7 +5,7 @@ import scala.language.higherKinds
 /**
   * A companion object for a version.
   *
-  * @tparam V the type of the version
+  * @tparam V  the type of the version
   * @tparam EV the type of the extended version associated with the version
   */
 private[versions] trait VersionCompanion[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV]] {
@@ -18,6 +18,15 @@ private[versions] trait VersionCompanion[V <: VersionBase[V, EV], EV[E] <: Exten
     */
   @throws[VersionFormatException]
   def parseVersion(v: String): V
+
+  /**
+    * Returns the extended version companion object associated with this
+    * version type.
+    *
+    * @return the extended version companion object associated with this
+    *         version type
+    */
+  private[versions] def extendedVersionCompanion: ExtendedVersionCompanion[V, EV]
 
   /**
     * An ordering for the version for which this is a companion.

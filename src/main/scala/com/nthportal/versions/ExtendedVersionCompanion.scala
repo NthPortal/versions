@@ -14,6 +14,18 @@ private[versions]
 abstract class ExtendedVersionCompanion[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV]]
 (c: VersionCompanion[V, EV]) {
   /**
+    * Creates an extended version from a version, extension, and
+    * [[ExtensionDef extension definition]].
+    *
+    * @param version the version component of the extended version
+    * @param extension the extension component of the extended version
+    * @param ed the extension definition for the version's extension
+    * @tparam E the type of the extension
+    * @return an extended version with the specified parameters
+    */
+  def apply[E](version: V, extension: E, ed: ExtensionDef[E]): EV[E]
+
+  /**
     * Parses a string into an extended version.
     *
     * @param v  the string to parse
