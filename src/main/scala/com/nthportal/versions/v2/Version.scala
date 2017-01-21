@@ -13,13 +13,13 @@ case class Version(major: Int, minor: Int) extends VersionBase[Version, Extended
 
   override private[versions] def companion = Version
 
+  override private[versions] def extendedCompanion = ExtendedVersion
+
   override def toString = s"$major.$minor"
 }
 
 object Version extends VersionCompanion[Version, ExtendedVersion] with Of[Dot[Version]] {
   override private[versions] val ordering: Ordering[Version] = Ordering by (v => (v.major, v.minor))
-
-  override private[versions] def extendedVersionCompanion = ExtendedVersion
 
   override def of(major: Int): Dot[Version] = minor => apply(major, minor)
 

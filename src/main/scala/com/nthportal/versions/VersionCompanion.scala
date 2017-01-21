@@ -15,15 +15,6 @@ private[versions] trait VersionCompanion[V <: VersionBase[V, EV], EV[E] <: Exten
   private[versions] val ordering: Ordering[V]
 
   /**
-    * Returns the extended version companion object associated with this
-    * version type.
-    *
-    * @return the extended version companion object associated with this
-    *         version type
-    */
-  private[versions] def extendedVersionCompanion: ExtendedVersionCompanion[V, EV]
-
-  /**
     * Returns a partial function which may create a version from an array of values.
     *
     * @return a partial function which may create a version from an array of values
