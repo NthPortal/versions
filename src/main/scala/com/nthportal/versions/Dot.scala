@@ -28,4 +28,9 @@ trait Dot[A] {
     * @see [[apply]]
     */
   final def :*(value: Int): A = apply(value)
+
+  /**
+    * @see [[apply]]
+    */
+  final def ⋅(value: Int): A = apply(value)
 }
