@@ -23,4 +23,9 @@ trait Of[D <: Dot[_]] {
     * @see [[of]]
     */
   final def :>(value: Int): D = of(value)
+
+  /**
+    * @see [[of]]
+    */
+  final def ⋮(value: Int): D = of(value)
 }

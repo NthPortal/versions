@@ -16,7 +16,19 @@ private[versions] trait VersionBase[V <: VersionBase[V, EV], EV[E] <: ExtendedVe
     *
     * @return the companion object for this version
     */
-  def companion: VersionCompanion[V, EV]
+  private[versions] def companion: VersionCompanion[V, EV]
+
+  /**
+    * Returns the [[ExtendedVersionCompanion extended version companion object]]
+    * associated with this version.
+    *
+    * @return the extended version companion object associated with this version
+    */
+  private[versions] def extendedCompanion: ExtendedVersionCompanion[V, EV]
+
+  override def dash[E](extension: E)(implicit ed: ExtensionDef[E]) = {
+    extendedCompanion(this.asInstanceOf[V], extension, ed)
+  }
 
   override def compare(that: V) = companion.ordering.compare(this.asInstanceOf[V], that)
 }

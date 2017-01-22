@@ -10,7 +10,7 @@ package com.nthportal.versions
   * @param ordering an ordering for extensions of this type
   * @tparam E the type of the extension
   */
-case class ExtensionDef[E](default: Option[E], ordering: Ordering[E]) {
+case class ExtensionDef[E](default: Option[E], ordering: Ordering[E]) extends Ordering[E] {
   /**
     * Converts an extension of this type to a string.
     *
@@ -24,6 +24,8 @@ case class ExtensionDef[E](default: Option[E], ordering: Ordering[E]) {
 
   @inline
   private def nonDefaultExtensionToString(extension: E): String = s"-$extension"
+
+  override def compare(x: E, y: E): Int = ordering.compare(x, y)
 }
 
 object ExtensionDef {

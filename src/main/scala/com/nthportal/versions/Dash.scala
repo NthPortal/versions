@@ -22,5 +22,5 @@ trait Dash[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV]] {
   /**
     * @see [[dash]]
     */
-  final def :-[E](extension: E)(implicit ed: ExtensionDef[E]): EV[E] = dash(extension)
+  final def --[E](extension: E)(implicit ed: ExtensionDef[E]): EV[E] = dash(extension)
 }

@@ -11,19 +11,9 @@ case class Version(major: Int, minor: Int) extends VersionBase[Version, Extended
   // Validate values
   require(major >= 0 && minor >= 0, "major and minor values must be >= 0")
 
-  override def companion = Version
+  override private[versions] def companion = Version
 
-  /**
-    * Creates an [[ExtendedVersion]] from this version with the specified extension.
-    *
-    * @param extension the extension for the ExtendedVersion
-    * @param ed        the [[ExtensionDef extension definition]]
-    * @tparam E the type of the extension
-    * @return an ExtendedVersion with this version and the specified extension
-    */
-  override def dash[E](extension: E)(implicit ed: ExtensionDef[E]): ExtendedVersion[E] = {
-    ExtendedVersion(this, extension, ed)
-  }
+  override private[versions] def extendedCompanion = ExtendedVersion
 
   override def toString = s"$major.$minor"
 }
@@ -33,16 +23,5 @@ object Version extends VersionCompanion[Version, ExtendedVersion] with Of[Dot[Ve
 
   override def of(major: Int): Dot[Version] = minor => apply(major, minor)
 
-  @throws[VersionFormatException]
-  def parseVersion(v: String): Version = {
-    v split '.' match {
-      case Array(major, minor) =>
-        try {
-          apply(Integer.parseInt(major), Integer.parseInt(minor))
-        } catch {
-          case e@(_: IllegalArgumentException | _: NumberFormatException) => throw new VersionFormatException(v, e)
-        }
-      case _ => throw new VersionFormatException(v)
-    }
-  }
+  override protected def versionFromArray = {case Array(major, minor) => apply(major, minor)}
 }
