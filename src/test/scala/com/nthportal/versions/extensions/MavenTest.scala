@@ -16,6 +16,7 @@ class MavenTest extends SimpleSpec {
 
     Maven.parse("SNAPSHOT") should be theSameInstanceAs Snapshot
     an [IllegalArgumentException] should be thrownBy {Maven.parse("INVALID")}
+    an [IllegalArgumentException] should be thrownBy {Maven.parse("")}
   }
 
   it should "produce the correct string representation" in {
