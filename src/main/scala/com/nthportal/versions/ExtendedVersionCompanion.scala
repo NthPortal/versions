@@ -40,12 +40,12 @@ abstract class ExtendedVersionCompanion[V <: VersionBase[V, EV], EV[E] <: Extend
     v.split("-", 2) match {
       case Array(version, extension) =>
         try {
-          c.parseVersion(version) :- ep.parse(extension)
+          c.parseVersion(version) -- ep.parse(extension)
         } catch {
           case e@(_: IllegalArgumentException | _: VersionFormatException) => throw new VersionFormatException(v, e)
         }
       case Array(version) => ed.default match {
-        case Some(extension) => c.parseVersion(version) :- extension
+        case Some(extension) => c.parseVersion(version) -- extension
         case None => throw new VersionFormatException(v, new UnsupportedOperationException("No default extension"))
       }
     }
