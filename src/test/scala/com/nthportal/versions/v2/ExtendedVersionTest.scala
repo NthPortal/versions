@@ -22,6 +22,10 @@ class ExtendedVersionTest extends SimpleSpec {
 
     v2 should be < Version(2)(1) -- Snapshot
     v2 should be > Version(2)(0) -- Snapshot
+
+    an [IllegalArgumentException] should be thrownBy {
+      v1.compare(Version(1)(3).dash(Snapshot)(ExtensionDef.fromOrdered[Maven]))
+    }
   }
 
   it should "produce the correct string representation" in {

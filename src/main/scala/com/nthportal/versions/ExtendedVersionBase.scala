@@ -26,7 +26,20 @@ private[versions] trait ExtendedVersionBase[V <: VersionBase[V, EV], E, EV[X] <:
 
   private implicit def eOrd = extensionDef.ordering
 
+  /**
+    * Compares two extended versions. Adheres to the general contract
+    * of `compare` as defined in [[scala.math.Ordered.compare]].
+    *
+    * `that` MUST have the same extension definition as `this`.
+    *
+    * @param that the extended version to compare to this
+    * @throws IllegalArgumentException if `that` does not have the same
+    *                                  extension definition as this
+    * @return the result of comparing `this` with `that`
+    */
+  @throws[IllegalArgumentException]
   override def compare(that: EV[E]): Int = {
+    require(extensionDef == that.extensionDef, "cannot compare extended versions with different extension definitions")
     implicitly[Ordering[(V, E)]].compare((this.version, this.extension), (that.version, that.extension))
   }
 

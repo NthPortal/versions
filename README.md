@@ -8,7 +8,7 @@ A Scala library for representing versions as objects
 
 ### SBT
 ```
-"com.nthportal" %% "versions" % "1.0.0"
+"com.nthportal" %% "versions" % "1.0.1"
 ```
 
 ### Maven
@@ -16,6 +16,6 @@ A Scala library for representing versions as objects
 <dependency>
   <groupId>com.nthportal</groupId>
   <artifactId>versions_2.12</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
