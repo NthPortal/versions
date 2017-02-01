@@ -7,7 +7,7 @@ package extensions
   *
   * @param ord the order of the extension
   */
-sealed abstract class Maven(private val ord: Int) extends Ordered[Maven] {
+sealed abstract class Maven private(private val ord: Int) extends Ordered[Maven] {
   override def compare(that: Maven) = this.ord compare that.ord
 }
 
@@ -16,8 +16,10 @@ sealed abstract class Maven(private val ord: Int) extends Ordered[Maven] {
   *
   * Statically importing the contents of this object will put the necessary
   * implicits in scope for using extended versions of this type.
+  *
+  * @define ext Maven
   */
-object Maven extends ExtensionParser[Maven] {
+object Maven extends RichExtensionParser[Maven] {
   private val snapshotToStr = "SNAPSHOT"
 
   /**
@@ -37,17 +39,9 @@ object Maven extends ExtensionParser[Maven] {
     */
   implicit val extensionDef: ExtensionDef[Maven] = ExtensionDef.fromOrdered[Maven](Release)
 
-  /**
-    * The parser for Maven extensions.
-    *
-    * @return the parser for Maven extensions
-    */
-  implicit def parser: ExtensionParser[Maven] = this
-
-
   @throws[IllegalArgumentException]
   override def parse(extension: String): Maven = extension match {
     case this.snapshotToStr => Snapshot
-    case _ => throw new IllegalArgumentException(s"Invalid extension: $extension")
+    case _ => invalidExtension(extension)
   }
 }

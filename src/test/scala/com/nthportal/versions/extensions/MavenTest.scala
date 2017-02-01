@@ -11,16 +11,14 @@ class MavenTest extends SimpleSpec {
     Release should be > Snapshot
   }
 
-  it should "have the correct string values for extensions" in {
-    Snapshot.toString should be ("SNAPSHOT")
-
-    Maven.parse("SNAPSHOT") should be theSameInstanceAs Snapshot
-    an [IllegalArgumentException] should be thrownBy {Maven.parse("INVALID")}
-    an [IllegalArgumentException] should be thrownBy {Maven.parse("")}
-  }
-
-  it should "produce the correct string representation" in {
+  it should "produce the correct string representations for extensions" in {
     extensionDef.extToString(Snapshot) should be ("-SNAPSHOT")
     extensionDef.extToString(Release) should be ("")
+  }
+
+  it should "parse extension values correctly" in {
+    parse("SNAPSHOT") should be theSameInstanceAs Snapshot
+    an [IllegalArgumentException] should be thrownBy {parse("INVALID")}
+    an [IllegalArgumentException] should be thrownBy {parse("")}
   }
 }
