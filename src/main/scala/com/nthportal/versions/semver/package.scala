@@ -13,8 +13,8 @@ package object semver {
     * from the version string if present.
     *
     * @param version the version string to parse
-    * @param ed the [[ExtensionDef extension definition]] with which to parse
-    * @param ep a [[ExtensionParser parser]] for extensions
+    * @param ed      the [[ExtensionDef extension definition]] with which to parse
+    * @param ep      a [[ExtensionParser parser]] for extensions
     * @tparam E the type of the extension
     * @throws VersionFormatException if the given string is not a valid SemVer version
     * @return the SemVer version represented by the specified version
@@ -23,6 +23,8 @@ package object semver {
   def parseSemVerVersion[E](version: String)
                            (implicit ep: ExtensionParser[E],
                             ed: ExtensionDef[E]): v3.ExtendedVersion[E] = {
+    import BuildMetadata.StringMetadata._
+
     parseSemVerWithBuildMetadata(version).extendedVersion
   }
 
@@ -31,21 +33,22 @@ package object semver {
     * as a string if present.
     *
     * @param version the version string to parse
-    * @param ed the [[ExtensionDef extension definition]] with which to parse
-    * @param ep a [[ExtensionParser parser]] for extensions
+    * @param ed      the [[ExtensionDef extension definition]] with which to parse
+    * @param ep      a [[ExtensionParser parser]] for extensions
     * @tparam E the type of the extension
     * @throws VersionFormatException if the given string is not a valid SemVer version
     * @return the SemVer version represented by the specified version
     */
   @throws[VersionFormatException]
-  def parseSemVerWithBuildMetadata[E](version: String)
-                                     (implicit ep: ExtensionParser[E],
-                                      ed: ExtensionDef[E]): SemVerFull[E] = {
+  def parseSemVerWithBuildMetadata[E, M <: BuildMetadata](version: String)
+                                                         (implicit ep: ExtensionParser[E],
+                                                          ed: ExtensionDef[E],
+                                                          mp: BuildMetadata.Parser[M]): SemVerFull[E, M] = {
     try {
       version split '+' match {
-        case Array(ver, buildInfo) =>
-          require(buildInfo.nonEmpty, "build info cannot be empty")
-          SemVerFull(v3.ExtendedVersion.parseVersion(ver), Some(buildInfo))
+        case Array(ver, meta) =>
+          require(meta.nonEmpty, "build metadata cannot be empty")
+          SemVerFull(v3.ExtendedVersion.parseVersion(ver), Some(mp.parse(meta)))
         case Array(ver) => SemVerFull(v3.ExtendedVersion.parseVersion(ver), None)
         case _ => throw new VersionFormatException(s"SemVer versions may only have a single build metadata section")
       }

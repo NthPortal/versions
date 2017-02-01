@@ -6,12 +6,13 @@ package semver
   * containing build metadata.
   *
   * @param extendedVersion the [[v3.ExtendedVersion version with an extension]]
-  * @param buildMetadata the build metadata, if any exists
+  * @param buildMetadata   the build metadata, if any exists
   * @tparam E the type of the version extension
+  * @tparam M the type of the build metadata
   */
-case class SemVerFull[E](extendedVersion: v3.ExtendedVersion[E], buildMetadata: Option[String])
-  extends Ordered[SemVerFull[E]] {
-  override def compare(that: SemVerFull[E]): Int = this.extendedVersion compare that.extendedVersion
+case class SemVerFull[E, M <: BuildMetadata](extendedVersion: v3.ExtendedVersion[E], buildMetadata: Option[M])
+  extends Ordered[SemVerFull[E, _]] {
+  override def compare(that: SemVerFull[E, _]): Int = this.extendedVersion compare that.extendedVersion
 
   override def toString = extendedVersion + {
     buildMetadata match {
