@@ -29,8 +29,8 @@ package object semver {
   }
 
   /**
-    * Parses a version string into a SemVer version. Keeps build metadata
-    * as a string if present.
+    * Parses a version string into a SemVer version. Keeps and parses build metadata
+    * if present.
     *
     * @param version the version string to parse
     * @param ed      the [[ExtensionDef extension definition]] with which to parse
