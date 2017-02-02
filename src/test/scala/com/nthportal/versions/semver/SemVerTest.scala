@@ -2,7 +2,7 @@ package com.nthportal.versions
 package semver
 
 import com.nthportal.versions.extensions.Maven._
-import com.nthportal.versions.semver.StringMetadata._
+import com.nthportal.versions.semver.BuildMetadata._
 
 class SemVerTest extends SimpleSpec {
   behavior of "SemVer package object"

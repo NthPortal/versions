@@ -23,7 +23,7 @@ package object semver {
   def parseSemVerVersion[E](version: String)
                            (implicit ep: ExtensionParser[E],
                             ed: ExtensionDef[E]): v3.ExtendedVersion[E] = {
-    import StringMetadata._
+    import BuildMetadata._
 
     parseSemVerWithBuildMetadata(version).extendedVersion
   }
@@ -40,10 +40,10 @@ package object semver {
     * @return the SemVer version represented by the specified version
     */
   @throws[VersionFormatException]
-  def parseSemVerWithBuildMetadata[E, M <: BuildMetadata](version: String)
-                                                         (implicit ep: ExtensionParser[E],
-                                                          ed: ExtensionDef[E],
-                                                          mp: BuildMetadata.Parser[M]): SemVerFull[E, M] = {
+  def parseSemVerWithBuildMetadata[E, M](version: String)
+                                        (implicit ep: ExtensionParser[E],
+                                         ed: ExtensionDef[E],
+                                         mp: BuildMetadata.Parser[M]): SemVerFull[E, M] = {
     try {
       version split '+' match {
         case Array(ver, meta) => SemVerFull(v3.ExtendedVersion.parseVersion(ver), Some(mp.parse(meta)))
@@ -118,10 +118,10 @@ package object semver {
       * Creates a [[SemVerFull SemVer version]] with empty build metadata
       * from this extended version.
       *
-      * @tparam M the type of the [[BuildMetadata]]
+      * @tparam M the type of the build metadata
       * @return a SemVer version with empty build metadata
       */
-    def withNoMetadata[M <: BuildMetadata]: SemVerFull[E, M] = SemVerFull(ver, None)
+    def withNoMetadata[M]: SemVerFull[E, M] = SemVerFull(ver, None)
 
     /**
       * Creates a [[SemVerFull SemVer version]] with the specified build
@@ -131,11 +131,12 @@ package object semver {
       * @tparam M the type of the build metadata
       * @return a SemVer version with the specified build metadata
       */
-    def withBuildMetadata[M <: BuildMetadata](metadata: M): SemVerFull[E, M] = SemVerFull(ver, Some(metadata))
+    def withBuildMetadata[M](metadata: M): SemVerFull[E, M] = SemVerFull(ver, Some(metadata))
 
     /**
       * @see [[withBuildMetadata]]
       */
-    def +[M <: BuildMetadata](buildMetadata: M): SemVerFull[E, M] = withBuildMetadata(buildMetadata)
+    def +[M](buildMetadata: M): SemVerFull[E, M] = withBuildMetadata(buildMetadata)
   }
+
 }
