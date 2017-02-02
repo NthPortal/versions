@@ -40,7 +40,7 @@ object BuildMetadata {
       *
       * @return a parser for StringMetadata
       */
-    implicit def parser: Parser[StringMetadata] = _parser(apply)
+    implicit def buildMetadataParser: Parser[StringMetadata] = _parser(apply)
   }
 
 }

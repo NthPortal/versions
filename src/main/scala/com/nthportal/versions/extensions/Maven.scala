@@ -39,6 +39,9 @@ object Maven extends RichExtensionParser[Maven] {
     */
   implicit val extensionDef: ExtensionDef[Maven] = ExtensionDef.fromOrdered[Maven](Release)
 
+  @deprecated("use `extensionParser` instead", since = "1.1.0")
+  def parser: ExtensionParser[Maven] = this
+
   @throws[IllegalArgumentException]
   override def parse(extension: String): Maven = extension match {
     case this.snapshotToStr => Snapshot

@@ -13,7 +13,7 @@ private[extensions] trait RichExtensionParser[E] extends ExtensionParser[E] {
     *
     * @return a parser for $ext extensions
     */
-  implicit def parser: ExtensionParser[E] = this
+  implicit def extensionParser: ExtensionParser[E] = this
 
   /**
     * Throws an [[IllegalArgumentException]] for an invalid extension.
