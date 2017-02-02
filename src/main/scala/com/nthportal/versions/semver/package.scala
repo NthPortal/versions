@@ -23,7 +23,7 @@ package object semver {
   def parseSemVerVersion[E](version: String)
                            (implicit ep: ExtensionParser[E],
                             ed: ExtensionDef[E]): v3.ExtendedVersion[E] = {
-    import BuildMetadata.StringMetadata._
+    import StringMetadata._
 
     parseSemVerWithBuildMetadata(version).extendedVersion
   }
