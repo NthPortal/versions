@@ -4,7 +4,7 @@ package extensions
 import com.nthportal.versions.extensions.AlphaBeta._
 
 class AlphaBetaTest extends SimpleSpec {
-  behavior of "AlphaBeta extensions"
+  behavior of "AlphaBeta extension"
 
   it should "compare correctly" in {
     release should be > rc(2)
