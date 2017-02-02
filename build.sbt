@@ -2,14 +2,19 @@ organization := "com.nthportal"
 name := "versions"
 description := "A Scala library for representing versions as objects."
 
-val rawVersion = "1.0.1"
+val rawVersion = "1.1.0"
 isSnapshot := true
 version := rawVersion + {if (isSnapshot.value) "-SNAPSHOT" else ""}
 
 scalaVersion := "2.12.1"
+crossScalaVersions := Seq(
+  "2.11.8",
+  "2.12.0",
+  "2.12.1"
+)
 
 libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "3.0.1" % Test
+  "org.scalatest" %% "scalatest" % "3.0.+" % Test
 )
 
 publishTo := {
