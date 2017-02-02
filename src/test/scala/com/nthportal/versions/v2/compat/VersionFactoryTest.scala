@@ -10,7 +10,7 @@ class VersionFactoryTest extends SimpleSpec {
   behavior of "VersionFactory (2)"
 
   it should "parse versions correctly" in {
-    val f = VersionFactory(extensionDef, parser)
+    val f = VersionFactory(extensionDef, extensionParser)
 
     f parseVersion "1.3" should equal(Version ⋮ 1⋅3 -- Release)
     f parseVersion "0.0-SNAPSHOT" should equal(Version ⋮ 0⋅0 -- Snapshot)
@@ -23,7 +23,7 @@ class VersionFactoryTest extends SimpleSpec {
 
     // Missing default extension
     a [VersionFormatException] should be thrownBy {
-      VersionFactory(ExtensionDef.fromOrdered[Maven], parser) parseVersion "1.0"
+      VersionFactory(ExtensionDef.fromOrdered[Maven], extensionParser) parseVersion "1.0"
     }
   }
 
