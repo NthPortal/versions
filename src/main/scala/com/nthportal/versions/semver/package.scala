@@ -137,21 +137,5 @@ package object semver {
       * @see [[withBuildMetadata]]
       */
     def +[M <: BuildMetadata](buildMetadata: M): SemVerFull[E, M] = withBuildMetadata(buildMetadata)
-
-    /**
-      * Creates a [[SemVerFull SemVer version]] with the specified build
-      * metadata string from this extended version.
-      *
-      * @param buildMetadata the build metadata string
-      * @param p             a [[BuildMetadata.Parser]] to parse the string into metadata
-      * @tparam M the type of the build metadata
-      * @throws IllegalArgumentException if the metadata string is invalid
-      * @return a SemVer version with the build metadata represented by the
-      *         specified string
-      */
-    @throws[IllegalArgumentException]
-    def +[M <: BuildMetadata](buildMetadata: String)(implicit p: BuildMetadata.Parser[M]): SemVerFull[E, M] = {
-      withBuildMetadata(p.parse(buildMetadata))
-    }
   }
 }

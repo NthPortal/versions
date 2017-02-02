@@ -37,7 +37,7 @@ class SemVerFullTest extends SimpleSpec {
   }
 
   it should "produce the correct string representation" in {
-    (v3.Version(1)(0)(0) -- Snapshot + "build.12654").toString should be ("1.0.0-SNAPSHOT+build.12654")
+    (v3.Version(1)(0)(0) -- Snapshot + StringMetadata("build.12654")).toString should be ("1.0.0-SNAPSHOT+build.12654")
     (v3.Version(1)(0)(0) -- Snapshot).withNoMetadata.toString should be ("1.0.0-SNAPSHOT")
   }
 }
