@@ -15,6 +15,9 @@ class SemVerTest extends SimpleSpec {
     v should equal (parseSemVerVersion("1.0.0-SNAPSHOT"))
 
     v should equal (parseSemVerWithBuildMetadata("1.0.0-SNAPSHOT+build.12654").extendedVersion)
+
+    a [VersionFormatException] should be thrownBy {parseSemVerVersion("1.0.0-SNAPSHOT+")}
+    a [VersionFormatException] should be thrownBy {parseSemVerVersion("1.0.0-SNAPSHOT+build+12654")}
   }
 
   it should "bump versions correctly" in {

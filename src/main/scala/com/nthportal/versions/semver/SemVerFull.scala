@@ -14,7 +14,7 @@ case class SemVerFull[E, M <: BuildMetadata](extendedVersion: v3.ExtendedVersion
   extends Ordered[SemVerFull[E, M]] {
   override final def compare(that: SemVerFull[E, M]) = this.extendedVersion compare that.extendedVersion
 
-  override def toString = extendedVersion + {
+  override def toString = extendedVersion.toString + {
     buildMetadata match {
       case Some(data) => s"+$data"
       case None => ""

@@ -46,11 +46,11 @@ package object semver {
                                                           mp: BuildMetadata.Parser[M]): SemVerFull[E, M] = {
     try {
       version split '+' match {
-        case Array(ver, meta) =>
-          require(meta.nonEmpty, "build metadata cannot be empty")
-          SemVerFull(v3.ExtendedVersion.parseVersion(ver), Some(mp.parse(meta)))
-        case Array(ver) => SemVerFull(v3.ExtendedVersion.parseVersion(ver), None)
-        case _ => throw new VersionFormatException(s"SemVer versions may only have a single build metadata section")
+        case Array(ver, meta) => SemVerFull(v3.ExtendedVersion.parseVersion(ver), Some(mp.parse(meta)))
+        case Array(ver) =>
+          require(!version.endsWith("+"), "build metadata cannot be empty")
+          SemVerFull(v3.ExtendedVersion.parseVersion(ver), None)
+        case _ => throw new VersionFormatException("SemVer versions may only have a single build metadata section")
       }
     } catch {
       case e: IllegalArgumentException => throw new VersionFormatException(s"Invalid SemVer version: $version", e)
@@ -113,6 +113,45 @@ package object semver {
       * @return a version with the patch version number incremented by `1`
       */
     def bumpPatch: v3.ExtendedVersion[E] = ver.copy(version = ver.version.bumpPatch)
-  }
 
+    /**
+      * Creates a [[SemVerFull SemVer version]] with empty build metadata
+      * from this extended version.
+      *
+      * @tparam M the type of the [[BuildMetadata]]
+      * @return a SemVer version with empty build metadata
+      */
+    def withNoMetadata[M <: BuildMetadata]: SemVerFull[E, M] = SemVerFull(ver, None)
+
+    /**
+      * Creates a [[SemVerFull SemVer version]] with the specified build
+      * metadata from this extended version.
+      *
+      * @param metadata the build metadata
+      * @tparam M the type of the build metadata
+      * @return a SemVer version with the specified build metadata
+      */
+    def withBuildMetadata[M <: BuildMetadata](metadata: M): SemVerFull[E, M] = SemVerFull(ver, Some(metadata))
+
+    /**
+      * @see [[withBuildMetadata]]
+      */
+    def +[M <: BuildMetadata](buildMetadata: M): SemVerFull[E, M] = withBuildMetadata(buildMetadata)
+
+    /**
+      * Creates a [[SemVerFull SemVer version]] with the specified build
+      * metadata string from this extended version.
+      *
+      * @param buildMetadata the build metadata string
+      * @param p             a [[BuildMetadata.Parser]] to parse the string into metadata
+      * @tparam M the type of the build metadata
+      * @throws IllegalArgumentException if the metadata string is invalid
+      * @return a SemVer version with the build metadata represented by the
+      *         specified string
+      */
+    @throws[IllegalArgumentException]
+    def +[M <: BuildMetadata](buildMetadata: String)(implicit p: BuildMetadata.Parser[M]): SemVerFull[E, M] = {
+      withBuildMetadata(p.parse(buildMetadata))
+    }
+  }
 }

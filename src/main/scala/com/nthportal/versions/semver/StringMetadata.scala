@@ -7,7 +7,9 @@ import com.nthportal.versions.semver._build_metadata._
   *
   * @param value the metadata as a string
   */
-case class StringMetadata(value: String) extends BuildMetadata
+case class StringMetadata(value: String) extends BuildMetadata {
+  override def toString = value
+}
 
 object StringMetadata {
   /**
