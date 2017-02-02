@@ -45,7 +45,7 @@ class ExtendedVersionTest extends SimpleSpec {
 
     // Missing default extension
     a [VersionFormatException] should be thrownBy {
-      ExtendedVersion.parseVersion("1.0")(ExtensionDef.fromOrdered[Maven], parser)
+      ExtendedVersion.parseVersion("1.0")(ExtensionDef.fromOrdered[Maven], extensionParser)
     }
   }
 }

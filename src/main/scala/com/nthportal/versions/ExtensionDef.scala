@@ -35,9 +35,7 @@ object ExtensionDef {
     * @tparam E the type of the extension
     * @return an extension definition for the given type
     */
-  def fromOrdered[E <: Ordered[E]]: ExtensionDef[E] = {
-    apply(None, new Ordering[E] {override def compare(x: E, y: E) = x compare y})
-  }
+  def fromOrdered[E <: Ordered[E]]: ExtensionDef[E] = apply(None, ordering(_ compare _))
 
   /**
     * Defines an extension type from an [[Ordered]] type, with the given default extension value.
@@ -46,9 +44,7 @@ object ExtensionDef {
     * @tparam E the type of the extension
     * @return an extension definition for the given type and default value
     */
-  def fromOrdered[E <: Ordered[E]](default: E): ExtensionDef[E] = {
-    apply(Some(default), new Ordering[E] {override def compare(x: E, y: E) = x compare y})
-  }
+  def fromOrdered[E <: Ordered[E]](default: E): ExtensionDef[E] = apply(Some(default), ordering(_ compare _))
 
   /**
     * Defines an extension type from a [[Comparable]] type, with no default extension value.
@@ -56,9 +52,7 @@ object ExtensionDef {
     * @tparam E the type of the extension
     * @return an extension definition for the given type
     */
-  def fromComparable[E <: Comparable[E]]: ExtensionDef[E] = {
-    apply(None, new Ordering[E] {override def compare(x: E, y: E) = x compareTo y})
-  }
+  def fromComparable[E <: Comparable[E]]: ExtensionDef[E] = apply(None, ordering(_ compareTo _))
 
   /**
     * Defines an extension type from a [[Comparable]] type, with the given default extension value.
@@ -67,7 +61,5 @@ object ExtensionDef {
     * @tparam E the type of the extension
     * @return an extension definition for the given type and default value
     */
-  def fromComparable[E <: Comparable[E]](default: E): ExtensionDef[E] = {
-    apply(Some(default), new Ordering[E] {override def compare(x: E, y: E) = x compareTo y})
-  }
+  def fromComparable[E <: Comparable[E]](default: E): ExtensionDef[E] = apply(Some(default), ordering(_ compareTo _))
 }
