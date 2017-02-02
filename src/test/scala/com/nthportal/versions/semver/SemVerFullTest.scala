@@ -27,13 +27,12 @@ class SemVerFullTest extends SimpleSpec {
 
   it should "compare correctly" in {
     val v0 = v3.Version(1)(0)(0) -- Snapshot + "build.12654"
-    val v1 = v3.Version(1)(0)(0) -- Snapshot + "12654"
-    val v2 = (v3.Version(1)(0)(0) -- Snapshot).withNoMetadata[String]
+    val v1 = v3.Version(1)(0)(0) -- Snapshot + 12654
+    val v2 = (v3.Version(1)(0)(0) -- Snapshot).withNoMetadata
 
-    v0 shouldNot be > v1
-    v0 shouldNot be < v1
-    v0 shouldNot be > v2
-    v0 shouldNot be < v2
+    (v0 <= v1 && v0 >= v1) should be (true)
+    (v0 <= v2 && v0 >= v2) should be (true)
+    (v2 <= v1 && v2 >= v1) should be (true)
   }
 
   it should "produce the correct string representation" in {
