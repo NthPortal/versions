@@ -3,7 +3,7 @@ name := "versions"
 description := "A Scala library for representing versions as objects."
 
 val rawVersion = "1.2.0"
-isSnapshot := true
+isSnapshot := false
 version := rawVersion + {if (isSnapshot.value) "-SNAPSHOT" else ""}
 
 scalaVersion := "2.12.1"
