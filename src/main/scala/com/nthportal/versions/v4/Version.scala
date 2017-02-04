@@ -1,0 +1,29 @@
+package com.nthportal.versions
+package v4
+
+/**
+  * A version of the form `_1`.`_2`.`_3`.`_4` (such as, for example, `1.2.5.4`).
+  *
+  * @param _1 the first value of the version
+  * @param _2 the second value of the version
+  * @param _3 the third value of the version
+  * @param _4 the fourth value of the version
+  */
+case class Version(_1: Int, _2: Int, _3: Int, _4: Int) extends VersionBase[Version, ExtendedVersion] {
+  // Validate values
+  require(_1 >= 0 && _2 >= 0 && _3 >= 0 && _4 >= 0, "_1, _2, _3, and _4 values must all be >= 0")
+
+  override private[versions] def companion = Version
+
+  override private[versions] def extendedCompanion = ExtendedVersion
+
+  override def toString = s"${_1}.${_2}.${_3}.${_4}"  // Brackets because 2.11 doesn't like it without them
+}
+
+object Version extends VersionCompanion[Version, ExtendedVersion] with Of[Dot[Dot[Dot[Version]]]] {
+  override private[versions] val ordering: Ordering[Version] = Ordering by (v => (v._1, v._2, v._3, v._4))
+
+  override def of(_1: Int): Dot[Dot[Dot[Version]]] = _dot(_2 => _dot(_3 => _dot(_4 => apply(_1, _2, _3, _4))))
+
+  override protected def versionFromArray = {case Array(_1, _2, _3, _4) => apply(_1, _2, _3, _4)}
+}
