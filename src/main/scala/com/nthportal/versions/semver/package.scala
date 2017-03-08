@@ -8,6 +8,8 @@ package com.nthportal.versions
   * any way; it is merely designed to comply with the SemVer specification.
   */
 package object semver {
+  private val sectionRegex = """[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*""".r
+
   /**
     * Parses a version string into a SemVer version. Strips build metadata
     * from the version string if present.
@@ -23,7 +25,7 @@ package object semver {
   def parseSemVerVersion[E](version: String)
                            (implicit ep: ExtensionParser[E],
                             ed: ExtensionDef[E]): v3.ExtendedVersion[E] = {
-    import BuildMetadata._
+    import BuildMetadata.stringMetadataParser
 
     parseSemVerWithBuildMetadata(version).extendedVersion
   }
@@ -46,15 +48,34 @@ package object semver {
                                          mp: BuildMetadata.Parser[M]): SemVerFull[E, M] = {
     try {
       version split '+' match {
-        case Array(ver, meta) => SemVerFull(v3.ExtendedVersion.parseVersion(ver), Some(mp.parse(meta)))
+        case Array(ver, meta) =>
+          validateSemVerSection(meta, "build metadata")
+          SemVerFull(parseExtendedVersion(ver), Some(mp.parse(meta)))
         case Array(ver) =>
           require(!version.endsWith("+"), "build metadata cannot be empty")
-          SemVerFull(v3.ExtendedVersion.parseVersion(ver), None)
-        case _ => throw new VersionFormatException("SemVer versions may only have a single build metadata section")
+          SemVerFull(parseExtendedVersion(ver), None)
+        case _ => throw new IllegalArgumentException("SemVer versions may only have a single build metadata section")
       }
     } catch {
-      case e: IllegalArgumentException => throw new VersionFormatException(s"Invalid SemVer version: $version", e)
+      case e: IllegalArgumentException => throw new VersionFormatException(version, e)
     }
+  }
+
+  @inline
+  @throws[IllegalArgumentException]
+  private def validateSemVerSection(contents: String, sectionName: String): Unit = {
+    require(sectionRegex.pattern.matcher(contents).matches(), s"Invalid $sectionName: " + contents)
+  }
+
+  @inline
+  @throws[IllegalArgumentException]
+  private def parseExtendedVersion[E](version: String)
+                                     (implicit ep: ExtensionParser[E],
+                                      ed: ExtensionDef[E]): v3.ExtendedVersion[E] = {
+    v3.ExtendedVersion.parseVersion(version)(ed, _extensionParser(extension => {
+      validateSemVerSection(extension, "extension")
+      ep.parse(extension)
+    }))
   }
 
   implicit final class RichVersion(private val ver: v3.Version) extends AnyVal {
