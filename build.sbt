@@ -2,7 +2,7 @@ organization := "com.nthportal"
 name := "versions"
 description := "A Scala library for representing versions as objects."
 
-val rawVersion = "1.2.1"
+val rawVersion = "1.3.0"
 isSnapshot := true
 version := rawVersion + {if (isSnapshot.value) "-SNAPSHOT" else ""}
 
