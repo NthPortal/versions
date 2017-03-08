@@ -25,14 +25,6 @@ class SemVerFullTest extends SimpleSpec {
     v2 should not equal v1
   }
 
-  it should "bump versions correctly" in {
-    val v1 = v3.Version(1)(1)(1) -- Snapshot + "build.12654"
-
-    v1.bumpMajor should be (v3.Version(2)(0)(0) -- Snapshot + "build.12654")
-    v1.bumpMinor should be (v3.Version(1)(2)(0) -- Snapshot + "build.12654")
-    v1.bumpPatch should be (v3.Version(1)(1)(2) -- Snapshot + "build.12654")
-  }
-
   it should "compare correctly" in {
     val v0 = v3.Version(1)(0)(0) -- Snapshot + "build.12654"
     val v1 = v3.Version(1)(0)(0) -- Snapshot + 12654

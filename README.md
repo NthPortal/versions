@@ -132,9 +132,4 @@ assert(Version(1)(2)(5).bumpMajor == Version(2)(0)(0))
 assert((Version(1)(2)(5) -- Snapshot).bumpPatch == Version(1)(2)(6) -- Snapshot)
 assert((Version(1)(2)(5) -- Snapshot).bumpMinor == Version(1)(3)(0) -- Snapshot)
 assert((Version(1)(2)(5) -- Snapshot).bumpMajor == Version(2)(0)(0) -- Snapshot)
-
-// SemVerFull bumping
-assert((Version(1)(2)(5) -- Snapshot + "commit.48e5a2e").bumpPatch == Version(1)(2)(6) -- Snapshot + "commit.48e5a2e")
-assert((Version(1)(2)(5) -- Snapshot + "commit.48e5a2e").bumpMinor == Version(1)(3)(0) -- Snapshot + "commit.48e5a2e")
-assert((Version(1)(2)(5) -- Snapshot + "commit.48e5a2e").bumpMajor == Version(2)(0)(0) -- Snapshot + "commit.48e5a2e")
 ```
