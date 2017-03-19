@@ -34,7 +34,7 @@ private[versions] trait VersionCompanion[V <: VersionBase[V, EV], EV[E] <: Exten
       val a = v split '.' map Integer.parseInt
       versionFromArray.applyOrElse(a, (_: Array[Int]) => throw new VersionFormatException(v))
     } catch {
-      case e@(_: IllegalArgumentException | _: NumberFormatException) => throw new VersionFormatException(v, e)
+      case e: IllegalArgumentException => throw new VersionFormatException(v, e)
     }
   }
 }
