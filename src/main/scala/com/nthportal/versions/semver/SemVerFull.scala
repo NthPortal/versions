@@ -10,7 +10,7 @@ package semver
   * @tparam E the type of the version extension
   * @tparam M the type of the build metadata
   */
-case class SemVerFull[E, M](extendedVersion: v3.ExtendedVersion[E], buildMetadata: Option[M])
+final case class SemVerFull[E, M](extendedVersion: v3.ExtendedVersion[E], buildMetadata: Option[M])
   extends Ordered[SemVerFull[E, _]] {
   override def compare(that: SemVerFull[E, _]): Int = this.extendedVersion compare that.extendedVersion
 

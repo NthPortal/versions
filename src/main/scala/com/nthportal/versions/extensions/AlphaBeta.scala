@@ -56,7 +56,7 @@ object AlphaBeta extends RichExtensionParser[AlphaBeta] {
     */
   def rc(num: Int): AlphaBeta = RC(num)
 
-  private case class RC(num: Int) extends AlphaBeta(3) {
+  private final case class RC(num: Int) extends AlphaBeta(3) {
     require(num >= 1, "release candidate number must be positive")
 
     override def compare(that: AlphaBeta) = that match {

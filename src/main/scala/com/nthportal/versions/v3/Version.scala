@@ -11,7 +11,7 @@ package v3
   * @param minor the minor version number
   * @param patch the patch version number
   */
-case class Version(major: Int, minor: Int, patch: Int) extends VersionBase[Version, ExtendedVersion] {
+final case class Version(major: Int, minor: Int, patch: Int) extends VersionBase[Version, ExtendedVersion] {
   // Validate values
   require(major >= 0 && minor >= 0 && patch >= 0, "major, minor, and patch values must all be >= 0")
 
