@@ -80,9 +80,9 @@ object AlphaBeta extends RichExtensionParser[AlphaBeta] {
     case e => e split '.' match {
       case Array(this.rcPrefix, num) =>
         try {
-          RC(Integer.parseInt(num))
+          RC(num.toInt)
         } catch {
-          case e: NumberFormatException => invalidExtension(extension, e)
+          case e: IllegalArgumentException => invalidExtension(extension, e)
         }
       case _ => invalidExtension(extension)
     }
