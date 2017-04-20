@@ -32,6 +32,9 @@ class SemVerTest extends SimpleSpec {
 
     noException should be thrownBy {parseSemVerVersion("1.0.0-SNAP.SHOT")}
     noException should be thrownBy {parseSemVerVersion("1.0.0-SNAP-SHOT")}
+    noException should be thrownBy {parseSemVerVersion("1.0.0--SNAPSHOT")}
+    noException should be thrownBy {parseSemVerVersion("1.0.0-SNAP--SHOT")}
+    noException should be thrownBy {parseSemVerVersion("1.0.0-SNAPSHOT-")}
 
     a [VersionFormatException] should be thrownBy {parseSemVerVersion("1.0.0-SNAPSHOT+build..12654")}
     a [VersionFormatException] should be thrownBy {parseSemVerVersion("1.0.0-SNAPSHOT+.build.12654")}
@@ -40,6 +43,9 @@ class SemVerTest extends SimpleSpec {
 
     noException should be thrownBy {parseSemVerVersion("1.0.0-SNAPSHOT+build.12654")}
     noException should be thrownBy {parseSemVerVersion("1.0.0-SNAPSHOT+build-12654")}
+    noException should be thrownBy {parseSemVerVersion("1.0.0-SNAPSHOT+-build.12654")}
+    noException should be thrownBy {parseSemVerVersion("1.0.0-SNAPSHOT+build--12654")}
+    noException should be thrownBy {parseSemVerVersion("1.0.0-SNAPSHOT+build.12654-")}
   }
 
   it should "bump versions correctly" in {
