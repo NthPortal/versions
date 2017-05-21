@@ -10,7 +10,7 @@ package com.nthportal.versions
   * @param ordering an ordering for extensions of this type
   * @tparam E the type of the extension
   */
-case class ExtensionDef[E](default: Option[E], ordering: Ordering[E]) extends Ordering[E] {
+final case class ExtensionDef[E](default: Option[E], ordering: Ordering[E]) extends Ordering[E] {
   /**
     * Converts an extension of this type to a string.
     *

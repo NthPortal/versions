@@ -9,7 +9,7 @@ package v4
   * @param _3 the third value of the version
   * @param _4 the fourth value of the version
   */
-case class Version(_1: Int, _2: Int, _3: Int, _4: Int) extends VersionBase[Version, ExtendedVersion] {
+final case class Version(_1: Int, _2: Int, _3: Int, _4: Int) extends VersionBase[Version, ExtendedVersion] {
   // Validate values
   require(_1 >= 0 && _2 >= 0 && _3 >= 0 && _4 >= 0, "_1, _2, _3, and _4 values must all be >= 0")
 

@@ -5,13 +5,14 @@ A Scala library for representing versions as objects
 [![Coverage Status](https://coveralls.io/repos/github/NthPortal/versions/badge.svg?branch=master)](https://coveralls.io/github/NthPortal/versions?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/com.nthportal/versions_2.12.svg)](https://mvnrepository.com/artifact/com.nthportal/versions_2.12)
 [![Versioning](https://img.shields.io/badge/versioning-semver%202.0.0-blue.svg)](http://semver.org/spec/v2.0.0.html)
+[![Docs](https://www.javadoc.io/badge/com.nthportal/versions_2.12.svg?color=blue&label=docs)](https://www.javadoc.io/doc/com.nthportal/versions_2.12)
 
 ## Add as a Dependency
 
 ### SBT (Scala 2.11 and 2.12)
 
 ```sbt
-"com.nthportal" %% "versions" % "1.2.0"
+"com.nthportal" %% "versions" % "1.2.1"
 ```
 
 ### Maven
@@ -22,7 +23,7 @@ A Scala library for representing versions as objects
 <dependency>
   <groupId>com.nthportal</groupId>
   <artifactId>versions_2.12</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1</version>
 </dependency>
 ```
 
@@ -32,7 +33,7 @@ A Scala library for representing versions as objects
 <dependency>
   <groupId>com.nthportal</groupId>
   <artifactId>versions_2.11</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1</version>
 </dependency>
 ```
 
@@ -132,9 +133,4 @@ assert(Version(1)(2)(5).bumpMajor == Version(2)(0)(0))
 assert((Version(1)(2)(5) -- Snapshot).bumpPatch == Version(1)(2)(6) -- Snapshot)
 assert((Version(1)(2)(5) -- Snapshot).bumpMinor == Version(1)(3)(0) -- Snapshot)
 assert((Version(1)(2)(5) -- Snapshot).bumpMajor == Version(2)(0)(0) -- Snapshot)
-
-// SemVerFull bumping
-assert((Version(1)(2)(5) -- Snapshot + "commit.48e5a2e").bumpPatch == Version(1)(2)(6) -- Snapshot + "commit.48e5a2e")
-assert((Version(1)(2)(5) -- Snapshot + "commit.48e5a2e").bumpMinor == Version(1)(3)(0) -- Snapshot + "commit.48e5a2e")
-assert((Version(1)(2)(5) -- Snapshot + "commit.48e5a2e").bumpMajor == Version(2)(0)(0) -- Snapshot + "commit.48e5a2e")
 ```
