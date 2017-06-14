@@ -24,17 +24,17 @@ private[versions] trait VersionCompanion[V <: VersionBase[V, EV], EV[E] <: Exten
   /**
     * Parses a string into a version.
     *
-    * @param v the string to parse
+    * @param version the string to parse
     * @throws VersionFormatException if the given string is not a valid version
     * @return the version represented by the string
     */
   @throws[VersionFormatException]
-  def parseVersion(v: String): V = {
+  def parseVersion(@deprecatedName('v, since = "1.3.0") version: String): V = {
     try {
-      val a = v split '.' map Integer.parseInt
-      versionFromArray.applyOrElse(a, (_: Array[Int]) => throw new VersionFormatException(v))
+      val a = version split '.' map Integer.parseInt
+      versionFromArray.applyOrElse(a, (_: Array[Int]) => throw new VersionFormatException(version))
     } catch {
-      case e: IllegalArgumentException => throw new VersionFormatException(v, e)
+      case e: IllegalArgumentException => throw new VersionFormatException(version, e)
     }
   }
 }

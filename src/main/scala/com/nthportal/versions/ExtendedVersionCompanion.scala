@@ -17,9 +17,9 @@ abstract class ExtendedVersionCompanion[V <: VersionBase[V, EV], EV[E] <: Extend
     * Creates an extended version from a version, extension, and
     * [[ExtensionDef extension definition]].
     *
-    * @param version the version component of the extended version
+    * @param version   the version component of the extended version
     * @param extension the extension component of the extended version
-    * @param ed the extension definition for the version's extension
+    * @param ed        the extension definition for the version's extension
     * @tparam E the type of the extension
     * @return an extended version with the specified parameters
     */
@@ -28,25 +28,27 @@ abstract class ExtendedVersionCompanion[V <: VersionBase[V, EV], EV[E] <: Extend
   /**
     * Parses a string into an extended version.
     *
-    * @param v  the string to parse
-    * @param ed the [[ExtensionDef extension definition]]
-    * @param ep a [[ExtensionParser parser]] for extensions
+    * @param version the string to parse
+    * @param ed      the [[ExtensionDef extension definition]]
+    * @param ep      a [[ExtensionParser parser]] for extensions
     * @tparam E the type of the extension
     * @throws VersionFormatException if the given string is not a valid extended version
     * @return the extended version represented by the string
     */
   @throws[VersionFormatException]
-  def parseVersion[E](v: String)(implicit ed: ExtensionDef[E], ep: ExtensionParser[E]): EV[E] = {
-    v.split("-", 2) match {
-      case Array(version, extension) =>
+  def parseVersion[E](@deprecatedName('v, since = "1.3.0") version: String)
+                     (implicit ed: ExtensionDef[E],
+                      ep: ExtensionParser[E]): EV[E] = {
+    version.split("-", 2) match {
+      case Array(ver, extension) =>
         try {
-          c.parseVersion(version) -- ep.parse(extension)
+          c.parseVersion(ver) -- ep.parse(extension)
         } catch {
-          case e: IllegalArgumentException => throw new VersionFormatException(v, e)
+          case e: IllegalArgumentException => throw new VersionFormatException(version, e)
         }
-      case Array(version) => ed.default match {
-        case Some(extension) => c.parseVersion(version) -- extension
-        case None => throw new VersionFormatException(v, new UnsupportedOperationException("No default extension"))
+      case Array(ver) => ed.default match {
+        case Some(extension) => c.parseVersion(ver) -- extension
+        case None => throw new VersionFormatException(version, new UnsupportedOperationException("No default extension"))
       }
     }
   }
