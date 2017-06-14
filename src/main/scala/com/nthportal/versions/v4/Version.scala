@@ -23,7 +23,7 @@ final case class Version(_1: Int, _2: Int, _3: Int, _4: Int) extends VersionBase
 object Version extends VersionCompanion[Version, ExtendedVersion] with Of[Dot[Dot[Dot[Version]]]] {
   override private[versions] val ordering: Ordering[Version] = Ordering by (v => (v._1, v._2, v._3, v._4))
 
-  override def of(_1: Int): Dot[Dot[Dot[Version]]] = _dot(_2 => _dot(_3 => _dot(_4 => apply(_1, _2, _3, _4))))
+  override def of(_1: Int): Dot[Dot[Dot[Version]]] = _2 => _3 => _4 => apply(_1, _2, _3, _4)
 
   override protected def versionFromArray = {case Array(_1, _2, _3, _4) => apply(_1, _2, _3, _4)}
 }

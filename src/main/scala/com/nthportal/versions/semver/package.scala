@@ -72,10 +72,10 @@ package object semver {
   private def parseExtendedVersion[E](version: String)
                                      (implicit ep: ExtensionParser[E],
                                       ed: ExtensionDef[E]): v3.ExtendedVersion[E] = {
-    v3.ExtendedVersion.parseVersion(version)(ed, _extensionParser(extension => {
+    v3.ExtendedVersion.parseVersion(version)(ed, extension => {
       validateSemVerSection(extension, "extension")
       ep.parse(extension)
-    }))
+    })
   }
 
   implicit final class RichVersion(private val ver: v3.Version) extends AnyVal {

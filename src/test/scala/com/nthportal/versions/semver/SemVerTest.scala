@@ -21,8 +21,8 @@ class SemVerTest extends SimpleSpec {
   }
 
   it should "only allow valid SemVer extensions and metadata" in {
-    implicit val extensionParser: ExtensionParser[String] = _extensionParser(identity)
-    implicit val extensionDef: ExtensionDef[String] = ExtensionDef(None, _ordering(_ compare _))
+    implicit val extensionParser: ExtensionParser[String] = identity(_)
+    implicit val extensionDef: ExtensionDef[String] = ExtensionDef(None, _ compare _)
 
     a [VersionFormatException] should be thrownBy {parseSemVerVersion("1.0.0-SNAP_SHOT")}
     a [VersionFormatException] should be thrownBy {parseSemVerVersion("1.0.0-SNAP..SHOT")}
