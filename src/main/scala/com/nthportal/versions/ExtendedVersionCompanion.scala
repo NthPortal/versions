@@ -52,4 +52,34 @@ abstract class ExtendedVersionCompanion[V <: VersionBase[V, EV], EV[E] <: Extend
       }
     }
   }
+
+  /**
+    * Parses a string into an extended version.
+    *
+    * @param version the string to parse
+    * @param ed      the [[ExtensionDef extension definition]]
+    * @param ep      a [[ExtensionParser parser]] for extensions
+    * @tparam E the type of the extension
+    * @throws VersionFormatException if the given string is not a valid extended version
+    * @return an [[Option]] containing the extended version represented by the string;
+    *         [[None]] if the string did not represent a valid extended version
+    */
+  def parseAsOption[E](version: String)(implicit ed: ExtensionDef[E], ep: ExtensionParser[E]): Option[EV[E]] = {
+    formatCheckToOption { parseVersion(version) }
+  }
+
+  /**
+    * Extracts an extended version from a version string.
+    *
+    * @param version the string from which to extract an extended version
+    * @param ed      the [[ExtensionDef extension definition]]
+    * @param ep      a [[ExtensionParser parser]] for extensions
+    * @tparam E the type of the extension
+    * @return an [[Option]] containing the version and extension represented
+    *         by the string; [[None]] if the string did not represent a valid
+    *         extended version
+    */
+  def unapply[E](version: String)(implicit ed: ExtensionDef[E], ep: ExtensionParser[E]): Option[(V, E)] = {
+     parseAsOption(version) map { ev => (ev.version, ev.extension) }
+  }
 }

@@ -24,4 +24,13 @@ object Version extends VersionCompanion[Version, ExtendedVersion] with Of[Dot[Ve
   override def of(major: Int): Dot[Version] = minor => apply(major, minor)
 
   override protected def versionFromArray = {case Array(major, minor) => apply(major, minor)}
+
+  /**
+    * Extracts a version from a string.
+    *
+    * @param version the string from which to extract a version
+    * @return an [[Option]] containing the major and minor version numbers;
+    *         [[None]] if the string did not represent a valid version
+    */
+  def unapply(version: String): Option[(Int, Int)] = parseAsOption(version) flatMap unapply
 }

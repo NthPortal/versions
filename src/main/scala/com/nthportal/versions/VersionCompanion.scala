@@ -37,4 +37,13 @@ private[versions] trait VersionCompanion[V <: VersionBase[V, EV], EV[E] <: Exten
       case e: IllegalArgumentException => throw new VersionFormatException(version, e)
     }
   }
+
+  /**
+    * Parses a string into a version.
+    *
+    * @param version the string to parse
+    * @return an [[Option]] containing the version represented by the string;
+    *         [[None]] if the string did not represent a valid version
+    */
+  def parseAsOption(version: String): Option[V] = formatCheckToOption { parseVersion(version) }
 }
