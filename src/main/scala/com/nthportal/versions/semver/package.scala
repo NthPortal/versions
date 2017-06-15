@@ -11,6 +11,9 @@ package versions
 package object semver {
   private val sectionRegex = """[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*""".r
 
+  @deprecated("use `SemanticVersion` instead", since = "1.3.0")
+  type SemVerFull[E, M] = SemanticVersion[E, M]
+
   /**
     * Parses a version string into a SemVer version. Strips build metadata
     * from the version string if present.
@@ -49,8 +52,7 @@ package object semver {
                                         (implicit ep: ExtensionParser[E],
                                          ed: ExtensionDef[E],
                                          mp: BuildMetadata.Parser[M]): SemVerFull[E, M] = {
-    val sv = parseSemVer(version)
-    SemVerFull(sv.extendedVersion, sv.buildMetadata)
+    parseSemVer(version)
   }
 
   /**
