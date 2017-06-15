@@ -11,6 +11,7 @@ import com.nthportal.versions.v3.compat.VersionFactory
   *                and its extension
   * @tparam E the type of the versions' extension
   */
+@deprecated("use `SemanticVersionFactory` or `SemVerWithoutMetadataFactory` instead", since = "1.3.0")
 case class SemVerFactory[E](factory: VersionFactory[E]) {
   /**
     * Parses a version string into a SemVer version. Strips build metadata
@@ -26,3 +27,6 @@ case class SemVerFactory[E](factory: VersionFactory[E]) {
     parseSemVerVersion(version)(factory.parser, factory.extensionDef)
   }
 }
+
+@deprecated("use `SemanticVersionFactory` or `SemVerWithoutMetadataFactory` instead", since = "1.3.0")
+object SemVerFactory
