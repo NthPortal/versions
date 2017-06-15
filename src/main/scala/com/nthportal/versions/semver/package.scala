@@ -12,47 +12,6 @@ package object semver {
   private val sectionRegex = """[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*""".r
 
   /**
-    * Parses a version string into a SemVer version. Strips build metadata
-    * from the version string if present.
-    *
-    * @param version the version string to parse
-    * @param ed      the [[ExtensionDef extension definition]] with which to parse
-    * @param ep      a [[ExtensionParser parser]] for extensions
-    * @tparam E the type of the extension
-    * @throws VersionFormatException if the given string is not a valid SemVer version
-    * @return the SemVer version represented by the specified version
-    */
-  @throws[VersionFormatException]
-  @deprecated("use `parseSemVer()` or `parseSemVerWithoutMetadata()` instead", since = "1.3.0")
-  def parseSemVerVersion[E](version: String)
-                           (implicit ep: ExtensionParser[E],
-                            ed: ExtensionDef[E]): v3.ExtendedVersion[E] = {
-    import BuildMetadata.stringMetadataParser
-
-    parseSemVer(version).extendedVersion
-  }
-
-  /**
-    * Parses a version string into a SemVer version. Keeps and parses build metadata
-    * if present.
-    *
-    * @param version the version string to parse
-    * @param ed      the [[ExtensionDef extension definition]] with which to parse
-    * @param ep      a [[ExtensionParser parser]] for extensions
-    * @tparam E the type of the extension
-    * @throws VersionFormatException if the given string is not a valid SemVer version
-    * @return the SemVer version represented by the specified version
-    */
-  @throws[VersionFormatException]
-  @deprecated("use `parseSemVer()` instead", since = "1.3.0")
-  def parseSemVerWithBuildMetadata[E, M](version: String)
-                                        (implicit ep: ExtensionParser[E],
-                                         ed: ExtensionDef[E],
-                                         mp: BuildMetadata.Parser[M]): SemanticVersion[E, M] = {
-    parseSemVer(version)
-  }
-
-  /**
     * Parses a version string into a [[SemanticVersion SemVer version]].
     *
     * @param version the version string to parse
