@@ -5,7 +5,7 @@ import com.nthportal.versions.extensions.Maven._
 import com.nthportal.versions.semver.BuildMetadata._
 
 class SemanticVersionTest extends SimpleSpec {
-  behavior of "SemVerFull"
+  behavior of "SemanticVersion"
 
   it should "define equality correctly" in {
     val v0 = parseSemVer("1.0.0-SNAPSHOT+build.12654")
