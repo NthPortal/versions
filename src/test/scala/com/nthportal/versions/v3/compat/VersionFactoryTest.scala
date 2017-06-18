@@ -12,8 +12,8 @@ class VersionFactoryTest extends SimpleSpec {
   it should "parse versions correctly" in {
     val f = VersionFactory(extensionDef, extensionParser)
 
-    f parseVersion "1.2.5" should equal(Version ⋮ 1⋅2⋅5 -- Release)
-    f parseVersion "0.0.0-SNAPSHOT" should equal(Version ⋮ 0⋅0⋅0 -- Snapshot)
+    f parseVersion "1.2.5" should equal(Version(1)(2)(5) -- Release)
+    f parseVersion "0.0.0-SNAPSHOT" should equal(Version(0)(0)(0) -- Snapshot)
 
     a [VersionFormatException] should be thrownBy {f parseVersion "1.0.0-INVALID"}
     a [VersionFormatException] should be thrownBy {f parseVersion "1.0.0-RELEASE"}

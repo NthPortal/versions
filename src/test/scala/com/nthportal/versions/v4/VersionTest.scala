@@ -6,9 +6,7 @@ class VersionTest extends SimpleSpec {
   behavior of "Version (4)"
 
   it should "have consistent constructors" in {
-    val v = Version ⋮ 1⋅2⋅5⋅4
-    v should equal (Version(1)(2)(5)(4))
-    v should equal (Version :> 1 :* 2 :* 5 :* 4)
+    val v = Version(1)(2)(5)(4)
     v should equal (Version of 1 dot 2 dot 5 dot 4)
     v should equal (Version(1, 2, 5, 4))
   }
@@ -21,7 +19,7 @@ class VersionTest extends SimpleSpec {
   }
 
   it should "compare correctly" in {
-    val v = Version ⋮ 1⋅2⋅5⋅4
+    val v = Version(1)(2)(5)(4)
 
     v should be > Version(1)(2)(5)(3)
     v should be > Version(1)(2)(4)(9)
