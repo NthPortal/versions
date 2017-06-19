@@ -11,8 +11,8 @@ class SemVerTest extends SimpleSpec {
     val v = parseSemVer("1.0.0-SNAPSHOT+build.12654").extendedVersion
 
     v should equal (v3.Version(1)(0)(0) -- Snapshot)
-    v should equal (parseSemVerWithoutMetadata("1.0.0-SNAPSHOT"))
-    v should equal (parseSemVer("1.0.0-SNAPSHOT+12654").extendedVersion)
+    v shouldEqual parseSemVerWithoutMetadata("1.0.0-SNAPSHOT")
+    v shouldEqual parseSemVer("1.0.0-SNAPSHOT+12654").extendedVersion
 
     a [VersionFormatException] should be thrownBy {parseSemVerWithoutMetadata("1.0.0-SNAPSHOT+12654")}
     a [VersionFormatException] should be thrownBy {parseSemVer("1.0.0-SNAPSHOT+")}
@@ -50,19 +50,28 @@ class SemVerTest extends SimpleSpec {
   it should "parse versions correctly as `Option`s" in {
     import BuildMetadata.stringMetadataParser
 
-    parseSemVerAsOption("1.0.0-SNAPSHOT+build.12654") shouldEqual Some(v3.Version(1)(0)(0) -- Snapshot + "build.12654")
-    parseSemVerAsOption("1.0.0") shouldEqual Some((v3.Version(1)(0)(0) -- Release).withNoMetadata[String])
+    parseSemVerAsOption("1.0.0-SNAPSHOT+build.12654").value shouldEqual (v3.Version(1)(0)(0) -- Snapshot + "build.12654")
+    parseSemVerAsOption("1.0.0").value shouldEqual (v3.Version(1)(0)(0) -- Release).withNoMetadata[String]
 
     parseSemVerAsOption("1.0.0-SNAPSHOT+") shouldBe empty
     parseSemVerAsOption("1.0.0-SNAPSHOT+build+12654") shouldBe empty
   }
 
-  it should "unapply versions correctly" in {
-    SemVer.unapply("1.0.0-SNAPSHOT+build.12654") shouldEqual Some((v3.Version(1)(0)(0), Snapshot, Some("build.12654")))
-    SemVer.unapply("1.0.0") shouldEqual Some((v3.Version(1)(0)(0), Release, None))
+  it should "pattern match versions correctly" in {
+    // SemVer
+    inside("1.0.0-SNAPSHOT+build.12654") { case SemVer(v3.Version(1, 0, 0), Snapshot, Some("build.12654")) => }
+    inside("1.0.0") { case SemVer(v3.Version(1, 0, 0), Release, None) => }
 
-    SemVer.unapply("1.0.0-SNAPSHOT+") shouldBe empty
-    SemVer.unapply("1.0.0-SNAPSHOT+build+12654") shouldBe empty
+    SemVer unapply "1.0.0-SNAPSHOT+" shouldBe empty
+    SemVer unapply "1.0.0-SNAPSHOT+build+12654" shouldBe empty
+
+    // +
+    inside(v3.V(1, 0, 0) -- Snapshot + "build.12654") { case v3.V(1, 0, 0) -- Snapshot + "build.12654" => }
+    semver.+.unapply((v3.V(1, 0, 0) -- Release).withNoMetadata[String]) shouldBe empty
+
+    // +?
+    inside(v3.V(1, 0, 0) -- Snapshot + "build.12654") { case v3.V(1, 0, 0) -- Snapshot +? Some("build.12654") => }
+    inside((v3.V(1, 0, 0) -- Release).withNoMetadata[String]) { case v3.V(1, 0, 0) -- Release +? None => }
   }
 
   it should "bump versions correctly" in {

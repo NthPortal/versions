@@ -12,8 +12,8 @@ class MavenTest extends SimpleSpec {
   }
 
   it should "produce the correct string representations for extensions" in {
-    extensionDef.extToString(Snapshot) should be ("-SNAPSHOT")
-    extensionDef.extToString(Release) should be ("")
+    extensionDef extToString Snapshot shouldBe "-SNAPSHOT"
+    extensionDef extToString Release shouldBe empty
   }
 
   it should "parse extension values correctly" in {

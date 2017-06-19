@@ -9,9 +9,9 @@ class ExtensionDefTest extends SimpleSpec {
   behavior of "ExtensionDef"
 
   it should "evaluate the correct string representation of an extension" in {
-    fromOrdered[Maven].extToString(Snapshot) should be (s"-$Snapshot")
-    fromOrdered[Maven](Release).extToString(Snapshot) should be (s"-$Snapshot")
-    fromOrdered[Maven](Release).extToString(Release) should be ("")
+    fromOrdered[Maven] extToString Snapshot shouldBe s"-$Snapshot"
+    fromOrdered[Maven](Release) extToString Snapshot shouldBe s"-$Snapshot"
+    fromOrdered[Maven](Release) extToString Release shouldBe empty
   }
 
   it should "create definitions with the correct ordering" in {

@@ -22,19 +22,19 @@ class AlphaBetaTest extends SimpleSpec {
   }
 
   it should "produce the correct string representations for extensions" in {
-    extensionDef.extToString(preAlpha) should be ("-pre-alpha")
-    extensionDef.extToString(alpha) should be ("-alpha")
-    extensionDef.extToString(beta) should be ("-beta")
-    extensionDef.extToString(rc(1)) should be ("-rc.1")
-    extensionDef.extToString(rc(2)) should be ("-rc.2")
+    extensionDef extToString preAlpha shouldBe "-pre-alpha"
+    extensionDef extToString alpha shouldBe "-alpha"
+    extensionDef extToString beta shouldBe "-beta"
+    extensionDef extToString rc(1) shouldBe "-rc.1"
+    extensionDef extToString rc(2) shouldBe "-rc.2"
   }
 
   it should "parse extension values correctly" in {
-    parse("pre-alpha") should be (preAlpha)
-    parse("alpha") should be (alpha)
-    parse("beta") should be (beta)
-    parse("rc.1") should be (rc(1))
-    parse("rc.2") should be (rc(2))
+    parse("pre-alpha") shouldBe preAlpha
+    parse("alpha") shouldBe alpha
+    parse("beta") shouldBe beta
+    parse("rc.1") shouldBe rc(1)
+    parse("rc.2") shouldBe rc(2)
 
     an [IllegalArgumentException] should be thrownBy {parse("invalid")}
     an [IllegalArgumentException] should be thrownBy {parse("rc1")}

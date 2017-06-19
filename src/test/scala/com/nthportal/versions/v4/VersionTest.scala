@@ -6,11 +6,9 @@ class VersionTest extends SimpleSpec {
   behavior of "Version (4)"
 
   it should "have consistent constructors" in {
-    val v = Version ⋮ 1⋅2⋅5⋅4
-    v should equal (Version(1)(2)(5)(4))
-    v should equal (Version :> 1 :* 2 :* 5 :* 4)
+    val v = Version(1)(2)(5)(4)
     v should equal (Version of 1 dot 2 dot 5 dot 4)
-    v should equal (Version(1, 2, 5, 4))
+    v shouldEqual Version(1, 2, 5, 4)
   }
 
   it should "not allow negative version values" in {
@@ -21,7 +19,7 @@ class VersionTest extends SimpleSpec {
   }
 
   it should "compare correctly" in {
-    val v = Version ⋮ 1⋅2⋅5⋅4
+    val v = Version(1)(2)(5)(4)
 
     v should be > Version(1)(2)(5)(3)
     v should be > Version(1)(2)(4)(9)
@@ -35,7 +33,7 @@ class VersionTest extends SimpleSpec {
   }
 
   it should "produce the correct string representation" in {
-    Version(1)(2)(5)(4).toString should be ("1.2.5.4")
+    Version(1)(2)(5)(4).toString shouldBe "1.2.5.4"
   }
 
   it should "parse versions correctly" in {
@@ -49,9 +47,20 @@ class VersionTest extends SimpleSpec {
     a [VersionFormatException] should be thrownBy {Version parseVersion "really not a version"}
   }
 
-  it should "unapply versions correctly" in {
-    Version unapply "1.2.5.4" shouldEqual Some((1, 2, 5, 4))
-    Version unapply "0.0.0.0" shouldEqual Some((0, 0, 0, 0))
+  it should "parse versions as options correctly" in {
+    Version.parseAsOption("1.2.5.4").value shouldEqual Version(1)(2)(5)(4)
+    Version.parseAsOption("0.0.0.0").value shouldEqual Version(0)(0)(0)(0)
+
+    Version parseAsOption "-1.0.0.0" shouldBe empty
+    Version parseAsOption "1.0.0" shouldBe empty
+    Version parseAsOption "1.0.0.0.0" shouldBe empty
+    Version parseAsOption "1.f.0.0" shouldBe empty
+    Version parseAsOption "really not a version" shouldBe empty
+  }
+
+  it should "pattern match versions correctly" in {
+    inside("1.2.5.4") { case Version(1, 2, 5, 4) => }
+    inside("0.0.0.0") { case Version(0, 0, 0, 0) => }
 
     Version unapply "-1.0.0.0" shouldBe empty
     Version unapply "1.0.0" shouldBe empty

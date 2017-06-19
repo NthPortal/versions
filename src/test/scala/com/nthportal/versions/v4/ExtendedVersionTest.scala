@@ -9,7 +9,7 @@ class ExtendedVersionTest extends SimpleSpec {
   behavior of "ExtendedVersion (4)"
 
   it should "have consistent constructors" in {
-    Version(1)(2)(5)(4) -- Snapshot should equal(ExtendedVersion(Version(1)(2)(5)(4), Snapshot, extensionDef))
+    Version(1)(2)(5)(4) -- Snapshot shouldEqual ExtendedVersion(Version(1)(2)(5)(4), Snapshot, extensionDef)
   }
 
   it should "compare correctly" in {
@@ -29,8 +29,8 @@ class ExtendedVersionTest extends SimpleSpec {
   }
 
   it should "produce the correct string representation" in {
-    (Version(1)(2)(5)(4) -- Snapshot).toString should be("1.2.5.4-SNAPSHOT")
-    (Version(1)(2)(5)(4) -- Release).toString should be("1.2.5.4")
+    (Version(1)(2)(5)(4) -- Snapshot).toString shouldBe "1.2.5.4-SNAPSHOT"
+    (Version(1)(2)(5)(4) -- Release).toString shouldBe "1.2.5.4"
   }
 
   it should "parse versions correctly" in {
@@ -49,10 +49,23 @@ class ExtendedVersionTest extends SimpleSpec {
     }
   }
 
+  it should "parse versions as options correctly" in {
+    ExtendedVersion.parseAsOption("1.2.5.4").value should equal (Version(1)(2)(5)(4) -- Release)
+    ExtendedVersion.parseAsOption("0.0.0.0-SNAPSHOT").value should equal (Version(0)(0)(0)(0) -- Snapshot)
 
-  it should "unapply versions correctly" in {
-    ExtendedVersion unapply "1.2.5.4" shouldEqual Some(Version(1)(2)(5)(4), Release)
-    ExtendedVersion unapply "0.0.0.0-SNAPSHOT" shouldEqual Some(Version(0)(0)(0)(0), Snapshot)
+    ExtendedVersion parseAsOption "1.0.0.0-INVALID" shouldBe empty
+    ExtendedVersion parseAsOption "1.0.0.0-RELEASE" shouldBe empty
+    ExtendedVersion parseAsOption "1.0.0.0-snapshot" shouldBe empty
+    ExtendedVersion parseAsOption "1.0.0.0-SNAPSHOT-4" shouldBe empty
+    ExtendedVersion parseAsOption "really not a version" shouldBe empty
+
+    // Missing default extension
+    ExtendedVersion.parseAsOption("1.0.0.0")(ExtensionDef.fromOrdered[Maven], extensionParser) shouldBe empty
+  }
+
+  it should "pattern match versions correctly" in {
+    inside("1.2.5.4") { case ExtendedVersion(Version(1, 2, 5, 4), Release) => }
+    inside("0.0.0.0-SNAPSHOT") { case ExtendedVersion(Version(0, 0, 0, 0), Snapshot) => }
 
     ExtendedVersion unapply "1.0.0.0-INVALID" shouldBe empty
     ExtendedVersion unapply "1.0.0.0-RELEASE" shouldBe empty
