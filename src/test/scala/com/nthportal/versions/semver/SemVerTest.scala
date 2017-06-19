@@ -50,8 +50,8 @@ class SemVerTest extends SimpleSpec {
   it should "parse versions correctly as `Option`s" in {
     import BuildMetadata.stringMetadataParser
 
-    parseSemVerAsOption("1.0.0-SNAPSHOT+build.12654") shouldEqual Some(v3.Version(1)(0)(0) -- Snapshot + "build.12654")
-    parseSemVerAsOption("1.0.0") shouldEqual Some((v3.Version(1)(0)(0) -- Release).withNoMetadata[String])
+    parseSemVerAsOption("1.0.0-SNAPSHOT+build.12654").value shouldEqual (v3.Version(1)(0)(0) -- Snapshot + "build.12654")
+    parseSemVerAsOption("1.0.0").value shouldEqual (v3.Version(1)(0)(0) -- Release).withNoMetadata[String]
 
     parseSemVerAsOption("1.0.0-SNAPSHOT+") shouldBe empty
     parseSemVerAsOption("1.0.0-SNAPSHOT+build+12654") shouldBe empty
