@@ -19,9 +19,9 @@ abstract class VersionFactoryBase[V <: VersionBase[V, EV], E, EV[X] <: ExtendedV
   /**
     * Parses a string into an extended version.
     *
-    * @param v the string to parse
+    * @param version the string to parse
     * @throws VersionFormatException if the given string is not a valid extended version
     * @return the extended version represented by the string
     */
-  def parseVersion(v: String): EV[E] = companion.parseVersion(v)(extensionDef, parser)
+  def parseVersion(@deprecatedName('v) version: String): EV[E] = companion.parseVersion(version)(extensionDef, parser)
 }

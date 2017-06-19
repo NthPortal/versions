@@ -1,4 +1,5 @@
-package com.nthportal.versions
+package com.nthportal
+package versions
 
 /**
   * A package containing utilities related to
@@ -22,12 +23,13 @@ package object semver {
     * @return the SemVer version represented by the specified version
     */
   @throws[VersionFormatException]
+  @deprecated("use `parseSemVer()` or `parseSemVerWithoutMetadata()` instead", since = "1.3.0")
   def parseSemVerVersion[E](version: String)
                            (implicit ep: ExtensionParser[E],
                             ed: ExtensionDef[E]): v3.ExtendedVersion[E] = {
     import BuildMetadata.stringMetadataParser
 
-    parseSemVerWithBuildMetadata(version).extendedVersion
+    parseSemVer(version).extendedVersion
   }
 
   /**
@@ -42,22 +44,112 @@ package object semver {
     * @return the SemVer version represented by the specified version
     */
   @throws[VersionFormatException]
+  @deprecated("use `parseSemVer()` instead", since = "1.3.0")
   def parseSemVerWithBuildMetadata[E, M](version: String)
                                         (implicit ep: ExtensionParser[E],
                                          ed: ExtensionDef[E],
                                          mp: BuildMetadata.Parser[M]): SemVerFull[E, M] = {
+    val sv = parseSemVer(version)
+    SemVerFull(sv.extendedVersion, sv.buildMetadata)
+  }
+
+  /**
+    * Parses a version string into a [[SemanticVersion SemVer version]].
+    *
+    * @param version the version string to parse
+    * @param ed      the [[ExtensionDef extension definition]] with which to parse
+    * @param ep      a [[ExtensionParser parser]] for extensions
+    * @tparam E the type of the extension
+    * @throws VersionFormatException if the given string is not a valid SemVer version
+    * @return the SemVer version represented by the specified version
+    */
+  def parseSemVer[E, M](version: String)
+                       (implicit ed: ExtensionDef[E],
+                        ep: ExtensionParser[E],
+                        mp: BuildMetadata.Parser[M]): SemanticVersion[E, M] = {
     try {
       version split '+' match {
         case Array(ver, meta) =>
           validateSemVerSection(meta, "build metadata")
-          SemVerFull(parseExtendedVersion(ver), Some(mp.parse(meta)))
+          SemanticVersion(parseExtendedVersion(ver), Some(mp.parse(meta)))
         case Array(ver) =>
           require(!version.endsWith("+"), "build metadata cannot be empty")
-          SemVerFull(parseExtendedVersion(ver), None)
+          SemanticVersion(parseExtendedVersion(ver), None)
         case _ => throw new IllegalArgumentException("SemVer versions may only have a single build metadata section")
       }
     } catch {
       case e: IllegalArgumentException => throw new VersionFormatException(version, e)
+    }
+  }
+
+  /**
+    * Parses a SemVer version string into a [[v3.Version version]].
+    * The version string must not contain build metadata.
+    *
+    * @param version the version string to parse
+    * @param ed      the [[ExtensionDef extension definition]] with which to parse
+    * @param ep      a [[ExtensionParser parser]] for extensions
+    * @tparam E the type of the extension
+    * @throws VersionFormatException if the given string is not a valid SemVer version
+    *                                or contains build metadata
+    * @return the SemVer version represented by the specified version string
+    */
+  @throws[VersionFormatException]
+  def parseSemVerWithoutMetadata[E](version: String)
+                                   (implicit ed: ExtensionDef[E],
+                                    ep: ExtensionParser[E]): v3.ExtendedVersion[E] = {
+    try {
+      val svf = parseSemVer(version)
+      require(svf.buildMetadata.isEmpty, "Specified version has metadata")
+      svf.extendedVersion
+    } catch {
+      case e: IllegalArgumentException => throw new VersionFormatException(version, e)
+    }
+  }
+
+  /**
+    * Parses a version string into a [[SemanticVersion SemVer version]].
+    *
+    * @param version the version string to parse
+    * @param ed      the [[ExtensionDef extension definition]] with which to parse
+    * @param ep      a [[ExtensionParser parser]] for extensions
+    * @tparam E the type of the extension
+    * @throws VersionFormatException if the given string is not a valid SemVer version
+    * @return an [[Option]] containing the SemVer version represented by the
+    *         version string; [[None]] if the string did not represent a valid
+    *         SemVer version
+    */
+  def parseSemVerAsOption[E, M](version: String)
+                               (implicit ed: ExtensionDef[E],
+                                ep: ExtensionParser[E],
+                                mp: BuildMetadata.Parser[M]): Option[SemanticVersion[E, M]] = {
+    formatCheckToOption { parseSemVer(version) }
+  }
+
+  /**
+    * Extractor for [[SemanticVersion SemVer versions]].
+    */
+  object SemVer {
+    /**
+      * Extracts a [[SemanticVersion SemVer version]] (including build metadata)
+      * from a version string.
+      *
+      * @param version the string from which to extract a SemVer version
+      * @param ed      the [[ExtensionDef extension definition]] with which to parse
+      * @param ep      a [[ExtensionParser parser]] for extensions
+      * @tparam E the type of the extension
+      * @return an [[Option]] containing the version, extension, and build metadata
+      *         represented by the version string; [[None]] if the string did not
+      *         represent a valid SemVer version
+      */
+    def unapply[E, M](version: String)
+                     (implicit ed: ExtensionDef[E],
+                      ep: ExtensionParser[E],
+                      mp: BuildMetadata.Parser[M]): Option[(v3.Version, E, Option[M])] = {
+      parseSemVerAsOption(version) map { svf =>
+        val ev = svf.extendedVersion
+        (ev.version, ev.extension, svf.buildMetadata)
+      }
     }
   }
 
@@ -72,10 +164,10 @@ package object semver {
   private def parseExtendedVersion[E](version: String)
                                      (implicit ep: ExtensionParser[E],
                                       ed: ExtensionDef[E]): v3.ExtendedVersion[E] = {
-    v3.ExtendedVersion.parseVersion(version)(ed, _extensionParser(extension => {
+    v3.ExtendedVersion.parseVersion(version)(ed, extension => {
       validateSemVerSection(extension, "extension")
       ep.parse(extension)
-    }))
+    })
   }
 
   implicit final class RichVersion(private val ver: v3.Version) extends AnyVal {
@@ -136,28 +228,28 @@ package object semver {
     def bumpPatch: v3.ExtendedVersion[E] = ver.copy(version = ver.version.bumpPatch)
 
     /**
-      * Creates a [[SemVerFull SemVer version]] with empty build metadata
+      * Creates a [[SemanticVersion SemVer version]] with empty build metadata
       * from this extended version.
       *
       * @tparam M the type of the build metadata
       * @return a SemVer version with empty build metadata
       */
-    def withNoMetadata[M]: SemVerFull[E, M] = SemVerFull(ver, None)
+    def withNoMetadata[M]: SemanticVersion[E, M] = SemanticVersion(ver, None)
 
     /**
-      * Creates a [[SemVerFull SemVer version]] with the specified build
+      * Creates a [[SemanticVersion SemVer version]] with the specified build
       * metadata from this extended version.
       *
       * @param metadata the build metadata
       * @tparam M the type of the build metadata
       * @return a SemVer version with the specified build metadata
       */
-    def withBuildMetadata[M](metadata: M): SemVerFull[E, M] = SemVerFull(ver, Some(metadata))
+    def withBuildMetadata[M](metadata: M): SemanticVersion[E, M] = SemanticVersion(ver, Some(metadata))
 
     /**
       * @see [[withBuildMetadata]]
       */
-    def +[M](buildMetadata: M): SemVerFull[E, M] = withBuildMetadata(buildMetadata)
+    def +[M](buildMetadata: M): SemanticVersion[E, M] = withBuildMetadata(buildMetadata)
   }
 
 }

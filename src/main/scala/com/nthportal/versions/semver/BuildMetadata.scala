@@ -1,7 +1,5 @@
 package com.nthportal.versions.semver
 
-import com.nthportal.versions.semver._build_metadata._
-
 /**
   * Utility object for build metadata parsers. (Metadata for a build may be
   * appended to a [[http://semver.org/spec/v2.0.0.html#spec-item-10 SemVer version]].)
@@ -15,7 +13,7 @@ object BuildMetadata {
     *
     * @return a parser for string build metadata
     */
-  implicit def stringMetadataParser: Parser[String] = _parser(identity)
+  implicit def stringMetadataParser: Parser[String] = identity(_)
 
   /**
     * Parses a string into build metadata

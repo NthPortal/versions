@@ -36,13 +36,24 @@ class VersionTest extends SimpleSpec {
   }
 
   it should "parse versions correctly" in {
-    Version parseVersion "1.2.5" should equal (Version ⋮ 1⋅2⋅5)
-    Version parseVersion "0.0.0" should equal (Version ⋮ 0⋅0⋅0)
+    Version parseVersion "1.2.5" shouldEqual Version(1)(2)(5)
+    Version parseVersion "0.0.0" shouldEqual Version(0)(0)(0)
 
     a [VersionFormatException] should be thrownBy {Version parseVersion "-1.0.0"}
     a [VersionFormatException] should be thrownBy {Version parseVersion "1.0"}
     a [VersionFormatException] should be thrownBy {Version parseVersion "1.0.0.0"}
     a [VersionFormatException] should be thrownBy {Version parseVersion "1.f.0"}
     a [VersionFormatException] should be thrownBy {Version parseVersion "really not a version"}
+  }
+
+  it should "unapply versions correctly" in {
+    Version unapply "1.2.5" shouldEqual Some((1, 2, 5))
+    Version unapply "0.0.0" shouldEqual Some((0, 0, 0))
+
+    Version unapply "-1.0.0" shouldBe empty
+    Version unapply "1.0" shouldBe empty
+    Version unapply "1.0.0.0" shouldBe empty
+    Version unapply "1.f.0" shouldBe empty
+    Version unapply "really not a version" shouldBe empty
   }
 }

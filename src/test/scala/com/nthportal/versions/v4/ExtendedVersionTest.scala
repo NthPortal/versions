@@ -34,8 +34,8 @@ class ExtendedVersionTest extends SimpleSpec {
   }
 
   it should "parse versions correctly" in {
-    ExtendedVersion parseVersion "1.2.5.4" should equal(Version ⋮ 1⋅2⋅5⋅4 -- Release)
-    ExtendedVersion parseVersion "0.0.0.0-SNAPSHOT" should equal(Version ⋮ 0⋅0⋅0⋅0 -- Snapshot)
+    ExtendedVersion parseVersion "1.2.5.4" should equal (Version(1)(2)(5)(4) -- Release)
+    ExtendedVersion parseVersion "0.0.0.0-SNAPSHOT" should equal (Version(0)(0)(0)(0) -- Snapshot)
 
     a [VersionFormatException] should be thrownBy {ExtendedVersion parseVersion "1.0.0.0-INVALID"}
     a [VersionFormatException] should be thrownBy {ExtendedVersion parseVersion "1.0.0.0-RELEASE"}
@@ -47,5 +47,20 @@ class ExtendedVersionTest extends SimpleSpec {
     a [VersionFormatException] should be thrownBy {
       ExtendedVersion.parseVersion("1.0.0.0")(ExtensionDef.fromOrdered[Maven], extensionParser)
     }
+  }
+
+
+  it should "unapply versions correctly" in {
+    ExtendedVersion unapply "1.2.5.4" shouldEqual Some(Version(1)(2)(5)(4), Release)
+    ExtendedVersion unapply "0.0.0.0-SNAPSHOT" shouldEqual Some(Version(0)(0)(0)(0), Snapshot)
+
+    ExtendedVersion unapply "1.0.0.0-INVALID" shouldBe empty
+    ExtendedVersion unapply "1.0.0.0-RELEASE" shouldBe empty
+    ExtendedVersion unapply "1.0.0.0-snapshot" shouldBe empty
+    ExtendedVersion unapply "1.0.0.0-SNAPSHOT-4" shouldBe empty
+    ExtendedVersion unapply "really not a version" shouldBe empty
+
+    // Missing default extension
+    ExtendedVersion.unapply("1.0.0.0")(ExtensionDef.fromOrdered[Maven], extensionParser) shouldBe empty
   }
 }
