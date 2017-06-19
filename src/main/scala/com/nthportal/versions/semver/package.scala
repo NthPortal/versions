@@ -21,6 +21,7 @@ package object semver {
     * @throws VersionFormatException if the given string is not a valid SemVer version
     * @return the SemVer version represented by the specified version
     */
+  @throws[VersionFormatException]
   def parseSemVer[E, M](version: String)
                        (implicit ed: ExtensionDef[E],
                         ep: ExtensionParser[E],
@@ -57,9 +58,9 @@ package object semver {
                                    (implicit ed: ExtensionDef[E],
                                     ep: ExtensionParser[E]): v3.ExtendedVersion[E] = {
     try {
-      val svf = parseSemVer(version)
-      require(svf.buildMetadata.isEmpty, "Specified version has metadata")
-      svf.extendedVersion
+      val semVer = parseSemVer(version)
+      require(semVer.buildMetadata.isEmpty, "version contains build metadata")
+      semVer.extendedVersion
     } catch {
       case e: IllegalArgumentException => throw new VersionFormatException(version, e)
     }
@@ -104,9 +105,9 @@ package object semver {
                      (implicit ed: ExtensionDef[E],
                       ep: ExtensionParser[E],
                       mp: BuildMetadata.Parser[M]): Option[(v3.Version, E, Option[M])] = {
-      parseSemVerAsOption(version) map { svf =>
-        val ev = svf.extendedVersion
-        (ev.version, ev.extension, svf.buildMetadata)
+      parseSemVerAsOption(version) map { semVer =>
+        val ev = semVer.extendedVersion
+        (ev.version, ev.extension, semVer.buildMetadata)
       }
     }
   }
