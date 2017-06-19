@@ -49,6 +49,19 @@ class ExtendedVersionTest extends SimpleSpec {
     }
   }
 
+  it should "parse versions as options correctly" in {
+    ExtendedVersion.parseAsOption("1.2.5.4").value should equal (Version(1)(2)(5)(4) -- Release)
+    ExtendedVersion.parseAsOption("0.0.0.0-SNAPSHOT").value should equal (Version(0)(0)(0)(0) -- Snapshot)
+
+    ExtendedVersion parseAsOption "1.0.0.0-INVALID" shouldBe empty
+    ExtendedVersion parseAsOption "1.0.0.0-RELEASE" shouldBe empty
+    ExtendedVersion parseAsOption "1.0.0.0-snapshot" shouldBe empty
+    ExtendedVersion parseAsOption "1.0.0.0-SNAPSHOT-4" shouldBe empty
+    ExtendedVersion parseAsOption "really not a version" shouldBe empty
+
+    // Missing default extension
+    ExtendedVersion.parseAsOption("1.0.0.0")(ExtensionDef.fromOrdered[Maven], extensionParser) shouldBe empty
+  }
 
   it should "pattern match versions correctly" in {
     inside("1.2.5.4") { case ExtendedVersion(Version(1, 2, 5, 4), Release) => }

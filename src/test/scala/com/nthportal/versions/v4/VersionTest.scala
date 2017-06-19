@@ -47,6 +47,17 @@ class VersionTest extends SimpleSpec {
     a [VersionFormatException] should be thrownBy {Version parseVersion "really not a version"}
   }
 
+  it should "parse versions as options correctly" in {
+    Version.parseAsOption("1.2.5.4").value shouldEqual Version(1)(2)(5)(4)
+    Version.parseAsOption("0.0.0.0").value shouldEqual Version(0)(0)(0)(0)
+
+    Version parseAsOption "-1.0.0.0" shouldBe empty
+    Version parseAsOption "1.0.0" shouldBe empty
+    Version parseAsOption "1.0.0.0.0" shouldBe empty
+    Version parseAsOption "1.f.0.0" shouldBe empty
+    Version parseAsOption "really not a version" shouldBe empty
+  }
+
   it should "pattern match versions correctly" in {
     inside("1.2.5.4") { case Version(1, 2, 5, 4) => }
     inside("0.0.0.0") { case Version(0, 0, 0, 0) => }
