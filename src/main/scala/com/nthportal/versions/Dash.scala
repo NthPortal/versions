@@ -24,3 +24,9 @@ trait Dash[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV]] {
     */
   final def --[E](extension: E)(implicit ed: ExtensionDef[E]): EV[E] = dash(extension)
 }
+
+object Dash {
+  def unapply[V <: VersionBase[V, EV], EV[X] <: ExtendedVersionBase[V, X, EV], E](ev: EV[E]): Option[(V, E)] = {
+    Some(ev.version -> ev.extension)
+  }
+}

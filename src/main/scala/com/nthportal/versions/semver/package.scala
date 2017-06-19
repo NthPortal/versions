@@ -112,6 +112,21 @@ package object semver {
     }
   }
 
+  object + {
+    def unapply[E, M](sv: SemanticVersion[E, M]): Option[(v3.ExtendedVersion[E], M)] = {
+      sv.buildMetadata match {
+        case Some(meta) => Some(sv.extendedVersion -> meta)
+        case None => None
+      }
+    }
+  }
+
+  object +? {
+    def unapply[E, M](sv: SemanticVersion[E, M]): Option[(v3.ExtendedVersion[E], Option[M])] = {
+      SemanticVersion.unapply(sv)
+    }
+  }
+
   @inline
   @throws[IllegalArgumentException]
   private def validateSemVerSection(contents: String, sectionName: String): Unit = {
