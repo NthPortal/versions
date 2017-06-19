@@ -57,9 +57,9 @@ class SemVerTest extends SimpleSpec {
     parseSemVerAsOption("1.0.0-SNAPSHOT+build+12654") shouldBe empty
   }
 
-  it should "unapply versions correctly" in {
-    SemVer.unapply("1.0.0-SNAPSHOT+build.12654") shouldEqual Some((v3.Version(1)(0)(0), Snapshot, Some("build.12654")))
-    SemVer.unapply("1.0.0") shouldEqual Some((v3.Version(1)(0)(0), Release, None))
+  it should "pattern match versions correctly" in {
+    inside("1.0.0-SNAPSHOT+build.12654") { case SemVer(v3.Version(1, 0, 0), Snapshot, Some("build.12654")) => }
+    inside("1.0.0") { case SemVer(v3.Version(1, 0, 0), Release, None) => }
 
     SemVer.unapply("1.0.0-SNAPSHOT+") shouldBe empty
     SemVer.unapply("1.0.0-SNAPSHOT+build+12654") shouldBe empty

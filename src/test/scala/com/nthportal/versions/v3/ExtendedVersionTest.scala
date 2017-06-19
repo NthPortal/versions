@@ -49,9 +49,9 @@ class ExtendedVersionTest extends SimpleSpec {
     }
   }
 
-  it should "unapply versions correctly" in {
-    ExtendedVersion unapply "1.2.5" shouldEqual Some(Version(1)(2)(5), Release)
-    ExtendedVersion unapply "0.0.0-SNAPSHOT" shouldEqual Some(Version(0)(0)(0), Snapshot)
+  it should "pattern match versions correctly" in {
+    inside("1.2.5") { case ExtendedVersion(Version(1, 2, 5), Release) => }
+    inside("0.0.0-SNAPSHOT") { case ExtendedVersion(Version(0, 0, 0), Snapshot) => }
 
     ExtendedVersion unapply "1.0.0-INVALID" shouldBe empty
     ExtendedVersion unapply "1.0.0-RELEASE" shouldBe empty

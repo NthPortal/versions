@@ -41,9 +41,9 @@ class VersionTest extends SimpleSpec {
     a [VersionFormatException] should be thrownBy {Version parseVersion "really not a version"}
   }
 
-  it should "unapply versions correctly" in {
-    Version unapply "1.3" shouldEqual Some((1, 3))
-    Version unapply "0.0" shouldEqual Some((0, 0))
+  it should "pattern match versions correctly" in {
+    inside("1.3") { case Version(1, 3) => }
+    inside("0.0") { case Version(0, 0) => }
 
     Version unapply "-1.0" shouldBe empty
     Version unapply "1" shouldBe empty
