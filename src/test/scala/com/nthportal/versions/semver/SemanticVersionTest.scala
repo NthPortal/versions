@@ -28,13 +28,13 @@ class SemanticVersionTest extends SimpleSpec {
     val v1 = v3.Version(1)(0)(0) -- Snapshot + 12654
     val v2 = (v3.Version(1)(0)(0) -- Snapshot).withNoMetadata
 
-    (v0 <= v1 && v0 >= v1) should be (true)
-    (v0 <= v2 && v0 >= v2) should be (true)
-    (v2 <= v1 && v2 >= v1) should be (true)
+    (v0 <= v1 && v0 >= v1) shouldBe true
+    (v0 <= v2 && v0 >= v2) shouldBe true
+    (v2 <= v1 && v2 >= v1) shouldBe true
   }
 
   it should "produce the correct string representation" in {
-    (v3.Version(1)(0)(0) -- Snapshot + "build.12654").toString should be ("1.0.0-SNAPSHOT+build.12654")
-    (v3.Version(1)(0)(0) -- Snapshot).withNoMetadata.toString should be ("1.0.0-SNAPSHOT")
+    (v3.Version(1)(0)(0) -- Snapshot + "build.12654").toString shouldBe "1.0.0-SNAPSHOT+build.12654"
+    (v3.Version(1)(0)(0) -- Snapshot).withNoMetadata.toString shouldBe "1.0.0-SNAPSHOT"
   }
 }

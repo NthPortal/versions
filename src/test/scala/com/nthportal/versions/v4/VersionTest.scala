@@ -8,7 +8,7 @@ class VersionTest extends SimpleSpec {
   it should "have consistent constructors" in {
     val v = Version(1)(2)(5)(4)
     v should equal (Version of 1 dot 2 dot 5 dot 4)
-    v should equal (Version(1, 2, 5, 4))
+    v shouldEqual Version(1, 2, 5, 4)
   }
 
   it should "not allow negative version values" in {
@@ -33,7 +33,7 @@ class VersionTest extends SimpleSpec {
   }
 
   it should "produce the correct string representation" in {
-    Version(1)(2)(5)(4).toString should be ("1.2.5.4")
+    Version(1)(2)(5)(4).toString shouldBe "1.2.5.4"
   }
 
   it should "parse versions correctly" in {

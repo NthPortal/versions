@@ -11,8 +11,8 @@ class SemVerTest extends SimpleSpec {
     val v = parseSemVer("1.0.0-SNAPSHOT+build.12654").extendedVersion
 
     v should equal (v3.Version(1)(0)(0) -- Snapshot)
-    v should equal (parseSemVerWithoutMetadata("1.0.0-SNAPSHOT"))
-    v should equal (parseSemVer("1.0.0-SNAPSHOT+12654").extendedVersion)
+    v shouldEqual parseSemVerWithoutMetadata("1.0.0-SNAPSHOT")
+    v shouldEqual parseSemVer("1.0.0-SNAPSHOT+12654").extendedVersion
 
     a [VersionFormatException] should be thrownBy {parseSemVerWithoutMetadata("1.0.0-SNAPSHOT+12654")}
     a [VersionFormatException] should be thrownBy {parseSemVer("1.0.0-SNAPSHOT+")}
@@ -61,8 +61,8 @@ class SemVerTest extends SimpleSpec {
     inside("1.0.0-SNAPSHOT+build.12654") { case SemVer(v3.Version(1, 0, 0), Snapshot, Some("build.12654")) => }
     inside("1.0.0") { case SemVer(v3.Version(1, 0, 0), Release, None) => }
 
-    SemVer.unapply("1.0.0-SNAPSHOT+") shouldBe empty
-    SemVer.unapply("1.0.0-SNAPSHOT+build+12654") shouldBe empty
+    SemVer unapply "1.0.0-SNAPSHOT+" shouldBe empty
+    SemVer unapply "1.0.0-SNAPSHOT+build+12654" shouldBe empty
   }
 
   it should "bump versions correctly" in {

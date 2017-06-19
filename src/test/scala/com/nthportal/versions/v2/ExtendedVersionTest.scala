@@ -9,7 +9,7 @@ class ExtendedVersionTest extends SimpleSpec {
   behavior of "ExtendedVersion (2)"
 
   it should "have consistent constructors" in {
-    Version(1)(3) -- Snapshot should equal(ExtendedVersion(Version(1)(3), Snapshot, extensionDef))
+    Version(1)(3) -- Snapshot shouldEqual ExtendedVersion(Version(1)(3), Snapshot, extensionDef)
   }
 
   it should "compare correctly" in {
@@ -29,8 +29,8 @@ class ExtendedVersionTest extends SimpleSpec {
   }
 
   it should "produce the correct string representation" in {
-    (Version(1)(3) -- Snapshot).toString should be("1.3-SNAPSHOT")
-    (Version(1)(3) -- Release).toString should be("1.3")
+    (Version(1)(3) -- Snapshot).toString shouldBe "1.3-SNAPSHOT"
+    (Version(1)(3) -- Release).toString shouldBe "1.3"
   }
 
   it should "parse versions correctly" in {
