@@ -58,11 +58,20 @@ class SemVerTest extends SimpleSpec {
   }
 
   it should "pattern match versions correctly" in {
+    // SemVer
     inside("1.0.0-SNAPSHOT+build.12654") { case SemVer(v3.Version(1, 0, 0), Snapshot, Some("build.12654")) => }
     inside("1.0.0") { case SemVer(v3.Version(1, 0, 0), Release, None) => }
 
     SemVer unapply "1.0.0-SNAPSHOT+" shouldBe empty
     SemVer unapply "1.0.0-SNAPSHOT+build+12654" shouldBe empty
+
+    // +
+    inside(v3.V(1, 0, 0) -- Snapshot + "build.12654") { case v3.V(1, 0, 0) -- Snapshot + "build.12654" => }
+    semver.+.unapply((v3.V(1, 0, 0) -- Release).withNoMetadata[String]) shouldBe empty
+
+    // +?
+    inside(v3.V(1, 0, 0) -- Snapshot + "build.12654") { case v3.V(1, 0, 0) -- Snapshot +? Some("build.12654") => }
+    inside((v3.V(1, 0, 0) -- Release).withNoMetadata[String]) { case v3.V(1, 0, 0) -- Release +? None => }
   }
 
   it should "bump versions correctly" in {

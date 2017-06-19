@@ -97,6 +97,7 @@ package object semver {
       * @param ed      the [[ExtensionDef extension definition]] with which to parse
       * @param ep      a [[ExtensionParser parser]] for extensions
       * @tparam E the type of the extension
+      * @tparam M the type of the build metadata
       * @return an [[Option]] containing the version, extension, and build metadata
       *         represented by the version string; [[None]] if the string did not
       *         represent a valid SemVer version
@@ -112,7 +113,32 @@ package object semver {
     }
   }
 
+  /**
+    * Extractor for [[SemanticVersion SemVer versions]].
+    *
+    * Example usage:
+    *
+    * {{{
+    * val sv = Version(1, 0, 0) -- "beta" + 12654
+    *
+    * sv match {
+    *   case ev + meta => println(s"metadata: $meta")
+    * }
+    * }}}
+    */
   object + {
+    /**
+      * Extracts the [[v3.ExtendedVersion extended version]] and build metadata
+      * from a [[SemanticVersion SemVer version]].
+      *
+      * @param sv the [[SemanticVersion SemVer version]] from which to extract
+      *           values
+      * @tparam E the type of the extension
+      * @tparam M the type of the build metadata
+      * @return an [[Option]] containing the extended version and build metadata;
+      *         [[None]] if the [[SemanticVersion SemVer version]] does not
+      *         contain build metadata
+      */
     def unapply[E, M](sv: SemanticVersion[E, M]): Option[(v3.ExtendedVersion[E], M)] = {
       sv.buildMetadata match {
         case Some(meta) => Some(sv.extendedVersion -> meta)
@@ -121,7 +147,34 @@ package object semver {
     }
   }
 
+  /**
+    * Extractor for [[SemanticVersion SemVer versions]].
+    *
+    * Example usage:
+    *
+    * {{{
+    * val sv = Version(1, 0, 0) -- "beta" + 12654
+    *
+    * sv match {
+    *   case ev +? metadata =>
+    *     metadata match {
+    *       case Some(meta) => println(s"metadata: $meta")
+    *       case None => println("no metadata")
+    * }
+    * }}}
+    */
   object +? {
+    /**
+      * Extracts the [[v3.ExtendedVersion extended version]] and build metadata
+      * (if it exists) from a [[SemanticVersion SemVer version]].
+      *
+      * @param sv the [[SemanticVersion SemVer version]] from which to extract
+      *           values
+      * @tparam E the type of the extension
+      * @tparam M the type of the build metadata
+      * @return an [[Option]] containing the extended version and build metadata;
+      *         the build metadata is an [[Option]]
+      */
     def unapply[E, M](sv: SemanticVersion[E, M]): Option[(v3.ExtendedVersion[E], Option[M])] = {
       SemanticVersion.unapply(sv)
     }
