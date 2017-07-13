@@ -1,4 +1,5 @@
-package com.nthportal.versions
+package com.nthportal
+package versions
 
 import scala.language.higherKinds
 
@@ -40,7 +41,7 @@ private[versions] trait ExtendedVersionBase[V <: VersionBase[V, EV], E, EV[X] <:
   @throws[IllegalArgumentException]
   override def compare(that: EV[E]): Int = {
     require(extensionDef == that.extensionDef, "cannot compare extended versions with different extension definitions")
-    implicitly[Ordering[(V, E)]].compare((this.version, this.extension), (that.version, that.extension))
+    (this.version compare that.version) thenCompare (this.extension, that.extension)
   }
 
   override def toString = s"$version${extensionDef.extToString(extension)}"
