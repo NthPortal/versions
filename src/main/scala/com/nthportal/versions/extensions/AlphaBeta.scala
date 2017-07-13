@@ -49,22 +49,39 @@ object AlphaBeta extends RichExtensionParser[AlphaBeta] {
   val release: AlphaBeta = new AlphaBeta(4) {}
 
   /**
-    * Returns a release candidate with the specified number.
-    *
-    * @param num the number of the release candidate
-    * @return a release candidate with the specified number
+    * A release candidate.
     */
-  def rc(num: Int): AlphaBeta = RC(num)
+  object rc {
+    /**
+      * Returns a release candidate with the specified number.
+      *
+      * @param num the number of the release candidate
+      * @return a release candidate with the specified number
+      */
+    def apply(num: Int): AlphaBeta = RC(num)
 
-  private final case class RC(num: Int) extends AlphaBeta(3) {
-    require(num >= 1, "release candidate number must be positive")
-
-    override def compare(that: AlphaBeta) = that match {
-      case RC(n) => num compare n
-      case _ => super.compare(that)
+    /**
+      * Extracts the release candidate number from a release candidate.
+      *
+      * @param ab an [[AlphaBeta]]
+      * @return an [[Option]] containing the number of the release candidate,
+      *         if the AlphaBeta is one
+      */
+    def unapply(ab: AlphaBeta): Option[Int] = ab match {
+      case RC(num) => Some(num)
+      case _ => None
     }
 
-    override def toString = s"$rcPrefix.$num"
+    private final case class RC(num: Int) extends AlphaBeta(3) {
+      require(num >= 1, "release candidate number must be positive")
+
+      override def compare(that: AlphaBeta) = that match {
+        case RC(n) => num compare n
+        case _ => super.compare(that)
+      }
+
+      override def toString = s"$rcPrefix.$num"
+    }
   }
 
   /**
@@ -80,7 +97,7 @@ object AlphaBeta extends RichExtensionParser[AlphaBeta] {
     case e => e split '.' match {
       case Array(this.rcPrefix, num) =>
         try {
-          RC(num.toInt)
+          rc(num.toInt)
         } catch {
           case e: IllegalArgumentException => invalidExtension(extension, e)
         }
