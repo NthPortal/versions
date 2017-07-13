@@ -106,10 +106,7 @@ package object semver {
                      (implicit ed: ExtensionDef[E],
                       ep: ExtensionParser[E],
                       mp: BuildMetadata.Parser[M]): Option[(v3.Version, E, Option[M])] = {
-      parseSemVerAsOption(version) map { semVer =>
-        val ev = semVer.extendedVersion
-        (ev.version, ev.extension, semVer.buildMetadata)
-      }
+      parseSemVerAsOption(version) map { semVer => (semVer.version, semVer.extension, semVer.buildMetadata) }
     }
   }
 
