@@ -23,6 +23,7 @@ private[extensions] trait RichExtensionParser[E] extends ExtensionParser[E] {
     * @throws IllegalArgumentException always
     * @return Nothing
     */
+  @inline
   @throws[IllegalArgumentException]
   protected def invalidExtension(extension: String, cause: Throwable = null): Nothing = {
     throw new IllegalArgumentException(s"Invalid extension: $extension", cause)
