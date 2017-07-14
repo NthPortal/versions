@@ -7,6 +7,13 @@ import com.nthportal.versions.semver.BuildMetadata._
 class SemanticVersionTest extends SimpleSpec {
   behavior of "SemanticVersion"
 
+  it should "return the correct version and extension" in {
+    val v = v3.V(1, 0, 0) -- Snapshot + 12654
+
+    v.version should be theSameInstanceAs v.extendedVersion.version
+    v.extension should be theSameInstanceAs v.extendedVersion.extension
+  }
+
   it should "define equality correctly" in {
     val v0 = parseSemVer("1.0.0-SNAPSHOT+build.12654")
     v0.buildMetadata.value shouldBe "build.12654"

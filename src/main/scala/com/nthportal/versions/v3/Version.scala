@@ -1,4 +1,5 @@
-package com.nthportal.versions
+package com.nthportal
+package versions
 package v3
 
 /**
@@ -23,11 +24,14 @@ final case class Version(major: Int, minor: Int, patch: Int) extends VersionBase
 }
 
 object Version extends VersionCompanion[Version, ExtendedVersion] with Of[Dot[Dot[Version]]] {
-  override private[versions] val ordering: Ordering[Version] = Ordering by (v => (v.major, v.minor, v.patch))
+  override private[versions] val ordering: Ordering[Version] =
+    Ordering.by[Version, Int](_.major)
+      .thenBy(_.minor)
+      .thenBy(_.patch)
 
   override def of(major: Int): Dot[Dot[Version]] = minor => patch => apply(major, minor, patch)
 
-  override protected def versionFromArray = {case Array(major, minor, patch) => apply(major, minor, patch)}
+  override protected def versionFromArray = { case Array(major, minor, patch) => apply(major, minor, patch) }
 
   /**
     * Extracts a version from a string.

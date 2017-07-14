@@ -106,10 +106,7 @@ package object semver {
                      (implicit ed: ExtensionDef[E],
                       ep: ExtensionParser[E],
                       mp: BuildMetadata.Parser[M]): Option[(v3.Version, E, Option[M])] = {
-      parseSemVerAsOption(version) map { semVer =>
-        val ev = semVer.extendedVersion
-        (ev.version, ev.extension, semVer.buildMetadata)
-      }
+      parseSemVerAsOption(version) map { semVer => (semVer.version, semVer.extension, semVer.buildMetadata) }
     }
   }
 
@@ -261,7 +258,7 @@ package object semver {
       * @tparam M the type of the build metadata
       * @return a SemVer version with empty build metadata
       */
-    def withNoMetadata[M]: SemanticVersion[E, M] = SemanticVersion(ver, None)
+    def withNoMetadata[M]: SemanticVersion[E, M] = +?(None)
 
     /**
       * Creates a [[SemanticVersion SemVer version]] with the specified build
@@ -271,12 +268,22 @@ package object semver {
       * @tparam M the type of the build metadata
       * @return a SemVer version with the specified build metadata
       */
-    def withBuildMetadata[M](metadata: M): SemanticVersion[E, M] = SemanticVersion(ver, Some(metadata))
+    def withBuildMetadata[M](metadata: M): SemanticVersion[E, M] = +?(Some(metadata))
 
     /**
       * @see [[withBuildMetadata]]
       */
-    def +[M](buildMetadata: M): SemanticVersion[E, M] = withBuildMetadata(buildMetadata)
+    def +[M](buildMetadata: M): SemanticVersion[E, M] = +?(Some(buildMetadata))
+
+    /**
+      * Creates a [[SemanticVersion SemVer version]] with the specified build
+      * metadata [[Option]] from this extended version.
+      *
+      * @param buildMetadata an Option containing the build metadata
+      * @tparam M the type of the build metadata
+      * @return a SemVer version with the specified build metadata
+      */
+    def +?[M](buildMetadata: Option[M]): SemanticVersion[E, M] = SemanticVersion(ver, buildMetadata)
   }
 
 }

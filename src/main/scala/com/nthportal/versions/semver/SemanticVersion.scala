@@ -12,6 +12,27 @@ package semver
   */
 final case class SemanticVersion[E, M](extendedVersion: v3.ExtendedVersion[E], buildMetadata: Option[M])
   extends Ordered[SemanticVersion[E, _]] {
+
+  /**
+    * Returns the [[v3.Version version]] portion of this SemVer version.
+    *
+    * This method is equivalent to [[v3.ExtendedVersion.version]].
+    *
+    * @return the version portion of this SemVer version
+    */
+  @inline
+  def version: v3.Version = extendedVersion.version
+
+  /**
+    * Returns the extension portion of this SemVer version.
+    *
+    * This method is equivalent to [[v3.ExtendedVersion.version]].
+    *
+    * @return the extension portion of this SemVer version
+    */
+  @inline
+  def extension: E = extendedVersion.extension
+
   override def compare(that: SemanticVersion[E, _]): Int = this.extendedVersion compare that.extendedVersion
 
   override def toString = extendedVersion.toString + {
