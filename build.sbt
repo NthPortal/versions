@@ -3,14 +3,15 @@ name := "versions"
 description := "A Scala library for representing versions as objects."
 
 val rawVersion = "1.2.2"
-isSnapshot := true
+isSnapshot := false
 version := rawVersion + {if (isSnapshot.value) "-SNAPSHOT" else ""}
 
-scalaVersion := "2.12.1"
+scalaVersion := "2.12.2"
 crossScalaVersions := Seq(
   "2.11.8",
   "2.12.0",
-  "2.12.1"
+  "2.12.1",
+  "2.12.2"
 )
 
 libraryDependencies ++= Seq(
