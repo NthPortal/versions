@@ -37,6 +37,7 @@ class VersionTest extends SimpleSpec {
     Version parseVersion "1.2.5" shouldEqual Version(1)(2)(5)
     Version parseVersion "0.0.0" shouldEqual Version(0)(0)(0)
 
+    a [VersionFormatException] should be thrownBy {Version parseVersion "1.0.0."}
     a [VersionFormatException] should be thrownBy {Version parseVersion "-1.0.0"}
     a [VersionFormatException] should be thrownBy {Version parseVersion "1.0"}
     a [VersionFormatException] should be thrownBy {Version parseVersion "1.0.0.0"}
@@ -48,6 +49,7 @@ class VersionTest extends SimpleSpec {
     Version.parseAsOption("1.2.5").value shouldEqual Version(1)(2)(5)
     Version.parseAsOption("0.0.0").value shouldEqual Version(0)(0)(0)
 
+    Version parseAsOption "1.0.0." shouldBe empty
     Version parseAsOption "-1.0.0" shouldBe empty
     Version parseAsOption "1.0" shouldBe empty
     Version parseAsOption "1.0.0.0" shouldBe empty

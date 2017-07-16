@@ -31,6 +31,7 @@ private[versions] trait VersionCompanion[V <: VersionBase[V, EV], EV[E] <: Exten
   @throws[VersionFormatException]
   def parseVersion(@deprecatedName('v, since = "1.3.0") version: String): V = {
     try {
+      require(!version.endsWith("."), "version cannot end with a '.'")
       val a = version split '.' map Integer.parseInt
       versionFromArray.applyOrElse(a, (_: Array[Int]) => throw new VersionFormatException(version))
     } catch {
