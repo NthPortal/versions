@@ -3,8 +3,8 @@ name := "versions"
 description := "A Scala library for representing versions as objects."
 
 val rawVersion = "2.0.0"
-isSnapshot := true
-version := rawVersion + {if (isSnapshot.value) "-SNAPSHOT" else ""}
+isSnapshot := false
+version := rawVersion + { if (isSnapshot.value) "-SNAPSHOT" else "" }
 
 scalaVersion := "2.12.2"
 crossScalaVersions := Seq(
