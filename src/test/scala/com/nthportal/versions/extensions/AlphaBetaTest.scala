@@ -17,30 +17,39 @@ class AlphaBetaTest extends SimpleSpec {
   }
 
   it should "only allow positive release candidate numbers" in {
-    an [IllegalArgumentException] should be thrownBy {rc(-1)}
-    an [IllegalArgumentException] should be thrownBy {rc(0)}
+    an [IllegalArgumentException] should be thrownBy { rc(-1) }
+    an [IllegalArgumentException] should be thrownBy { rc(0) }
+    noException should be thrownBy { rc(1) }
   }
 
   it should "produce the correct string representations for extensions" in {
-    extensionDef.extToString(preAlpha) should be ("-pre-alpha")
-    extensionDef.extToString(alpha) should be ("-alpha")
-    extensionDef.extToString(beta) should be ("-beta")
-    extensionDef.extToString(rc(1)) should be ("-rc.1")
-    extensionDef.extToString(rc(2)) should be ("-rc.2")
+    extensionDef extToString preAlpha shouldBe "-pre-alpha"
+    extensionDef extToString alpha shouldBe "-alpha"
+    extensionDef extToString beta shouldBe "-beta"
+    extensionDef extToString rc(1) shouldBe "-rc.1"
+    extensionDef extToString rc(2) shouldBe "-rc.2"
   }
 
   it should "parse extension values correctly" in {
-    parse("pre-alpha") should be (preAlpha)
-    parse("alpha") should be (alpha)
-    parse("beta") should be (beta)
-    parse("rc.1") should be (rc(1))
-    parse("rc.2") should be (rc(2))
+    parse("pre-alpha") shouldBe preAlpha
+    parse("alpha") shouldBe alpha
+    parse("beta") shouldBe beta
+    parse("rc.1") shouldBe rc(1)
+    parse("rc.2") shouldBe rc(2)
 
-    an [IllegalArgumentException] should be thrownBy {parse("invalid")}
-    an [IllegalArgumentException] should be thrownBy {parse("rc1")}
-    an [IllegalArgumentException] should be thrownBy {parse("rc.0")}
-    an [IllegalArgumentException] should be thrownBy {parse("rc.-1")}
-    an [IllegalArgumentException] should be thrownBy {parse("rc.NaN")}
-    an [IllegalArgumentException] should be thrownBy {parse("")}
+    an [IllegalArgumentException] should be thrownBy { parse("invalid") }
+    an [IllegalArgumentException] should be thrownBy { parse("rc1") }
+    an [IllegalArgumentException] should be thrownBy { parse("rc.0") }
+    an [IllegalArgumentException] should be thrownBy { parse("rc.-1") }
+    an [IllegalArgumentException] should be thrownBy { parse("rc.NaN") }
+    an [IllegalArgumentException] should be thrownBy { parse("") }
+  }
+
+  it should "match extensions" in {
+    rc(1) should matchPattern { case rc(1) => }
+    rc(5) should matchPattern { case rc(5) => }
+
+    alpha should not matchPattern { case rc(_) => }
+    rc(2) should not matchPattern { case AlphaBeta.beta => }
   }
 }

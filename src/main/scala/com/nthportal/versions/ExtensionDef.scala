@@ -10,7 +10,7 @@ package com.nthportal.versions
   * @param ordering an ordering for extensions of this type
   * @tparam E the type of the extension
   */
-case class ExtensionDef[E](default: Option[E], ordering: Ordering[E]) extends Ordering[E] {
+final case class ExtensionDef[E](default: Option[E], ordering: Ordering[E]) extends Ordering[E] {
   /**
     * Converts an extension of this type to a string.
     *
@@ -35,7 +35,7 @@ object ExtensionDef {
     * @tparam E the type of the extension
     * @return an extension definition for the given type
     */
-  def fromOrdered[E <: Ordered[E]]: ExtensionDef[E] = apply(None, _ordering(_ compare _))
+  def fromOrdered[E <: Ordered[E]]: ExtensionDef[E] = apply(None, _ compare _)
 
   /**
     * Defines an extension type from an [[Ordered]] type, with the given default extension value.
@@ -44,7 +44,7 @@ object ExtensionDef {
     * @tparam E the type of the extension
     * @return an extension definition for the given type and default value
     */
-  def fromOrdered[E <: Ordered[E]](default: E): ExtensionDef[E] = apply(Some(default), _ordering(_ compare _))
+  def fromOrdered[E <: Ordered[E]](default: E): ExtensionDef[E] = apply(Some(default), _ compare _)
 
   /**
     * Defines an extension type from a [[Comparable]] type, with no default extension value.
@@ -52,7 +52,7 @@ object ExtensionDef {
     * @tparam E the type of the extension
     * @return an extension definition for the given type
     */
-  def fromComparable[E <: Comparable[E]]: ExtensionDef[E] = apply(None, _ordering(_ compareTo _))
+  def fromComparable[E <: Comparable[E]]: ExtensionDef[E] = apply(None, _ compareTo _)
 
   /**
     * Defines an extension type from a [[Comparable]] type, with the given default extension value.
@@ -61,5 +61,5 @@ object ExtensionDef {
     * @tparam E the type of the extension
     * @return an extension definition for the given type and default value
     */
-  def fromComparable[E <: Comparable[E]](default: E): ExtensionDef[E] = apply(Some(default), _ordering(_ compareTo _))
+  def fromComparable[E <: Comparable[E]](default: E): ExtensionDef[E] = apply(Some(default), _ compareTo _)
 }

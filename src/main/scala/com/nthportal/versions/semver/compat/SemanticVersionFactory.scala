@@ -5,8 +5,7 @@ package compat
 import com.nthportal.versions.v3.compat.VersionFactory
 
 /**
-  * A factory for for parsing version strings into SemVer versions
-  * with build metadata.
+  * A factory for for parsing version strings into [[SemanticVersion SemVer versions]]..
   *
   * @param factory the [[VersionFactory]] with which to parse the version
   *                and its extension
@@ -15,7 +14,7 @@ import com.nthportal.versions.v3.compat.VersionFactory
   * @tparam E the type of the versions' extension
   * @tparam M the type of the build metadata
   */
-case class SemVerFullFactory[E, M](factory: VersionFactory[E], parser: BuildMetadata.Parser[M]) {
+final case class SemanticVersionFactory[E, M](factory: VersionFactory[E], parser: BuildMetadata.Parser[M]) {
   /**
     * Parses a version string into a SemVer version. Keeps and parses build metadata
     * if present.
@@ -25,7 +24,7 @@ case class SemVerFullFactory[E, M](factory: VersionFactory[E], parser: BuildMeta
     * @return the SemVer version represented by the specified version
     */
   @throws[VersionFormatException]
-  def parseVersion(version: String): SemVerFull[E, M] = {
-    parseSemVerWithBuildMetadata(version)(factory.parser, factory.extensionDef, parser)
+  def parseVersion(version: String): SemanticVersion[E, M] = {
+    parseSemVer(version)(factory.extensionDef, factory.parser, parser)
   }
 }

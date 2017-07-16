@@ -1,4 +1,5 @@
-package com.nthportal.versions
+package com.nthportal
+package versions
 package v2
 
 /**
@@ -7,7 +8,7 @@ package v2
   * @param major the major version number
   * @param minor the minor version number
   */
-case class Version(major: Int, minor: Int) extends VersionBase[Version, ExtendedVersion] {
+final case class Version(major: Int, minor: Int) extends VersionBase[Version, ExtendedVersion] {
   // Validate values
   require(major >= 0 && minor >= 0, "major and minor values must be >= 0")
 
@@ -19,9 +20,20 @@ case class Version(major: Int, minor: Int) extends VersionBase[Version, Extended
 }
 
 object Version extends VersionCompanion[Version, ExtendedVersion] with Of[Dot[Version]] {
-  override private[versions] val ordering: Ordering[Version] = Ordering by (v => (v.major, v.minor))
+  override private[versions] val ordering: Ordering[Version] =
+    Ordering.by[Version, Int](_.major)
+      .thenBy(_.minor)
 
-  override def of(major: Int): Dot[Version] = _dot(minor => apply(major, minor))
+  override def of(major: Int): Dot[Version] = minor => apply(major, minor)
 
-  override protected def versionFromArray = {case Array(major, minor) => apply(major, minor)}
+  override protected def versionFromArray = { case Array(major, minor) => apply(major, minor) }
+
+  /**
+    * Extracts a version from a string.
+    *
+    * @param version the string from which to extract a version
+    * @return an [[Option]] containing the major and minor version numbers;
+    *         [[None]] if the string did not represent a valid version
+    */
+  def unapply(version: String): Option[(Int, Int)] = parseAsOption(version) flatMap unapply
 }

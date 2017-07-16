@@ -1,4 +1,5 @@
-package com.nthportal.versions
+package com.nthportal
+package versions
 package v4
 
 /**
@@ -9,7 +10,7 @@ package v4
   * @param _3 the third value of the version
   * @param _4 the fourth value of the version
   */
-case class Version(_1: Int, _2: Int, _3: Int, _4: Int) extends VersionBase[Version, ExtendedVersion] {
+final case class Version(_1: Int, _2: Int, _3: Int, _4: Int) extends VersionBase[Version, ExtendedVersion] {
   // Validate values
   require(_1 >= 0 && _2 >= 0 && _3 >= 0 && _4 >= 0, "_1, _2, _3, and _4 values must all be >= 0")
 
@@ -17,13 +18,26 @@ case class Version(_1: Int, _2: Int, _3: Int, _4: Int) extends VersionBase[Versi
 
   override private[versions] def extendedCompanion = ExtendedVersion
 
-  override def toString = s"${_1}.${_2}.${_3}.${_4}"  // Brackets because 2.11 doesn't like it without them
+  override def toString = s"${_1}.${_2}.${_3}.${_4}"
 }
 
 object Version extends VersionCompanion[Version, ExtendedVersion] with Of[Dot[Dot[Dot[Version]]]] {
-  override private[versions] val ordering: Ordering[Version] = Ordering by (v => (v._1, v._2, v._3, v._4))
+  override private[versions] val ordering: Ordering[Version] =
+    Ordering.by[Version, Int](_._1)
+      .thenBy(_._2)
+      .thenBy(_._3)
+      .thenBy(_._4)
 
-  override def of(_1: Int): Dot[Dot[Dot[Version]]] = _dot(_2 => _dot(_3 => _dot(_4 => apply(_1, _2, _3, _4))))
+  override def of(_1: Int): Dot[Dot[Dot[Version]]] = _2 => _3 => _4 => apply(_1, _2, _3, _4)
 
-  override protected def versionFromArray = {case Array(_1, _2, _3, _4) => apply(_1, _2, _3, _4)}
+  override protected def versionFromArray = { case Array(_1, _2, _3, _4) => apply(_1, _2, _3, _4) }
+
+  /**
+    * Extracts a version from a string.
+    *
+    * @param version the string from which to extract a version
+    * @return an [[Option]] containing the four version numbers;
+    *         [[None]] if the string did not represent a valid version
+    */
+  def unapply(version: String): Option[(Int, Int, Int, Int)] = parseAsOption(version) flatMap unapply
 }

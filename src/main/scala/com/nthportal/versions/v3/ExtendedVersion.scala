@@ -9,7 +9,7 @@ package v3
   * @param extensionDef the [[ExtensionDef extension definition]] for this version's extension
   * @tparam E the type of the extension component of this extended version
   */
-case class ExtendedVersion[E](version: Version, extension: E, protected val extensionDef: ExtensionDef[E])
+final case class ExtendedVersion[E](version: Version, extension: E, protected val extensionDef: ExtensionDef[E])
   extends ExtendedVersionBase[Version, E, ExtendedVersion]
 
 object ExtendedVersion extends ExtendedVersionCompanion[Version, ExtendedVersion](Version)
