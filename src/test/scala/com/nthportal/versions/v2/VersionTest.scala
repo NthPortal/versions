@@ -36,6 +36,7 @@ class VersionTest extends SimpleSpec {
     Version parseVersion "1.3" should equal (Version ⋮ 1⋅3)
     Version parseVersion "0.0" should equal (Version ⋮ 0⋅0)
 
+    a [VersionFormatException] should be thrownBy {Version parseVersion "1.0."}
     a [VersionFormatException] should be thrownBy {Version parseVersion "-1.0"}
     a [VersionFormatException] should be thrownBy {Version parseVersion "1"}
     a [VersionFormatException] should be thrownBy {Version parseVersion "1.0.0"}
