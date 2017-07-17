@@ -10,7 +10,7 @@ import scala.language.higherKinds
   * @tparam E  the type of the extension component of this extended version
   * @tparam EV the type of this extended version
   */
-private[versions] trait ExtendedVersionBase[V <: VersionBase[V, EV], E, EV[X] <: ExtendedVersionBase[V, X, EV]]
+trait ExtendedVersionBase[V <: VersionBase[V, EV], E, EV[X] <: ExtendedVersionBase[V, X, EV]]
   extends Ordered[EV[E]] {
   /**
     * The version component of this extended version.

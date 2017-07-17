@@ -8,7 +8,7 @@ import scala.language.higherKinds
   * @tparam V  the type of the version
   * @tparam EV the type of the extended version associated with the version
   */
-private[versions] trait VersionCompanion[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV]] {
+trait VersionCompanion[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV]] {
   /**
     * An ordering for the version for which this is a companion.
     */

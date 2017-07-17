@@ -10,7 +10,6 @@ import scala.language.higherKinds
   * @tparam V  the type of the version component of the extended version
   * @tparam EV the type of the extended version
   */
-private[versions]
 abstract class ExtendedVersionCompanion[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV]]
 (c: VersionCompanion[V, EV]) {
   /**

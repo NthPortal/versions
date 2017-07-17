@@ -8,7 +8,7 @@ import scala.language.higherKinds
   * @tparam V  the type of the version
   * @tparam EV the type of the extended version associated with the version
   */
-private[versions] trait VersionBase[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV]]
+trait VersionBase[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV]]
   extends Ordered[V]
           with Dash[V, EV] {
   /**
@@ -26,8 +26,21 @@ private[versions] trait VersionBase[V <: VersionBase[V, EV], EV[E] <: ExtendedVe
     */
   protected def extendedCompanion: ExtendedVersionCompanion[V, EV]
 
+  /**
+    * Returns a [[Seq]] representation of this version.
+    *
+    * @return a Seq representation of this version
+    */
   def toSeq: Seq[Int]
 
+  /**
+    * Converts this version to another type.
+    *
+    * @param companion a [[VersionCompanion companion]] of the type of version
+    *                  to which this should be converted
+    * @return an [[Option]] containing this version converted to
+    *         the other type, if it can be represented by the other type
+    */
   def to[V2 <: VersionBase[V2, EV2], EV2[E] <: ExtendedVersionBase[V2, E, EV2]]
   (companion: VersionCompanion[V2, EV2]): Option[V2] = companion.versionFromSeq.lift(toSeq)
 
