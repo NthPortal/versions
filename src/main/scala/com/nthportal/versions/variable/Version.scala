@@ -7,19 +7,21 @@ final case class Version private(private[Version] val parts: IndexedSeq[Int])
 
   def size: Int = parts.size
 
-  override private[versions] def companion = Version
+  override protected def companion = Version
 
-  override private[versions] def extendedCompanion = ExtendedVersion
+  override protected def extendedCompanion = ExtendedVersion
+
+  override protected def toSeq: Seq[Int] = parts
 
   override def toString = parts mkString "."
 }
 
-private sealed case class WithSize(range: Range) extends VersionCompanion[Version, ExtendedVersion] {
+sealed case class WithSize private[variable](range: Range) extends VersionCompanion[Version, ExtendedVersion] {
   require(range.min > 0, "versions must have a positive number of parts")
 
   override private[versions] val ordering = Version.ordering
 
-  override protected def versionFromArray = { case arr if range contains arr.length => Version(arr.toVector) }
+  override protected[versions] def versionFromSeq = { case seq if range contains seq.length => Version(seq.toVector) }
 
   def apply(parts: Int*): Version = {
     val vector = parts.toVector
@@ -36,5 +38,5 @@ object Version extends WithSize(1 to 16) {
     Ordering by { _.parts }
   }
 
-  def withSize(range: Range): VersionCompanion[Version, ExtendedVersion] = WithSize(range)
+  def withSize(range: Range): WithSize = WithSize(range)
 }

@@ -15,11 +15,11 @@ private[versions] trait VersionCompanion[V <: VersionBase[V, EV], EV[E] <: Exten
   private[versions] val ordering: Ordering[V]
 
   /**
-    * Returns a partial function which may create a version from an array of values.
+    * Returns a partial function which may create a version from a sequence of values.
     *
-    * @return a partial function which may create a version from an array of values
+    * @return a partial function which may create a version from a sequence of values
     */
-  protected def versionFromArray: PartialFunction[Array[Int], V]
+  protected[versions] def versionFromSeq: PartialFunction[Seq[Int], V]
 
   /**
     * Parses a string into a version.
@@ -32,8 +32,8 @@ private[versions] trait VersionCompanion[V <: VersionBase[V, EV], EV[E] <: Exten
   def parseVersion(@deprecatedName('v, since = "1.3.0") version: String): V = {
     try {
       require(!version.endsWith("."), "version cannot end with a '.'")
-      val a = version split '.' map Integer.parseInt
-      versionFromArray.applyOrElse(a, (_: Array[Int]) => throw new VersionFormatException(version))
+      val seq = version.split('.').map(_.toInt).toSeq
+      versionFromSeq.applyOrElse(seq, (_: Seq[Int]) => throw new VersionFormatException(version))
     } catch {
       case e: IllegalArgumentException => throw new VersionFormatException(version, e)
     }

@@ -14,9 +14,11 @@ final case class Version(_1: Int, _2: Int, _3: Int, _4: Int) extends VersionBase
   // Validate values
   require(_1 >= 0 && _2 >= 0 && _3 >= 0 && _4 >= 0, "_1, _2, _3, and _4 values must all be >= 0")
 
-  override private[versions] def companion = Version
+  override protected def companion = Version
 
-  override private[versions] def extendedCompanion = ExtendedVersion
+  override protected def extendedCompanion = ExtendedVersion
+
+  override protected def toSeq: Seq[Int] = Seq(_1, _2, _3, _4)
 
   override def toString = s"${_1}.${_2}.${_3}.${_4}"
 }
@@ -30,7 +32,7 @@ object Version extends VersionCompanion[Version, ExtendedVersion] with Of[Dot[Do
 
   override def of(_1: Int): Dot[Dot[Dot[Version]]] = _2 => _3 => _4 => apply(_1, _2, _3, _4)
 
-  override protected def versionFromArray = { case Array(_1, _2, _3, _4) => apply(_1, _2, _3, _4) }
+  override protected[versions] def versionFromSeq = { case Seq(_1, _2, _3, _4) => apply(_1, _2, _3, _4) }
 
   /**
     * Extracts a version from a string.
