@@ -58,6 +58,7 @@ class VersionTest extends SimpleSpec {
     inside("1.3") { case Version(1, 3) => }
     inside("0.0") { case Version(0, 0) => }
 
+    Version unapply "1.0." shouldBe empty
     Version unapply "-1.0" shouldBe empty
     Version unapply "1" shouldBe empty
     Version unapply "1.0.0" shouldBe empty

@@ -7,6 +7,12 @@ package variable
   * are within a specified range.
   */
 object Versions {
+  private[variable] val ordering: Ordering[Version] = {
+    import Ordering.Implicits._
+
+    // It's so nice that this just works
+    Ordering by { _.values }
+  }
 
   /**
     * A [[VersionCompanion companion]] for [[Version]]s which only allows
@@ -17,9 +23,11 @@ object Versions {
   case class OfSize private[variable](range: Range) extends VersionCompanion[Version, ExtendedVersion] {
     require(range.min > 0, "versions must have a positive number of parts")
 
-    override private[versions] val ordering = Version.ordering
+    override private[versions] val ordering = Versions.ordering
 
-    override protected[versions] def versionFromSeq = { case seq if range contains seq.length => Version(seq.toVector) }
+    override protected[versions] def versionFromSeq = {
+      case seq if range contains seq.length => new Version(seq.toVector)
+    }
 
     /**
       * Returns a [[ExtendedVersionCompanion companion]] for an [[ExtendedVersion]],
@@ -41,7 +49,7 @@ object Versions {
     def apply(values: Int*): Version = {
       val vector = values.toVector
       require(range contains vector.size, s"version size not in range: $range")
-      Version(vector)
+      new Version(vector)
     }
 
     /**

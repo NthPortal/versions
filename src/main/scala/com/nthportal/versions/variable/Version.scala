@@ -8,7 +8,8 @@ import scala.collection.immutable
   *
   * @param values the values of the version
   */
-final case class Version private(values: immutable.IndexedSeq[Int]) extends VersionBase[Version, ExtendedVersion] {
+final class Version private[variable](val values: immutable.IndexedSeq[Int])
+  extends VersionBase[Version, ExtendedVersion] {
   require(values forall { _ >= 0 }, "Version numbers must be non-negative")
 
   /**
@@ -26,13 +27,13 @@ final case class Version private(values: immutable.IndexedSeq[Int]) extends Vers
   override def toSeq: Seq[Int] = values
 
   override def toString = values mkString "."
-}
 
-object Version extends Versions.OfSize(1 to 16) {
-  override private[versions] val ordering: Ordering[Version] = {
-    import Ordering.Implicits._
-
-    // It's so nice that this just works
-    Ordering by { _.values }
+  override def equals(obj: Any) = obj match {
+    case that: Version => this.values == that.values
+    case _ => false
   }
+
+  override def hashCode() = values.hashCode()
 }
+
+object Version extends Versions.OfSize(1 to 16)
