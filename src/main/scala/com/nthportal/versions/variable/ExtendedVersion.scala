@@ -22,4 +22,8 @@ final class ExtendedVersion[E](val version: Version, val extension: E, protected
   override def hashCode() = (version, extension, extensionDef).hashCode()
 }
 
+/**
+  * [[ExtendedVersionCompanion Companion object]] for [[ExtendedVersion]],
+  * which allows version [[Version.size sizes]] in the range `1 to 16`.
+  */
 object ExtendedVersion extends ExtendedVersions.From(Version)

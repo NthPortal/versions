@@ -36,4 +36,8 @@ final class Version private[variable](val values: immutable.IndexedSeq[Int], ofS
   override def hashCode() = values.hashCode()
 }
 
+/**
+  * [[VersionCompanion Companion object]] for [[Version]], which
+  * allows version [[Version.size sizes]] in the range `1 to 16`.
+  */
 object Version extends Versions.OfSize(1 to 16)
