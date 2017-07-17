@@ -1,7 +1,7 @@
 package com.nthportal.versions
 package variable
 
-final case class Version private(private[Version] val parts: IndexedSeq[Int])
+final case class Version private(private[variable] val parts: IndexedSeq[Int])
   extends VersionBase[Version, ExtendedVersion] {
   require(parts forall { _ >= 0 }, "Version numbers must be non-negative")
 
@@ -28,6 +28,8 @@ sealed case class WithSize private[variable](range: Range) extends VersionCompan
     require(vector contains parts.size, s"version size not in range: $range")
     Version(vector)
   }
+
+  def unapplySeq(version: String): Option[Seq[Int]] = parseAsOption(version) map { _.parts }
 }
 
 object Version extends WithSize(1 to 16) {
