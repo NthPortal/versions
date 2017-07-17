@@ -68,4 +68,14 @@ class VersionTest extends SimpleSpec {
     Version unapply "1.f.0" shouldBe empty
     Version unapply "really not a version" shouldBe empty
   }
+
+  it should "convert to other types correctly" in {
+    val v = Version(1, 2, 5)
+
+    v.to(Version).value shouldEqual v
+    v.to(variable.Version).value shouldEqual variable.Version(1, 2, 5)
+
+    v.to(v2.Version) shouldBe empty
+    v.to(v4.Version) shouldBe empty
+  }
 }

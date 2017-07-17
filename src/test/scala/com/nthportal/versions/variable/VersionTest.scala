@@ -68,4 +68,18 @@ class VersionTest extends SimpleSpec {
     Version unapplySeq "1.f" shouldBe empty
     Version unapplySeq "really not a version" shouldBe empty
   }
+
+  it should "convert to other types correctly" in {
+    Version(1, 2, 5, 4, 16).to(Version).value shouldEqual Version(1, 2, 5, 4, 16)
+    Version(1, 3).to(v2.Version).value shouldEqual v2.Version(1, 3)
+    Version(1, 2, 5).to(v3.Version).value shouldEqual v3.Version(1, 2, 5)
+    Version(1, 2, 5, 4).to(v4.Version).value shouldEqual v4.Version(1, 2, 5, 4)
+
+    val v = Version(1)
+
+    v.to(Version).value shouldEqual v
+    v.to(v2.Version) shouldBe empty
+    v.to(v3.Version) shouldBe empty
+    v.to(v4.Version) shouldBe empty
+  }
 }
