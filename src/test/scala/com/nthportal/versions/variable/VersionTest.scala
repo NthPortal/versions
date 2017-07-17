@@ -10,6 +10,13 @@ class VersionTest extends SimpleSpec {
     an [IllegalArgumentException] should be thrownBy { Version(0, 0, 0, -1) }
   }
 
+  it should "return the correct size" in {
+    Version(1, 3) should have size 2
+    Version(1, 2, 5) should have size 3
+    Version(1, 2, 5, 4) should have size 4
+    Version(1, 2, 5, 4, 16) should have size 5
+  }
+
   it should "compare correctly" in {
     val v1 = Version(1, 2, 5)
 
@@ -25,6 +32,18 @@ class VersionTest extends SimpleSpec {
 
     v2 should be > Version(1, 2)
     v2 should be < Version(1, 2, 0, 0)
+  }
+
+  it should "evaluate equality correctly" in {
+    val v = Version(1, 2, 5)
+
+    v shouldEqual Version(1, 2, 5)
+    v.hashCode() shouldEqual Version(1, 2, 5).hashCode()
+
+    v should not equal Version(1, 2, 6)
+    v should not equal Version(1, 3)
+    v should not equal Version(1, 2, 5, 4)
+    v should not equal "a string"
   }
 
   it should "produce the correct string representation" in {

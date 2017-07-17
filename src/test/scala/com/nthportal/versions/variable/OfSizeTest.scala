@@ -4,6 +4,13 @@ package variable
 class OfSizeTest extends SimpleSpec {
   behavior of "OfSize"
 
+  it should "only allow valid sizes" in {
+    noException should be thrownBy { Versions.ofSize(1 to 10) }
+
+    an [IllegalArgumentException] should be thrownBy { Versions.ofSize(2 until 2) }
+    an [IllegalArgumentException] should be thrownBy { Versions.ofSize(0 to 5) }
+  }
+
   it should "create versions correctly" in {
     val ver = Versions.ofSize(1 to 2)
 

@@ -21,6 +21,7 @@ object Versions {
     * @param range the range in which versions' sizes must be
     */
   case class OfSize private[variable](range: Range) extends VersionCompanion[Version, ExtendedVersion] {
+    require(range.nonEmpty, "size range cannot be empty")
     require(range.min > 0, "versions must have a positive number of parts")
 
     override private[versions] val ordering = Versions.ordering
