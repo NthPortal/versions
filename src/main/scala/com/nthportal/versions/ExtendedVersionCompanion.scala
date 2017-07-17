@@ -13,6 +13,14 @@ import scala.language.higherKinds
 abstract class ExtendedVersionCompanion[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV]]
 (c: VersionCompanion[V, EV]) {
   /**
+    * Returns the [[VersionCompanion companion object]] for
+    * non-extended versions.
+    *
+    * @return the companion object for non-extended versions
+    */
+  final def baseCompanion: VersionCompanion[V, EV] = c
+
+  /**
     * Creates an extended version from a version, extension, and
     * [[ExtensionDef extension definition]].
     *
