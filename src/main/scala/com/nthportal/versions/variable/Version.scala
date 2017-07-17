@@ -16,7 +16,7 @@ final case class Version private(private[variable] val parts: IndexedSeq[Int])
   override def toString = parts mkString "."
 }
 
-sealed case class WithSize private[variable](range: Range) extends VersionCompanion[Version, ExtendedVersion] {
+sealed case class OfSize private[variable](range: Range) extends VersionCompanion[Version, ExtendedVersion] {
   require(range.min > 0, "versions must have a positive number of parts")
 
   override private[versions] val ordering = Version.ordering
@@ -32,7 +32,7 @@ sealed case class WithSize private[variable](range: Range) extends VersionCompan
   def unapplySeq(version: String): Option[Seq[Int]] = parseAsOption(version) map { _.parts }
 }
 
-object Version extends WithSize(1 to 16) {
+object Version extends OfSize(1 to 16) {
   override private[versions] val ordering: Ordering[Version] = {
     import Ordering.Implicits._
 
@@ -40,5 +40,5 @@ object Version extends WithSize(1 to 16) {
     Ordering by { _.parts }
   }
 
-  def withSize(range: Range): WithSize = WithSize(range)
+  def ofSize(range: Range): OfSize = OfSize(range)
 }
