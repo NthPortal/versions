@@ -10,7 +10,7 @@ import scala.language.higherKinds
   * @tparam E  the type of the extension component of this extended version
   * @tparam EV the type of this extended version
   */
-private[versions] trait ExtendedVersionBase[V <: VersionBase[V, EV], E, EV[X] <: ExtendedVersionBase[V, X, EV]]
+trait ExtendedVersionBase[V <: VersionBase[V, EV], E, EV[X] <: ExtendedVersionBase[V, X, EV]]
   extends Ordered[EV[E]] {
   /**
     * The version component of this extended version.
@@ -24,6 +24,19 @@ private[versions] trait ExtendedVersionBase[V <: VersionBase[V, EV], E, EV[X] <:
     * The [[ExtensionDef extension definition]] for this version's extension.
     */
   protected val extensionDef: ExtensionDef[E]
+
+  /**
+    * Converts this extended version to another type.
+    *
+    * @param companion a [[ExtendedVersionCompanion companion]] of the type
+    *                  of version to which this should be converted
+    * @return an [[Option]] containing this version converted to
+    *         the other type, if it can be represented by the other type
+    */
+  def to[V2 <: VersionBase[V2, EV2], EV2[X] <: ExtendedVersionBase[V2, X, EV2]]
+  (companion: ExtendedVersionCompanion[V2, EV2]): Option[EV2[E]] = {
+    companion.baseCompanion.versionFromSeq.lift(version.toSeq) map { companion(_, extension, extensionDef) }
+  }
 
   /**
     * Compares two extended versions. Adheres to the general contract

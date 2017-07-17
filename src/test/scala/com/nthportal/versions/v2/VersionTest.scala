@@ -58,10 +58,21 @@ class VersionTest extends SimpleSpec {
     inside("1.3") { case Version(1, 3) => }
     inside("0.0") { case Version(0, 0) => }
 
+    Version unapply "1.0." shouldBe empty
     Version unapply "-1.0" shouldBe empty
     Version unapply "1" shouldBe empty
     Version unapply "1.0.0" shouldBe empty
     Version unapply "1.f" shouldBe empty
     Version unapply "really not a version" shouldBe empty
+  }
+
+  it should "convert to other types correctly" in {
+    val v = Version(1, 3)
+
+    v.to(Version).value shouldEqual v
+    v.to(variable.Version).value shouldEqual variable.Version(1, 3)
+
+    v.to(v3.Version) shouldBe empty
+    v.to(v4.Version) shouldBe empty
   }
 }

@@ -17,7 +17,7 @@ package object versions {
     * }
     * }}}
     */
-  object -- extends v2.Extractor with v3.Extractor with v4.Extractor
+  object -- extends v2.Extractor with v3.Extractor with v4.Extractor with variable.Extractor
 
   /**
     * Alias for [[--]].
