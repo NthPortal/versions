@@ -25,9 +25,10 @@ object Versions {
 
     override private[versions] val ordering = Versions.ordering
 
-    override protected[versions] def versionFromSeq = {
-      case seq if range contains seq.length => new Version(seq.toVector)
-    }
+    @inline
+    private def allowedSize(seq: Seq[Int]): Boolean = range contains seq.size
+
+    override protected[versions] def versionFromSeq = { case seq if allowedSize(seq) => new Version(seq.toVector) }
 
     /**
       * Returns a [[ExtendedVersionCompanion companion]] for an [[ExtendedVersion]],
@@ -48,8 +49,19 @@ object Versions {
     @throws[IllegalArgumentException]
     def apply(values: Int*): Version = {
       val vector = values.toVector
-      require(range contains vector.size, s"version size not in range: $range")
+      require(allowedSize(vector), s"version size not in range: $range")
       new Version(vector)
+    }
+
+    /**
+      * Extracts values from a version.
+      *
+      * @param version the version from which to extract values
+      * @return the values of the version
+      */
+    def unapplySeq(version: Version): Option[Seq[Int]] = {
+      if (allowedSize(version.values)) Some(version.values)
+      else None
     }
 
     /**

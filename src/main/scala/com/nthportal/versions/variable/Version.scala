@@ -36,6 +36,4 @@ final class Version private[variable](val values: immutable.IndexedSeq[Int])
   override def hashCode() = values.hashCode()
 }
 
-object Version extends Versions.OfSize(1 to 16) {
-  def unapplySeq(version: Version): Some[Seq[Int]] = Some(version.values)
-}
+object Version extends Versions.OfSize(1 to 16)

@@ -33,42 +33,6 @@ class VersionTest extends SimpleSpec {
     Version(1, 2, 0, 20, 0).toString shouldBe "1.2.0.20.0"
   }
 
-  it should "parse versions correctly" in {
-    Version parseVersion "1.2.5" shouldEqual Version(1, 2, 5)
-    Version parseVersion "0.0" shouldEqual Version(0, 0)
-    Version parseVersion "12" shouldEqual Version(12)
-    Version parseVersion "1.2.0.20.0" shouldEqual Version(1, 2, 0, 20, 0)
-
-    a [VersionFormatException] should be thrownBy {Version parseVersion "1.0."}
-    a [VersionFormatException] should be thrownBy {Version parseVersion "-1.0"}
-    a [VersionFormatException] should be thrownBy {Version parseVersion "1.f"}
-    a [VersionFormatException] should be thrownBy {Version parseVersion "really not a version"}
-  }
-
-  it should "parse versions as options correctly" in {
-    Version.parseAsOption("1.2.5").value shouldEqual Version(1, 2, 5)
-    Version.parseAsOption("0.0").value shouldEqual Version(0, 0)
-    Version.parseAsOption("12").value shouldEqual Version(12)
-    Version.parseAsOption("1.2.0.20.0").value shouldEqual Version(1, 2, 0, 20, 0)
-
-    Version parseAsOption "1.0." shouldBe empty
-    Version parseAsOption "-1.0" shouldBe empty
-    Version parseAsOption "1.f" shouldBe empty
-    Version parseAsOption "really not a version" shouldBe empty
-  }
-
-  it should "pattern match versions correctly" in {
-    inside("1.2.5") { case Version(1, 2, 5) => }
-    inside("0.0") { case Version(0, 0) => }
-    inside("12") { case Version(12) => }
-    inside("1.2.0.20.0") { case Version(1, 2, 0, 20, 0) => }
-
-    Version unapplySeq "1.0." shouldBe empty
-    Version unapplySeq "-1.0" shouldBe empty
-    Version unapplySeq "1.f" shouldBe empty
-    Version unapplySeq "really not a version" shouldBe empty
-  }
-
   it should "convert to other types correctly" in {
     Version(1, 2, 5, 4, 16).to(Version).value shouldEqual Version(1, 2, 5, 4, 16)
     Version(1, 3).to(v2.Version).value shouldEqual v2.Version(1, 3)
