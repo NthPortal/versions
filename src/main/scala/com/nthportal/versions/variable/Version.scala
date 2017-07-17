@@ -23,6 +23,8 @@ sealed case class OfSize private[variable](range: Range) extends VersionCompanio
 
   override protected[versions] def versionFromSeq = { case seq if range contains seq.length => Version(seq.toVector) }
 
+  def extended: ExtendedVersionCompanion[Version, ExtendedVersion] = ExtendedVersion.From(this)
+
   def apply(parts: Int*): Version = {
     val vector = parts.toVector
     require(vector contains parts.size, s"version size not in range: $range")

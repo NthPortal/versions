@@ -7,7 +7,8 @@ final case class ExtendedVersion[E](version: Version, extension: E, protected va
 object ExtendedVersion extends ExtendedVersionCompanion[Version, ExtendedVersion](Version) {
   def ofSize(range: Range): ExtendedVersionCompanion[Version, ExtendedVersion] = From(Version.ofSize(range))
 
-  private final case class From(ofSize: OfSize) extends ExtendedVersionCompanion[Version, ExtendedVersion](ofSize) {
+  private[variable] final case class From(ofSize: OfSize)
+    extends ExtendedVersionCompanion[Version, ExtendedVersion](ofSize) {
     override def apply[E](version: Version, extension: E, ed: ExtensionDef[E]) = ExtendedVersion(version, extension, ed)
   }
 
