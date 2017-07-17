@@ -75,4 +75,18 @@ class ExtendedVersionTest extends SimpleSpec {
     // Missing default extension
     ExtendedVersion.unapply("1.0.0.0.0")(ExtensionDef.fromOrdered[Maven], extensionParser) shouldBe empty
   }
+
+  it should "convert to other types correctly" in {
+    (Version(1, 2, 5, 4, 16) -- Snapshot).to(ExtendedVersion).value shouldEqual Version(1, 2, 5, 4, 16) -- Snapshot
+    (Version(1, 3) -- Snapshot).to(v2.ExtendedVersion).value shouldEqual v2.Version(1, 3) -- Snapshot
+    (Version(1, 2, 5) -- Snapshot).to(v3.ExtendedVersion).value shouldEqual v3.Version(1, 2, 5) -- Snapshot
+    (Version(1, 2, 5, 4) -- Snapshot).to(v4.ExtendedVersion).value shouldEqual v4.Version(1, 2, 5, 4) -- Snapshot
+
+    val ev = Version(1) -- Snapshot
+
+    ev.to(ExtendedVersion).value shouldEqual ev
+    ev.to(v2.ExtendedVersion) shouldBe empty
+    ev.to(v3.ExtendedVersion) shouldBe empty
+    ev.to(v4.ExtendedVersion) shouldBe empty
+  }
 }
