@@ -20,7 +20,7 @@ final case class Version(major: Int, minor: Int, patch: Int) extends VersionBase
 
   override protected def extendedCompanion = ExtendedVersion
 
-  override protected def toSeq: Seq[Int] = Seq(major, minor, patch)
+  override def toSeq: Seq[Int] = Seq(major, minor, patch)
 
   override def toString = s"$major.$minor.$patch"
 }

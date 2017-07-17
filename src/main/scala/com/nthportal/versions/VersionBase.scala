@@ -26,7 +26,7 @@ private[versions] trait VersionBase[V <: VersionBase[V, EV], EV[E] <: ExtendedVe
     */
   protected def extendedCompanion: ExtendedVersionCompanion[V, EV]
 
-  protected def toSeq: Seq[Int]
+  def toSeq: Seq[Int]
 
   def to[V2 <: VersionBase[V2, EV2], EV2[E] <: ExtendedVersionBase[V2, E, EV2]]
   (companion: VersionCompanion[V2, EV2]): Option[V2] = companion.versionFromSeq.lift(toSeq)

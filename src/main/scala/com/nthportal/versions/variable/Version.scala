@@ -11,7 +11,7 @@ final case class Version private(private[variable] val parts: IndexedSeq[Int])
 
   override protected def extendedCompanion = ExtendedVersion
 
-  override protected def toSeq: Seq[Int] = parts
+  override def toSeq: Seq[Int] = parts
 
   override def toString = parts mkString "."
 }
