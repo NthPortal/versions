@@ -27,6 +27,19 @@ class ExtendedVersionTest extends SimpleSpec {
     }
   }
 
+  it should "evaluate equality correctly" in {
+    // TODO: write
+    val v = Version(1, 2, 5) -- Snapshot
+
+    v shouldEqual Version(1, 2, 5) -- Snapshot
+    v.hashCode() shouldEqual (Version(1, 2, 5) -- Snapshot).hashCode()
+
+    v should not equal Version(1, 2, 6) -- Snapshot
+    v should not equal Version(1, 3) -- Snapshot
+    v should not equal Version(1, 2, 5, 4) -- Snapshot
+    v should not equal "a string"
+  }
+
   it should "produce the correct string representation" in {
     (Version(1, 2, 5, 4, 16) -- Snapshot).toString shouldBe "1.2.5.4.16-SNAPSHOT"
     (Version(1, 2, 5, 4, 16) -- Release).toString shouldBe "1.2.5.4.16"

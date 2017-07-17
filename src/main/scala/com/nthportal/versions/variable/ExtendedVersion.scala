@@ -9,7 +9,17 @@ package variable
   * @param extensionDef the [[ExtensionDef extension definition]] for this version's extension
   * @tparam E the type of the extension component of this extended version
   */
-final case class ExtendedVersion[E](version: Version, extension: E, protected val extensionDef: ExtensionDef[E])
-  extends ExtendedVersionBase[Version, E, ExtendedVersion]
+final class ExtendedVersion[E](val version: Version, val extension: E, protected val extensionDef: ExtensionDef[E])
+  extends ExtendedVersionBase[Version, E, ExtendedVersion] {
+  override def equals(obj: Any) = obj match {
+    case that: ExtendedVersion[_] =>
+      this.version == that.version &&
+        this.extension == that.extension &&
+        this.extensionDef == that.extensionDef
+    case _ => false
+  }
 
-object ExtendedVersion extends ExtendedVersionCompanion[Version, ExtendedVersion](Version)
+  override def hashCode() = (version, extension, extensionDef).hashCode()
+}
+
+object ExtendedVersion extends ExtendedVersions.From(Version)

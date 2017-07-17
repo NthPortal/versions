@@ -8,9 +8,12 @@ package variable
   */
 object ExtendedVersions {
 
-  private[variable] final case class From(ofSize: Versions.OfSize)
+  private[variable] case class From(ofSize: Versions.OfSize)
     extends ExtendedVersionCompanion[Version, ExtendedVersion](ofSize) {
-    override def apply[E](version: Version, extension: E, ed: ExtensionDef[E]) = ExtendedVersion(version, extension, ed)
+    override def apply[E](version: Version, extension: E, ed: ExtensionDef[E]) = {
+      if (version.companion ne ofSize) ofSize.checkSize(version.values)
+      new ExtendedVersion(version, extension, ed)
+    }
   }
 
   /**

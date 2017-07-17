@@ -29,7 +29,15 @@ object Versions {
     @inline
     private def allowedSize(seq: Seq[Int]): Boolean = range contains seq.size
 
-    override protected[versions] def versionFromSeq = { case seq if allowedSize(seq) => new Version(seq.toVector) }
+    @inline
+    @throws[IllegalArgumentException]
+    private[variable] def checkSize(seq: Seq[Int]): Unit = {
+      require(allowedSize(seq), s"version size not in range: $range")
+    }
+
+    override protected[versions] def versionFromSeq = {
+      case seq if allowedSize(seq) => new Version(seq.toVector, this)
+    }
 
     /**
       * Returns a [[ExtendedVersionCompanion companion]] for an [[ExtendedVersion]],
@@ -37,7 +45,7 @@ object Versions {
       *
       * @return a companion for an ExtendedVersion with the same size range as this
       */
-    def extended: ExtendedVersionCompanion[Version, ExtendedVersion] = ExtendedVersions.From(this)
+    lazy val extended: ExtendedVersionCompanion[Version, ExtendedVersion] = ExtendedVersions.From(this)
 
     /**
       * Returns a [[Version]] with the specified values.
@@ -50,8 +58,8 @@ object Versions {
     @throws[IllegalArgumentException]
     def apply(values: Int*): Version = {
       val vector = values.toVector
-      require(allowedSize(vector), s"version size not in range: $range")
-      new Version(vector)
+      checkSize(vector)
+      new Version(vector, this)
     }
 
     /**

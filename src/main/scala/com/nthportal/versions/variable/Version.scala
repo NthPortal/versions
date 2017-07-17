@@ -8,7 +8,7 @@ import scala.collection.immutable
   *
   * @param values the values of the version
   */
-final class Version private[variable](val values: immutable.IndexedSeq[Int])
+final class Version private[variable](val values: immutable.IndexedSeq[Int], ofSize: Versions.OfSize)
   extends VersionBase[Version, ExtendedVersion] {
   require(values forall { _ >= 0 }, "Version numbers must be non-negative")
 
@@ -20,9 +20,9 @@ final class Version private[variable](val values: immutable.IndexedSeq[Int])
     */
   def size: Int = values.size
 
-  override protected def companion = Version
+  override protected[variable] def companion = ofSize
 
-  override protected def extendedCompanion = ExtendedVersion
+  override protected def extendedCompanion = ofSize.extended
 
   override def toSeq: Seq[Int] = values
 
