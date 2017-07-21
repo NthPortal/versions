@@ -4,7 +4,11 @@ package variable
 class VersionTest extends SimpleSpec {
   behavior of "Version (variable)"
 
-  it should "not allow negative version values" in {
+  it should "create versions correctly" in {
+    noException should be thrownBy { Version(1) }
+    noException should be thrownBy { Version(1, 2, 5, 4, 16) }
+
+    an [IllegalArgumentException] should be thrownBy { Version() }
     an [IllegalArgumentException] should be thrownBy { Version(-1, 0) }
     an [IllegalArgumentException] should be thrownBy { Version(0, -1, 0) }
     an [IllegalArgumentException] should be thrownBy { Version(0, 0, 0, -1) }
@@ -15,6 +19,16 @@ class VersionTest extends SimpleSpec {
     Version(1, 2, 5) should have size 3
     Version(1, 2, 5, 4) should have size 4
     Version(1, 2, 5, 4, 16) should have size 5
+  }
+
+  it should "return the correct value for an index" in {
+    val v = Version(1, 2, 5)
+    v(0) shouldBe 1
+    v(1) shouldBe 2
+    v(2) shouldBe 5
+
+    an [IndexOutOfBoundsException] should be thrownBy { v(-1) }
+    an [IndexOutOfBoundsException] should be thrownBy { v(3) }
   }
 
   it should "compare correctly" in {
@@ -38,7 +52,7 @@ class VersionTest extends SimpleSpec {
     val v = Version(1, 2, 5)
 
     v shouldEqual Version(1, 2, 5)
-    v.hashCode() shouldEqual Version(1, 2, 5).hashCode()
+    v.## shouldEqual Version(1, 2, 5).##
 
     v should not equal Version(1, 2, 6)
     v should not equal Version(1, 3)

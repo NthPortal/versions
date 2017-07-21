@@ -2,17 +2,17 @@ package com.nthportal.versions
 package variable
 
 class OfSizeTest extends SimpleSpec {
-  behavior of "Versions.ofSize"
+  behavior of "Version.ofSize"
 
   it should "only allow valid sizes" in {
-    noException should be thrownBy { Versions.ofSize(1 to 10) }
+    noException should be thrownBy { Version.ofSize(1 to 10) }
 
-    an [IllegalArgumentException] should be thrownBy { Versions.ofSize(2 until 2) }
-    an [IllegalArgumentException] should be thrownBy { Versions.ofSize(0 to 5) }
+    an [IllegalArgumentException] should be thrownBy { Version.ofSize(2 until 2) }
+    an [IllegalArgumentException] should be thrownBy { Version.ofSize(0 to 5) }
   }
 
   it should "create versions correctly" in {
-    val V = Versions.ofSize(1 to 2)
+    val V = Version.ofSize(1 to 2)
 
     noException should be thrownBy { V(1, 3) }
     noException should be thrownBy { V(0, 0) }
@@ -23,7 +23,7 @@ class OfSizeTest extends SimpleSpec {
   }
 
   it should "parse versions correctly" in {
-    val V = Versions.ofSize(1 to 2)
+    val V = Version.ofSize(1 to 2)
 
     V parseVersion "1.3" shouldEqual V(1, 3)
     V parseVersion "0.0" shouldEqual V(0, 0)
@@ -38,7 +38,7 @@ class OfSizeTest extends SimpleSpec {
   }
 
   it should "parse versions as options correctly" in {
-    val V = Versions.ofSize(1 to 2)
+    val V = Version.ofSize(1 to 2)
 
     V.parseAsOption("1.3").value shouldEqual V(1, 3)
     V.parseAsOption("0.0").value shouldEqual V(0, 0)
@@ -53,7 +53,7 @@ class OfSizeTest extends SimpleSpec {
   }
 
   it should "pattern match versions correctly" in {
-    val V = Versions.ofSize(2 to 3)
+    val V = Version.ofSize(2 to 3)
 
     inside(V(1, 2, 5)) { case V(1, 2, 5) => }
     inside(V(0, 0, 0)) { case V(0, 0, 0) => }
@@ -64,7 +64,7 @@ class OfSizeTest extends SimpleSpec {
   }
 
   it should "pattern match version strings correctly" in {
-    val V = Versions.ofSize(1 to 2)
+    val V = Version.ofSize(1 to 2)
 
     inside("1.3") { case V(1, 3) => }
     inside("0.0") { case V(0, 0) => }
