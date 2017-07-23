@@ -9,9 +9,8 @@ import scala.collection.immutable
   * @param values the values of the version
   */
 final class Version private(val values: IndexedSeq[Int])
-  extends VersionBase[Version, ExtendedVersion] {
-  require(values forall { _ >= 0 }, "Version numbers must be non-negative")
-
+  extends VersionBase[Version, ExtendedVersion]
+          with Dot[Version] {
 
   /**
     * Returns the size of the version (the number of
@@ -20,6 +19,11 @@ final class Version private(val values: IndexedSeq[Int])
     * @return returns the size of the version
     */
   def size: Int = values.size
+
+  override def apply(value: Int) = {
+    require(value >= 0, "Version number must be non-negative")
+    new Version(values :+ value)
+  }
 
   override protected def companion = Version
 
@@ -41,10 +45,12 @@ final class Version private(val values: IndexedSeq[Int])
   * A [[Companion]] which allows the creation of [[Version]]s of
   * any non-empty size.
   */
-object Version extends Companion {
+object Version extends Companion with Of[Version] {
   override protected def allowedSize(seq: Seq[Int]): Boolean = seq.nonEmpty
 
   override protected def invalidSizeMessage: String = "version must have a positive number of values"
+
+  override def of(value: Int) = apply(immutable.IndexedSeq(value))
 
   /**
     * A [[Companion]] for [[Version]]s which only allows creating
@@ -80,5 +86,8 @@ object Version extends Companion {
   def ofSize(range: Range): OfSize = OfSize(range)
 
   /** Creates a version from an [[immutable.IndexedSeq]] */
-  private[variable] def apply(values: immutable.IndexedSeq[Int]): Version = new Version(values)
+  private[variable] def apply(values: immutable.IndexedSeq[Int]): Version = {
+    require(values forall { _ >= 0 }, "Version numbers must be non-negative")
+    new Version(values)
+  }
 }

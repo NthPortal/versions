@@ -4,6 +4,12 @@ package variable
 class VersionTest extends SimpleSpec {
   behavior of "Version (variable)"
 
+  it should "have consistent constructors" in {
+    val v = Version(1)(2)(5)(4)(16)
+    v should equal (Version of 1 dot 2 dot 5 dot 4 dot 16)
+    v shouldEqual Version(1, 2, 5, 4, 16)
+  }
+
   it should "create versions correctly" in {
     noException should be thrownBy { Version(1) }
     noException should be thrownBy { Version(1, 2, 5, 4, 16) }
@@ -12,6 +18,8 @@ class VersionTest extends SimpleSpec {
     an [IllegalArgumentException] should be thrownBy { Version(-1, 0) }
     an [IllegalArgumentException] should be thrownBy { Version(0, -1, 0) }
     an [IllegalArgumentException] should be thrownBy { Version(0, 0, 0, -1) }
+
+    an [IllegalArgumentException] should be thrownBy { Version of 1 dot -1 }
   }
 
   it should "return the correct size" in {
