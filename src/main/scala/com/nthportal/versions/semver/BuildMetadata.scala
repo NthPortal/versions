@@ -28,7 +28,7 @@ object BuildMetadata {
       * @throws IllegalArgumentException if the metadata is invalid
       * @return the metadata represented by the string
       */
-    @throws[IllegalArgumentException]
+    @throws[IllegalArgumentException]("if the metadata is invalid")
     def parse(metadata: String): M
   }
 

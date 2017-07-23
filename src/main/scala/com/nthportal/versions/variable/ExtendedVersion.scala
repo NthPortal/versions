@@ -16,7 +16,7 @@ object ExtendedVersion extends ExtendedVersionCompanion[Version, ExtendedVersion
   private[variable] final case class OfSize(ofSize: Version.OfSize)
     extends ExtendedVersionCompanion[Version, ExtendedVersion](ofSize) {
 
-    @throws[IllegalArgumentException]
+    @throws[IllegalArgumentException]("if the number of values in the version does not conform to the allowed sizes")
     override def apply[E](version: Version, extension: E, ed: ExtensionDef[E]) = {
       ofSize.checkSize(version.values)
       ExtendedVersion(version, extension, ed)

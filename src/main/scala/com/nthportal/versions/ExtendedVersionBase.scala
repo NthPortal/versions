@@ -35,7 +35,7 @@ trait ExtendedVersionBase[V <: VersionBase[V, EV], E, EV[X] <: ExtendedVersionBa
     * @throws IllegalArgumentException if this version cannot be converted
     *                                  to the other type
     */
-  @throws[IllegalArgumentException]
+  @throws[IllegalArgumentException]("if this version cannot be converted to the other type")
   def to[V2 <: VersionBase[V2, EV2], EV2[X] <: ExtendedVersionBase[V2, X, EV2]]
   (companion: ExtendedVersionCompanion[V2, EV2]): EV2[E] = {
     if (companion eq version.extendedCompanion) this.asInstanceOf[EV2[E]]
@@ -63,11 +63,11 @@ trait ExtendedVersionBase[V <: VersionBase[V, EV], E, EV[X] <: ExtendedVersionBa
     * `that` MUST have the same [[Ordering]] in its extension definition as `this`.
     *
     * @param that the extended version to compare to this
-    * @throws IllegalArgumentException if `that` does not have the same
-    *                                  extension definition as this
+    * @throws IllegalArgumentException if the other extended version does not have
+    *                                  the same extension ordering as this
     * @return the result of comparing `this` with `that`
     */
-  @throws[IllegalArgumentException]
+  @throws[IllegalArgumentException]("if the other extended version does not have the same extension ordering as this")
   override def compare(that: EV[E]): Int = {
     require(extensionDef.ordering == that.extensionDef.ordering,
       "cannot compare extended versions with different extension orderings")
@@ -75,5 +75,5 @@ trait ExtendedVersionBase[V <: VersionBase[V, EV], E, EV[X] <: ExtendedVersionBa
     (this.version compare that.version) thenCompare(this.extension, that.extension)
   }
 
-  override def toString = s"$version${ extensionDef.extToString(extension) }"
+  override def toString = s"$version${extensionDef.extToString(extension)}"
 }

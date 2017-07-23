@@ -43,7 +43,7 @@ trait VersionBase[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV
     * @throws IllegalArgumentException if this version cannot be converted
     *                                  to the other type
     */
-  @throws[IllegalArgumentException]
+  @throws[IllegalArgumentException]("if this version cannot be converted to the other type")
   def to[V2 <: VersionBase[V2, EV2], EV2[E] <: ExtendedVersionBase[V2, E, EV2]]
   (companion: VersionCompanion[V2, EV2]): V2 = {
     if (companion eq this.companion) this.asInstanceOf[V2]

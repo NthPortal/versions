@@ -21,7 +21,7 @@ package object semver {
     * @throws VersionFormatException if the given string is not a valid SemVer version
     * @return the SemVer version represented by the specified version
     */
-  @throws[VersionFormatException]
+  @throws[VersionFormatException]("if the given string is not a valid SemVer version")
   def parseSemVer[E, M](version: String)
                        (implicit ed: ExtensionDef[E],
                         ep: ExtensionParser[E],
@@ -53,7 +53,7 @@ package object semver {
     *                                or contains build metadata
     * @return the SemVer version represented by the specified version string
     */
-  @throws[VersionFormatException]
+  @throws[VersionFormatException]("if the given string is not a valid SemVer version or contains build metadata")
   def parseSemVerWithoutMetadata[E](version: String)
                                    (implicit ed: ExtensionDef[E],
                                     ep: ExtensionParser[E]): v3.ExtendedVersion[E] = {
