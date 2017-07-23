@@ -12,10 +12,6 @@ final class Version private(val values: IndexedSeq[Int])
   extends VersionBase[Version, ExtendedVersion] {
   require(values forall { _ >= 0 }, "Version numbers must be non-negative")
 
-  override protected def companion: VersionCompanion[Version, ExtendedVersion] = Version
-
-  override protected def extendedCompanion: ExtendedVersionCompanion[Version, ExtendedVersion] = ExtendedVersion
-
   /**
     * Returns the value at the specified index.
     *
@@ -35,7 +31,11 @@ final class Version private(val values: IndexedSeq[Int])
     */
   def size: Int = values.size
 
-  override def toSeq: Seq[Int] = values
+  override protected def companion = Version
+
+  override protected def extendedCompanion = ExtendedVersion
+
+  override def toSeq = values
 
   override def equals(obj: scala.Any) = obj match {
     case that: Version => this.values == that.values
