@@ -77,16 +77,30 @@ class ExtendedVersionTest extends SimpleSpec {
   }
 
   it should "convert to other types correctly" in {
-    (Version(1, 2, 5, 4, 16) -- Snapshot).to(ExtendedVersion).value shouldEqual Version(1, 2, 5, 4, 16) -- Snapshot
-    (Version(1, 3) -- Snapshot).to(v2.ExtendedVersion).value shouldEqual v2.Version(1, 3) -- Snapshot
-    (Version(1, 2, 5) -- Snapshot).to(v3.ExtendedVersion).value shouldEqual v3.Version(1, 2, 5) -- Snapshot
-    (Version(1, 2, 5, 4) -- Snapshot).to(v4.ExtendedVersion).value shouldEqual v4.Version(1, 2, 5, 4) -- Snapshot
+    Version(1, 2, 5, 4, 16) -- Snapshot to ExtendedVersion shouldEqual Version(1, 2, 5, 4, 16) -- Snapshot
+    Version(1, 3) -- Snapshot to v2.ExtendedVersion shouldEqual v2.Version(1, 3) -- Snapshot
+    Version(1, 2, 5) -- Snapshot to v3.ExtendedVersion shouldEqual v3.Version(1, 2, 5) -- Snapshot
+    Version(1, 2, 5, 4) -- Snapshot to v4.ExtendedVersion shouldEqual v4.Version(1, 2, 5, 4) -- Snapshot
 
     val ev = Version(1) -- Snapshot
 
-    ev.to(ExtendedVersion).value shouldEqual ev
-    ev.to(v2.ExtendedVersion) shouldBe empty
-    ev.to(v3.ExtendedVersion) shouldBe empty
-    ev.to(v4.ExtendedVersion) shouldBe empty
+    ev to ExtendedVersion shouldEqual ev
+    an [IllegalArgumentException] should be thrownBy { ev to v2.ExtendedVersion }
+    an [IllegalArgumentException] should be thrownBy { ev to v3.ExtendedVersion }
+    an [IllegalArgumentException] should be thrownBy { ev to v4.ExtendedVersion }
+  }
+
+  it should "convert as an option to other types correctly" in {
+    (Version(1, 2, 5, 4, 16) -- Snapshot).toOptionOf(ExtendedVersion).value shouldEqual Version(1, 2, 5, 4, 16) -- Snapshot
+    (Version(1, 3) -- Snapshot).toOptionOf(v2.ExtendedVersion).value shouldEqual v2.Version(1, 3) -- Snapshot
+    (Version(1, 2, 5) -- Snapshot).toOptionOf(v3.ExtendedVersion).value shouldEqual v3.Version(1, 2, 5) -- Snapshot
+    (Version(1, 2, 5, 4) -- Snapshot).toOptionOf(v4.ExtendedVersion).value shouldEqual v4.Version(1, 2, 5, 4) -- Snapshot
+
+    val ev = Version(1) -- Snapshot
+
+    ev.toOptionOf(ExtendedVersion).value shouldEqual ev
+    ev toOptionOf v2.ExtendedVersion shouldBe empty
+    ev toOptionOf v3.ExtendedVersion shouldBe empty
+    ev toOptionOf v4.ExtendedVersion shouldBe empty
   }
 }

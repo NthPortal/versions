@@ -26,7 +26,7 @@ abstract class Companion private[variable]() extends VersionCompanion[Version, E
     * @throws IllegalArgumentException if the number of values does not
     *                                  conform to the allowed sizes
     */
-  @throws[IllegalArgumentException]
+  @throws[IllegalArgumentException]("if the number of values does not conform to the allowed sizes")
   def apply(values: Int*): Version = {
     val vector = values.toVector
     checkSize(vector)

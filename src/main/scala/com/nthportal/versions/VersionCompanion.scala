@@ -28,7 +28,7 @@ trait VersionCompanion[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, 
     * @throws VersionFormatException if the given string is not a valid version
     * @return the version represented by the string
     */
-  @throws[VersionFormatException]
+  @throws[VersionFormatException]("if the given string is not a valid version")
   def parseVersion(@deprecatedName('v, since = "1.3.0") version: String): V = {
     try {
       require(!version.endsWith("."), "version cannot end with a '.'")

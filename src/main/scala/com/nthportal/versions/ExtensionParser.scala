@@ -14,6 +14,6 @@ trait ExtensionParser[E] {
     *                                  represent a valid extension
     * @return the extension represented by the specified string
     */
-  @throws[IllegalArgumentException]
+  @throws[IllegalArgumentException]("if the string provided does not represent a valid extension")
   def parse(extension: String): E
 }

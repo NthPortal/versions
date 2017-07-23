@@ -42,7 +42,7 @@ abstract class ExtendedVersionCompanion[V <: VersionBase[V, EV], EV[E] <: Extend
     * @throws VersionFormatException if the given string is not a valid extended version
     * @return the extended version represented by the string
     */
-  @throws[VersionFormatException]
+  @throws[VersionFormatException]("if the given string is not a valid extended version")
   def parseVersion[E](@deprecatedName('v, since = "1.3.0") version: String)
                      (implicit ed: ExtensionDef[E],
                       ep: ExtensionParser[E]): EV[E] = {

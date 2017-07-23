@@ -77,4 +77,28 @@ class OfSizeTest extends SimpleSpec {
     V unapplySeq "1.f" shouldBe empty
     V unapplySeq "really not a version" shouldBe empty
   }
+
+  it should "convert to other types correctly" in {
+    val v1 = Version(1, 2, 5)
+
+    v1 to Version.ofSize(2 to 3) shouldEqual v1
+    an [IllegalArgumentException] should be thrownBy { v1 to Version.ofSize(1 to 2) }
+
+    val v2 = Version.ofSize(1 to 2)(1)
+
+    v2 to Version shouldEqual v2
+    an [IllegalArgumentException] should be thrownBy { v2 to Version.ofSize(2 to 3) }
+  }
+
+  it should "convert as an option to other types correctly" in {
+    val v1 = Version(1, 2, 5)
+
+    v1.toOptionOf(Version.ofSize(2 to 3)).value shouldEqual v1
+    v1 toOptionOf Version.ofSize(1 to 2) shouldBe empty
+
+    val v2 = Version.ofSize(1 to 2)(1)
+
+    v2.toOptionOf(Version).value shouldEqual v2
+    v2 toOptionOf Version.ofSize(2 to 3) shouldBe empty
+  }
 }

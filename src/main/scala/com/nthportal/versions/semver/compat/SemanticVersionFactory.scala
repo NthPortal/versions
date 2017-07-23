@@ -23,7 +23,7 @@ final case class SemanticVersionFactory[E, M](factory: VersionFactory[E], parser
     * @throws VersionFormatException if the given string is not a valid SemVer version
     * @return the SemVer version represented by the specified version
     */
-  @throws[VersionFormatException]
+  @throws[VersionFormatException]("if the given string is not a valid SemVer version")
   def parseVersion(version: String): SemanticVersion[E, M] = {
     parseSemVer(version)(factory.extensionDef, factory.parser, parser)
   }

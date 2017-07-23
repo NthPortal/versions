@@ -18,11 +18,12 @@ final case class SemVerWithoutMetadataFactory[E](factory: VersionFactory[E]) {
     * The version string must not contain build metadata.
     *
     * @param version the version string to parse
-    * @throws VersionFormatException if the given string is not a valid SemVer version
+    * @throws VersionFormatException if the given string is not a valid SemVer
+    *                                version or contains build metadata
     * @return the SemVer version represented by the specified version string
     * @see [[parseSemVerWithoutMetadata]]
     */
-  @throws[VersionFormatException]
+  @throws[VersionFormatException]("if the given string is not a valid SemVer version or contains build metadata")
   def parseVersion(version: String): v3.ExtendedVersion[E] = {
     parseSemVerWithoutMetadata(version)(factory.extensionDef, factory.parser)
   }
