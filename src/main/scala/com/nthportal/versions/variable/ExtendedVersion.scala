@@ -9,21 +9,28 @@ package variable
   * @param extensionDef the [[ExtensionDef extension definition]] for this version's extension
   * @tparam E the type of the extension component of this extended version
   */
-final class ExtendedVersion[E](val version: Version, val extension: E, protected val extensionDef: ExtensionDef[E])
-  extends ExtendedVersionBase[Version, E, ExtendedVersion] {
-  override def equals(obj: Any) = obj match {
-    case that: ExtendedVersion[_] =>
-      this.version == that.version &&
-        this.extension == that.extension &&
-        this.extensionDef == that.extensionDef
-    case _ => false
+final case class ExtendedVersion[E](version: Version, extension: E, protected val extensionDef: ExtensionDef[E])
+  extends ExtendedVersionBase[Version, E, ExtendedVersion]
+
+object ExtendedVersion extends ExtendedVersionCompanion[Version, ExtendedVersion](Version) {
+  private[variable] final case class OfSize(ofSize: Version.OfSize)
+    extends ExtendedVersionCompanion[Version, ExtendedVersion](ofSize) {
+
+    @throws[IllegalArgumentException]
+    override def apply[E](version: Version, extension: E, ed: ExtensionDef[E]) = {
+      ofSize.checkSize(version.values)
+      ExtendedVersion(version, extension, ed)
+    }
   }
 
-  override def hashCode() = (version, extension, extensionDef).hashCode()
+  /**
+    * Returns a [[ExtendedVersionCompanion companion]] for [[ExtendedVersion]]s
+    * which only allows creating versions whose [[Version.size sizes]] are
+    * within a specified range.
+    *
+    * @param range the range in which versions' sizes must be
+    * @return a companion for ExtendedVersions which only allows creating
+    *         versions whose sizes are within a specified range
+    */
+  def ofSize(range: Range): ExtendedVersionCompanion[Version, ExtendedVersion] = OfSize(Version.ofSize(range))
 }
-
-/**
-  * [[ExtendedVersionCompanion Companion object]] for [[ExtendedVersion]],
-  * which allows version [[Version.size sizes]] in the range `1 to 16`.
-  */
-object ExtendedVersion extends ExtendedVersions.From(Version)

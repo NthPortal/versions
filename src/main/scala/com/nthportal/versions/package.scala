@@ -24,9 +24,10 @@ package object versions {
     */
   val dash : --.type = --
 
-  private[versions] def formatCheckToOption[V](thunk: => V): Option[V] = {
+  @inline
+  private[versions] def formatCheckToOption[V](v: => V): Option[V] = {
     try {
-      Some(thunk)
+      Some(v)
     } catch {
       case _: VersionFormatException => None
     }

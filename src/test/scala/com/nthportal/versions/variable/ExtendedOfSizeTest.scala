@@ -5,17 +5,17 @@ import com.nthportal.versions.extensions.Maven
 import com.nthportal.versions.extensions.Maven._
 
 class ExtendedOfSizeTest extends SimpleSpec {
-  behavior of "ExtendedVersions.ofSize"
+  behavior of "ExtendedVersion.ofSize"
 
   it should "only allow valid sizes" in {
-    noException should be thrownBy { ExtendedVersions.ofSize(1 to 10) }
+    noException should be thrownBy { ExtendedVersion.ofSize(1 to 10) }
 
-    an [IllegalArgumentException] should be thrownBy { ExtendedVersions.ofSize(2 until 2) }
-    an [IllegalArgumentException] should be thrownBy { ExtendedVersions.ofSize(0 to 5) }
+    an [IllegalArgumentException] should be thrownBy { ExtendedVersion.ofSize(2 until 2) }
+    an [IllegalArgumentException] should be thrownBy { ExtendedVersion.ofSize(0 to 5) }
   }
 
   it should "create versions correctly" in {
-    val EV = ExtendedVersions.ofSize(1 to 2)
+    val EV = ExtendedVersion.ofSize(1 to 2)
 
     val ed = implicitly[ExtensionDef[Maven]]
 
@@ -24,13 +24,10 @@ class ExtendedOfSizeTest extends SimpleSpec {
     noException should be thrownBy { EV(Version(1, 3), Snapshot, ed) }
 
     an [IllegalArgumentException] should be thrownBy { EV(Version(1, 2, 5), Snapshot, ed) }
-    an [IllegalArgumentException] should be thrownBy {
-      ExtendedVersion(Versions.ofSize(1 to 20)(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16), Snapshot, ed)
-    }
   }
 
   it should "parse versions correctly" in {
-    val V = Versions.ofSize(1 to 2)
+    val V = Version.ofSize(1 to 2)
     val EV = V.extended
 
     EV parseVersion "1.3-SNAPSHOT" shouldEqual V(1, 3) -- Snapshot
@@ -42,7 +39,7 @@ class ExtendedOfSizeTest extends SimpleSpec {
   }
 
   it should "parse versions as options correctly" in {
-    val V = Versions.ofSize(1 to 2)
+    val V = Version.ofSize(1 to 2)
     val EV = V.extended
 
     EV.parseAsOption("1.3-SNAPSHOT").value shouldEqual V(1, 3) -- Snapshot
@@ -54,7 +51,7 @@ class ExtendedOfSizeTest extends SimpleSpec {
   }
 
   it should "pattern match version strings correctly" in {
-    val V = Versions.ofSize(1 to 2)
+    val V = Version.ofSize(1 to 2)
     val EV = V.extended
 
     inside("1.3-SNAPSHOT") { case EV(V(1, 3), Snapshot) => }

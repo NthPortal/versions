@@ -18,7 +18,7 @@ abstract class ExtendedVersionCompanion[V <: VersionBase[V, EV], EV[E] <: Extend
     *
     * @return the companion object for non-extended versions
     */
-  final def baseCompanion: VersionCompanion[V, EV] = c
+  private[versions] final def baseCompanion: VersionCompanion[V, EV] = c
 
   /**
     * Creates an extended version from a version, extension, and
