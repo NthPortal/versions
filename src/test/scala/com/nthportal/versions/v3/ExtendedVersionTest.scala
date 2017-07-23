@@ -80,10 +80,20 @@ class ExtendedVersionTest extends SimpleSpec {
   it should "convert to other types correctly" in {
     val ev = Version(1, 2, 5) -- Snapshot
 
-    ev.to(ExtendedVersion).value shouldEqual ev
-    ev.to(variable.ExtendedVersion).value shouldEqual variable.Version(1, 2, 5) -- Snapshot
+    ev to ExtendedVersion shouldEqual ev
+    ev to variable.ExtendedVersion shouldEqual variable.Version(1, 2, 5) -- Snapshot
 
-    ev.to(v2.ExtendedVersion) shouldBe empty
-    ev.to(v4.ExtendedVersion) shouldBe empty
+    an [IllegalArgumentException] should be thrownBy { ev to v2.ExtendedVersion }
+    an [IllegalArgumentException] should be thrownBy { ev to v4.ExtendedVersion }
+  }
+
+  it should "convert as an option to other types correctly" in {
+    val ev = Version(1, 2, 5) -- Snapshot
+
+    ev.toOptionOf(ExtendedVersion).value shouldEqual ev
+    ev.toOptionOf(variable.ExtendedVersion).value shouldEqual variable.Version(1, 2, 5) -- Snapshot
+
+    ev toOptionOf v2.ExtendedVersion shouldBe empty
+    ev toOptionOf v4.ExtendedVersion shouldBe empty
   }
 }

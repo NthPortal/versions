@@ -61,4 +61,28 @@ class ExtendedOfSizeTest extends SimpleSpec {
     EV unapply "1.2.5-SNAPSHOT" shouldBe empty
     EV unapply "1.0.0" shouldBe empty
   }
+
+  it should "convert to other types correctly" in {
+    val ev1 = Version(1, 2, 5) -- Snapshot
+
+    ev1 to ExtendedVersion.ofSize(2 to 3) shouldEqual ev1
+    an [IllegalArgumentException] should be thrownBy { ev1 to ExtendedVersion.ofSize(1 to 2) }
+
+    val ev2 = Version.ofSize(1 to 2)(1) -- Snapshot
+
+    ev2 to ExtendedVersion shouldEqual ev2
+    an [IllegalArgumentException] should be thrownBy { ev2 to ExtendedVersion.ofSize(2 to 3) }
+  }
+
+  it should "convert as an option to other types correctly" in {
+    val v1 = Version(1, 2, 5) -- Snapshot
+
+    v1.toOptionOf(ExtendedVersion.ofSize(2 to 3)).value shouldEqual v1
+    v1 toOptionOf ExtendedVersion.ofSize(1 to 2) shouldBe empty
+
+    val v2 = Version.ofSize(1 to 2)(1) -- Snapshot
+
+    v2.toOptionOf(ExtendedVersion).value shouldEqual v2
+    v2 toOptionOf ExtendedVersion.ofSize(2 to 3) shouldBe empty
+  }
 }

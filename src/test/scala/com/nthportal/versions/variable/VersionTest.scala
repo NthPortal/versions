@@ -57,16 +57,30 @@ class VersionTest extends SimpleSpec {
   }
 
   it should "convert to other types correctly" in {
-    Version(1, 2, 5, 4, 16).to(Version).value shouldEqual Version(1, 2, 5, 4, 16)
-    Version(1, 3).to(v2.Version).value shouldEqual v2.Version(1, 3)
-    Version(1, 2, 5).to(v3.Version).value shouldEqual v3.Version(1, 2, 5)
-    Version(1, 2, 5, 4).to(v4.Version).value shouldEqual v4.Version(1, 2, 5, 4)
+    Version(1, 2, 5, 4, 16) to Version shouldEqual Version(1, 2, 5, 4, 16)
+    Version(1, 3) to v2.Version shouldEqual v2.Version(1, 3)
+    Version(1, 2, 5) to v3.Version shouldEqual v3.Version(1, 2, 5)
+    Version(1, 2, 5, 4) to v4.Version shouldEqual v4.Version(1, 2, 5, 4)
 
     val v = Version(1)
 
-    v.to(Version).value shouldEqual v
-    v.to(v2.Version) shouldBe empty
-    v.to(v3.Version) shouldBe empty
-    v.to(v4.Version) shouldBe empty
+    v to Version shouldEqual v
+    an [IllegalArgumentException] should be thrownBy { v to v2.Version }
+    an [IllegalArgumentException] should be thrownBy { v to v3.Version }
+    an [IllegalArgumentException] should be thrownBy { v to v4.Version }
+  }
+
+  it should "convert as an option to other types correctly" in {
+    Version(1, 2, 5, 4, 16).toOptionOf(Version).value shouldEqual Version(1, 2, 5, 4, 16)
+    Version(1, 3).toOptionOf(v2.Version).value shouldEqual v2.Version(1, 3)
+    Version(1, 2, 5).toOptionOf(v3.Version).value shouldEqual v3.Version(1, 2, 5)
+    Version(1, 2, 5, 4).toOptionOf(v4.Version).value shouldEqual v4.Version(1, 2, 5, 4)
+
+    val v = Version(1)
+
+    v.toOptionOf(Version).value shouldEqual v
+    v toOptionOf v2.Version shouldBe empty
+    v toOptionOf v3.Version shouldBe empty
+    v toOptionOf v4.Version shouldBe empty
   }
 }
