@@ -16,7 +16,7 @@ final case class Version(_1: Int, _2: Int, _3: Int, _4: Int) extends VersionBase
 
   override protected def companion = Version
 
-  override protected def extendedCompanion = ExtendedVersion
+  override protected[versions] def extendedCompanion = ExtendedVersion
 
   override def toSeq = Seq(_1, _2, _3, _4)
 

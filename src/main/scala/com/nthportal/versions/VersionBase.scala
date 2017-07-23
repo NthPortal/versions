@@ -24,7 +24,7 @@ trait VersionBase[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV
     *
     * @return the extended version companion object associated with this version
     */
-  protected def extendedCompanion: ExtendedVersionCompanion[V, EV]
+  protected[versions] def extendedCompanion: ExtendedVersionCompanion[V, EV]
 
   /**
     * Returns a [[Seq]] representation of this version.
@@ -42,7 +42,10 @@ trait VersionBase[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV
     *         the other type, if it can be represented by the other type
     */
   def to[V2 <: VersionBase[V2, EV2], EV2[E] <: ExtendedVersionBase[V2, E, EV2]]
-  (companion: VersionCompanion[V2, EV2]): Option[V2] = companion.versionFromSeq.lift(toSeq)
+  (companion: VersionCompanion[V2, EV2]): Option[V2] = {
+    if (companion eq this.companion) Some(this.asInstanceOf[V2])
+    else companion.versionFromSeq.lift(toSeq)
+  }
 
   override def dash[E](extension: E)(implicit ed: ExtensionDef[E]) = {
     extendedCompanion(this.asInstanceOf[V], extension, ed)

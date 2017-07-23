@@ -33,7 +33,7 @@ final class Version private(val values: IndexedSeq[Int])
 
   override protected def companion = Version
 
-  override protected def extendedCompanion = ExtendedVersion
+  override protected[versions] def extendedCompanion = ExtendedVersion
 
   override def toSeq = values
 

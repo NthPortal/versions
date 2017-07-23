@@ -35,7 +35,8 @@ trait ExtendedVersionBase[V <: VersionBase[V, EV], E, EV[X] <: ExtendedVersionBa
     */
   def to[V2 <: VersionBase[V2, EV2], EV2[X] <: ExtendedVersionBase[V2, X, EV2]]
   (companion: ExtendedVersionCompanion[V2, EV2]): Option[EV2[E]] = {
-    companion.baseCompanion.versionFromSeq.lift(version.toSeq) map { companion(_, extension, extensionDef) }
+    if (companion eq version.extendedCompanion) Some(this.asInstanceOf[EV2[E]])
+    else companion.baseCompanion.versionFromSeq.lift(version.toSeq) map { companion(_, extension, extensionDef) }
   }
 
   /**
