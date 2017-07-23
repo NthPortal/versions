@@ -12,16 +12,6 @@ final class Version private(val values: IndexedSeq[Int])
   extends VersionBase[Version, ExtendedVersion] {
   require(values forall { _ >= 0 }, "Version numbers must be non-negative")
 
-  /**
-    * Returns the value at the specified index.
-    *
-    * @param idx the index of the value in the version
-    * @return the value at the specified index
-    * @throws IndexOutOfBoundsException if the specified index
-    *                                   is out of bounds
-    */
-  @throws[IndexOutOfBoundsException]
-  def apply(idx: Int): Int = values(idx)
 
   /**
     * Returns the size of the version (the number of

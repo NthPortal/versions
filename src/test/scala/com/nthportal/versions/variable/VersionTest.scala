@@ -21,16 +21,6 @@ class VersionTest extends SimpleSpec {
     Version(1, 2, 5, 4, 16) should have size 5
   }
 
-  it should "return the correct value for an index" in {
-    val v = Version(1, 2, 5)
-    v(0) shouldBe 1
-    v(1) shouldBe 2
-    v(2) shouldBe 5
-
-    an [IndexOutOfBoundsException] should be thrownBy { v(-1) }
-    an [IndexOutOfBoundsException] should be thrownBy { v(3) }
-  }
-
   it should "compare correctly" in {
     val v1 = Version(1, 2, 5)
 
