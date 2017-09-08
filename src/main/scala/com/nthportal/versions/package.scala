@@ -14,8 +14,8 @@ package object versions {
     *
     * ev match {
     *   case ver -- ext =>
-    *     println(s"version: $ver")
-    *     println(s"extension: $ext")
+    *     println(s"version: \$ver")
+    *     println(s"extension: \$ext")
     * }
     * }}}
     */

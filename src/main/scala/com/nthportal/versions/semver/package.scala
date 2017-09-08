@@ -89,8 +89,8 @@ package object semver {
       * @param ep      a [[ExtensionParser parser]] for extensions
       * @tparam E the type of the extension
       * @tparam M the type of the build metadata
-      * @return an [[Option]] containing the version, extension, and build metadata
-      *         represented by the version string; [[None]] if the string did not
+      * @return an [[scala.Option Option]] containing the version, extension, and build metadata
+      *         represented by the version string; [[scala.None None]] if the string did not
       *         represent a valid SemVer version
       */
     def unapply[E, M](version: String)
@@ -111,7 +111,7 @@ package object semver {
     * val sv = Version(1, 0, 0) -- "beta" + 12654
     *
     * sv match {
-    *   case ev + meta => println(s"metadata: $meta")
+    *   case ev + meta => println(s"metadata: \$meta")
     * }
     * }}}
     */
@@ -124,8 +124,8 @@ package object semver {
       *           values
       * @tparam E the type of the extension
       * @tparam M the type of the build metadata
-      * @return an [[Option]] containing the extended version and build metadata;
-      *         [[None]] if the [[SemanticVersion SemVer version]] does not
+      * @return an [[scala.Option Option]] containing the extended version and build metadata;
+      *         [[scala.None None]] if the [[SemanticVersion SemVer version]] does not
       *         contain build metadata
       */
     def unapply[E, M](sv: SemanticVersion[E, M]): Option[(v3.ExtendedVersion[E], M)] = {
@@ -147,7 +147,7 @@ package object semver {
     * sv match {
     *   case ev +? metadata =>
     *     metadata match {
-    *       case Some(meta) => println(s"metadata: $meta")
+    *       case Some(meta) => println(s"metadata: \$meta")
     *       case None => println("no metadata")
     * }
     * }}}
@@ -161,8 +161,8 @@ package object semver {
       *           values
       * @tparam E the type of the extension
       * @tparam M the type of the build metadata
-      * @return an [[Option]] containing the extended version and build metadata;
-      *         the build metadata is an [[Option]]
+      * @return an [[scala.Option Option]] containing the extended version
+      *         and build metadata; the build metadata is an Option
       */
     def unapply[E, M](sv: SemanticVersion[E, M]): Option[(v3.ExtendedVersion[E], Option[M])] = {
       SemanticVersion.unapply(sv)
@@ -275,7 +275,7 @@ package object semver {
 
     /**
       * Creates a [[SemanticVersion SemVer version]] with the specified build
-      * metadata [[Option]] from this extended version.
+      * metadata [[scala.Option Option]] from this extended version.
       *
       * @param buildMetadata an Option containing the build metadata
       * @tparam M the type of the build metadata

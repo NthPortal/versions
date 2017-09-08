@@ -8,8 +8,8 @@ import com.nthportal.versions.v3.compat.VersionFactory
 /**
   * A factory for for parsing version strings into [[SemanticVersion SemVer versions]]..
   *
-  * @param factory the [[VersionFactory]] with which to parse the version
-  *                and its extension
+  * @param factory the [[com.nthportal.versions.v3.compat.VersionFactory VersionFactory]]
+  *                with which to parse the version and its extension
   * @param parser  the [[BuildMetadata.Parser]] with which to parse the build
   *                metadata
   * @tparam E the type of the versions' extension

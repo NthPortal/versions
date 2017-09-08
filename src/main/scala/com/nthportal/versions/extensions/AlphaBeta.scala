@@ -66,7 +66,7 @@ object AlphaBeta extends RichExtensionParser[AlphaBeta] {
       * Extracts the release candidate number from a release candidate.
       *
       * @param ab an [[AlphaBeta]]
-      * @return an [[Option]] containing the number of the release candidate,
+      * @return an [[scala.Option Option]] containing the number of the release candidate,
       *         if the AlphaBeta is one
       */
     def unapply(ab: AlphaBeta): Option[Int] = ab match {

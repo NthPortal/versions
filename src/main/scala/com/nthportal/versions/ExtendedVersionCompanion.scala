@@ -74,8 +74,8 @@ abstract class ExtendedVersionCompanion[V <: VersionBase[V, EV], EV[E] <: Extend
     * @param ed      the [[ExtensionDef extension definition]]
     * @param ep      a [[ExtensionParser parser]] for extensions
     * @tparam E the type of the extension
-    * @return an [[Option]] containing the version and extension represented
-    *         by the string; [[None]] if the string did not represent a valid
+    * @return an [[scala.Option Option]] containing the version and extension represented
+    *         by the string; [[scala.None None]] if the string did not represent a valid
     *         extended version
     */
   def unapply[E](version: String)(implicit ed: ExtensionDef[E], ep: ExtensionParser[E]): Option[(V, E)] = {

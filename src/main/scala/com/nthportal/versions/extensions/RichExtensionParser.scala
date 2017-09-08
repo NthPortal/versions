@@ -18,11 +18,11 @@ private[extensions] trait RichExtensionParser[E] extends ExtensionParser[E] {
   implicit def extensionParser: ExtensionParser[E] = this
 
   /**
-    * Throws an [[IllegalArgumentException]] for an invalid extension.
+    * Throws an [[scala.IllegalArgumentException]] for an invalid extension.
     *
     * @param extension the invalid extension string
     * @param cause the exception making the extension invalid (`null` if none)
-    * @throws IllegalArgumentException always
+    * @throws scala.IllegalArgumentException always
     * @return Nothing
     */
   @inline

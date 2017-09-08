@@ -9,8 +9,8 @@ import com.nthportal.versions.v3.compat.VersionFactory
   * A factory for for parsing version strings into SemVer versions without
   * build metadata.
   *
-  * @param factory the [[VersionFactory]] with which to parse the version
-  *                and its extension
+  * @param factory the [[com.nthportal.versions.v3.compat.VersionFactory VersionFactory]]
+  *                with which to parse the version and its extension
   * @tparam E the type of the versions' extension
   */
 final case class SemVerWithoutMetadataFactory[E](factory: VersionFactory[E]) {

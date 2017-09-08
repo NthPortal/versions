@@ -12,7 +12,7 @@ import scala.language.higherKinds
   */
 trait VersionBase[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV]]
   extends Ordered[V]
-          with Dash[V, EV] {
+    with Dash[V, EV] {
   /**
     * Returns the [[VersionCompanion companion object]] for this version.
     *
@@ -29,7 +29,7 @@ trait VersionBase[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV
   protected[versions] def extendedCompanion: ExtendedVersionCompanion[V, EV]
 
   /**
-    * Returns a [[Seq]] representation of this version.
+    * Returns a [[scala.Seq Seq]] representation of this version.
     *
     * @return a Seq representation of this version
     */
@@ -42,8 +42,8 @@ trait VersionBase[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV
     *                  to which this should be converted
     * @return this version converted to the other type, if it can be
     *         represented by the other type
-    * @throws IllegalArgumentException if this version cannot be converted
-    *                                  to the other type
+    * @throws scala.IllegalArgumentException if this version cannot be converted
+    *                                        to the other type
     */
   @throws[IllegalArgumentException]("if this version cannot be converted to the other type")
   def to[V2 <: VersionBase[V2, EV2], EV2[E] <: ExtendedVersionBase[V2, E, EV2]]
