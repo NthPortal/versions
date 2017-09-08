@@ -6,11 +6,12 @@ val rawVersion = "3.0.0"
 isSnapshot := true
 version := rawVersion + { if (isSnapshot.value) "-SNAPSHOT" else "" }
 
-scalaVersion := "2.12.2"
+scalaVersion := "2.12.3"
 crossScalaVersions := Seq(
   "2.12.0",
   "2.12.1",
-  "2.12.2"
+  "2.12.2",
+  "2.12.3"
 )
 
 libraryDependencies ++= Seq(
