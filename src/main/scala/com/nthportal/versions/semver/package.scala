@@ -17,10 +17,12 @@ package object semver {
     * Parses a version string into a [[SemanticVersion SemVer version]].
     *
     * @param version the version string to parse
+    * @param c       the `Convert` to use
     * @param ed      the [[ExtensionDef extension definition]] with which to parse
     * @param ep      a [[ExtensionParser parser]] for extensions
     * @tparam E the type of the extension
     * @throws VersionFormatException if the given string is not a valid SemVer version
+    *                                (when `c` is `Convert.Valid`)
     * @return the SemVer version represented by the specified version
     */
   @throws[VersionFormatException]("if the given string is not a valid SemVer version")
@@ -52,11 +54,12 @@ package object semver {
     * The version string must not contain build metadata.
     *
     * @param version the version string to parse
+    * @param c       the `Convert` to use
     * @param ed      the [[ExtensionDef extension definition]] with which to parse
     * @param ep      a [[ExtensionParser parser]] for extensions
     * @tparam E the type of the extension
     * @throws VersionFormatException if the given string is not a valid SemVer version
-    *                                or contains build metadata
+    *                                or contains build metadata (when `c` is `Convert.Valid`)
     * @return the SemVer version represented by the specified version string
     */
   @throws[VersionFormatException]("if the given string is not a valid SemVer version or contains build metadata")

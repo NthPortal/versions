@@ -38,10 +38,12 @@ abstract class ExtendedVersionCompanion[V <: VersionBase[V, EV], EV[E] <: Extend
     * Parses a string into an extended version.
     *
     * @param version the string to parse
+    * @param c       the `Convert` to use
     * @param ed      the [[ExtensionDef extension definition]]
     * @param ep      a [[ExtensionParser parser]] for extensions
     * @tparam E the type of the extension
     * @throws VersionFormatException if the given string is not a valid extended version
+    *                                (when `c` is `Convert.Valid`)
     * @return the extended version represented by the string
     */
   @throws[VersionFormatException]("if the given string is not a valid extended version")

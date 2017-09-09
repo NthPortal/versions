@@ -27,7 +27,9 @@ trait VersionCompanion[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, 
     * Parses a string into a version.
     *
     * @param version the string to parse
+    * @param c the `Convert` to use
     * @throws VersionFormatException if the given string is not a valid version
+    *                                (when `c` is `Convert.Valid`)
     * @return the version represented by the string
     */
   @throws[VersionFormatException]("if the given string is not a valid version")

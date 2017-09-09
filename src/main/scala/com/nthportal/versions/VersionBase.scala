@@ -40,10 +40,11 @@ trait VersionBase[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV
     *
     * @param companion a [[VersionCompanion companion]] of the type of version
     *                  to which this should be converted
+    * @param c         the `Convert` to use
     * @return this version converted to the other type, if it can be
     *         represented by the other type
     * @throws scala.IllegalArgumentException if this version cannot be converted
-    *                                        to the other type
+    *                                        to the other type (when `c` is `Convert.Valid`)
     */
   @throws[IllegalArgumentException]("if this version cannot be converted to the other type")
   def to[V2 <: VersionBase[V2, EV2], EV2[E] <: ExtendedVersionBase[V2, E, EV2]]
