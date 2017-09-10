@@ -1,6 +1,7 @@
 package com.nthportal.versions
 package v4
 
+import com.nthportal.convert.Convert
 import com.nthportal.versions.extensions.Maven
 import com.nthportal.versions.extensions.Maven._
 
@@ -34,6 +35,8 @@ class ExtendedVersionTest extends SimpleSpec {
   }
 
   it should "parse versions correctly" in {
+    implicit val c = Convert.Valid
+
     ExtendedVersion parseVersion "1.2.5.4" should equal (Version(1)(2)(5)(4) -- Release)
     ExtendedVersion parseVersion "0.0.0.0-SNAPSHOT" should equal (Version(0)(0)(0)(0) -- Snapshot)
 
@@ -45,22 +48,24 @@ class ExtendedVersionTest extends SimpleSpec {
 
     // Missing default extension
     a [VersionFormatException] should be thrownBy {
-      ExtendedVersion.parseVersion("1.0.0.0")(ExtensionDef.fromOrdered[Maven], extensionParser)
+      ExtendedVersion.parseVersion("1.0.0.0")(c, ExtensionDef.fromOrdered[Maven], extensionParser)
     }
   }
 
   it should "parse versions as options correctly" in {
-    ExtendedVersion.parseAsOption("1.2.5.4").value should equal (Version(1)(2)(5)(4) -- Release)
-    ExtendedVersion.parseAsOption("0.0.0.0-SNAPSHOT").value should equal (Version(0)(0)(0)(0) -- Snapshot)
+    implicit val c = Convert.Any
 
-    ExtendedVersion parseAsOption "1.0.0.0-INVALID" shouldBe empty
-    ExtendedVersion parseAsOption "1.0.0.0-RELEASE" shouldBe empty
-    ExtendedVersion parseAsOption "1.0.0.0-snapshot" shouldBe empty
-    ExtendedVersion parseAsOption "1.0.0.0-SNAPSHOT-4" shouldBe empty
-    ExtendedVersion parseAsOption "really not a version" shouldBe empty
+    ExtendedVersion.parseVersion("1.2.5.4").value should equal (Version(1)(2)(5)(4) -- Release)
+    ExtendedVersion.parseVersion("0.0.0.0-SNAPSHOT").value should equal (Version(0)(0)(0)(0) -- Snapshot)
+
+    ExtendedVersion parseVersion "1.0.0.0-INVALID" shouldBe empty
+    ExtendedVersion parseVersion "1.0.0.0-RELEASE" shouldBe empty
+    ExtendedVersion parseVersion "1.0.0.0-snapshot" shouldBe empty
+    ExtendedVersion parseVersion "1.0.0.0-SNAPSHOT-4" shouldBe empty
+    ExtendedVersion parseVersion "really not a version" shouldBe empty
 
     // Missing default extension
-    ExtendedVersion.parseAsOption("1.0.0.0")(ExtensionDef.fromOrdered[Maven], extensionParser) shouldBe empty
+    ExtendedVersion.parseVersion("1.0.0.0")(c, ExtensionDef.fromOrdered[Maven], extensionParser) shouldBe empty
   }
 
   it should "pattern match versions correctly" in {
@@ -78,6 +83,7 @@ class ExtendedVersionTest extends SimpleSpec {
   }
 
   it should "convert to other types correctly" in {
+    import Convert.Valid.Implicit.ref
     val ev = Version(1, 2, 5, 4) -- Snapshot
 
     ev to ExtendedVersion shouldEqual ev
@@ -88,12 +94,13 @@ class ExtendedVersionTest extends SimpleSpec {
   }
 
   it should "convert as an option to other types correctly" in {
+    import Convert.Any.Implicit.ref
     val ev = Version(1, 2, 5, 4) -- Snapshot
 
-    ev.toOptionOf(ExtendedVersion).value shouldEqual ev
-    ev.toOptionOf(variable.ExtendedVersion).value shouldEqual variable.Version(1, 2, 5, 4) -- Snapshot
+    ev.to(ExtendedVersion).value shouldEqual ev
+    ev.to(variable.ExtendedVersion).value shouldEqual variable.Version(1, 2, 5, 4) -- Snapshot
 
-    ev toOptionOf v2.ExtendedVersion shouldBe empty
-    ev toOptionOf v3.ExtendedVersion shouldBe empty
+    ev to v2.ExtendedVersion shouldBe empty
+    ev to v3.ExtendedVersion shouldBe empty
   }
 }

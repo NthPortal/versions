@@ -1,5 +1,7 @@
 package com.nthportal.versions
 
+import com.nthportal.convert.Convert
+
 import scala.language.higherKinds
 
 /**
@@ -25,26 +27,24 @@ trait VersionCompanion[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, 
     * Parses a string into a version.
     *
     * @param version the string to parse
+    * @param c the `Convert` to use
     * @throws VersionFormatException if the given string is not a valid version
+    *                                (when `c` is `Convert.Valid`)
     * @return the version represented by the string
     */
   @throws[VersionFormatException]("if the given string is not a valid version")
-  def parseVersion(@deprecatedName('v, since = "1.3.0") version: String): V = {
-    try {
-      require(!version.endsWith("."), "version cannot end with a '.'")
-      val seq = version.split('.').map(_.toInt).toSeq
-      versionFromSeq.applyOrElse(seq, (_: Seq[Int]) => throw new VersionFormatException(version))
-    } catch {
-      case e: IllegalArgumentException => throw new VersionFormatException(version, e)
+  def parseVersion(version: String)(implicit c: Convert): c.Result[V] = {
+    import c._
+    conversion {
+      try {
+        require(!version.endsWith("."), "version cannot end with a '.'")
+        val seq = version.split('.')
+          .map(s => unwrap(parseInt(s)))
+          .toSeq
+        versionFromSeq.applyOrElse(seq, (_: Seq[Int]) => fail(new VersionFormatException(version)))
+      } catch {
+        case e: IllegalArgumentException => fail(new VersionFormatException(version, e))
+      }
     }
   }
-
-  /**
-    * Parses a string into a version.
-    *
-    * @param version the string to parse
-    * @return an [[Option]] containing the version represented by the string;
-    *         [[None]] if the string did not represent a valid version
-    */
-  def parseAsOption(version: String): Option[V] = formatCheckToOption { parseVersion(version) }
 }

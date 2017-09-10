@@ -1,6 +1,8 @@
 package com.nthportal.versions
 package variable
 
+import com.nthportal.convert.Convert
+
 /**
   * A [[VersionCompanion companion]] for [[Version]]s.
   */
@@ -23,8 +25,8 @@ abstract class Companion private[variable]() extends VersionCompanion[Version, E
     *
     * @param values the values of the version
     * @return a Version with the specified values
-    * @throws IllegalArgumentException if the number of values does not
-    *                                  conform to the allowed sizes
+    * @throws scala.IllegalArgumentException if the number of values does not
+    *                                        conform to the allowed sizes
     */
   @throws[IllegalArgumentException]("if the number of values does not conform to the allowed sizes")
   def apply(values: Int*): Version = {
@@ -47,11 +49,11 @@ abstract class Companion private[variable]() extends VersionCompanion[Version, E
     * Extracts a version from a string.
     *
     * @param version the string from which to extract a version
-    * @return an [[Option]] containing the values of the version;
-    *         [[None]] if the string did not represent a valid version
+    * @return an [[scala.Option Option]] containing the values of the version;
+    *         [[scala.None None]] if the string did not represent a valid version
     *         or was of invalid size
     */
-  def unapplySeq(version: String): Option[Seq[Int]] = parseAsOption(version) map { _.values }
+  def unapplySeq(version: String): Option[Seq[Int]] = parseVersion(version)(Convert.Any) map { _.values }
 }
 
 private object Companion {

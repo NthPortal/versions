@@ -2,14 +2,15 @@ package com.nthportal.versions
 package semver
 package compat
 
+import com.nthportal.convert.Convert
 import com.nthportal.versions.v3.compat.VersionFactory
 
 /**
   * A factory for for parsing version strings into SemVer versions without
   * build metadata.
   *
-  * @param factory the [[VersionFactory]] with which to parse the version
-  *                and its extension
+  * @param factory the [[com.nthportal.versions.v3.compat.VersionFactory VersionFactory]]
+  *                with which to parse the version and its extension
   * @tparam E the type of the versions' extension
   */
 final case class SemVerWithoutMetadataFactory[E](factory: VersionFactory[E]) {
@@ -25,6 +26,6 @@ final case class SemVerWithoutMetadataFactory[E](factory: VersionFactory[E]) {
     */
   @throws[VersionFormatException]("if the given string is not a valid SemVer version or contains build metadata")
   def parseVersion(version: String): v3.ExtendedVersion[E] = {
-    parseSemVerWithoutMetadata(version)(factory.extensionDef, factory.parser)
+    parseSemVerWithoutMetadata(version)(Convert.Valid, factory.extensionDef, factory.parser)
   }
 }

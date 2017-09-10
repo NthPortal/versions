@@ -9,7 +9,7 @@ object BuildMetadata {
   /**
     * Returns a [[Parser]] for string build metadata.
     *
-    * The parser uses the [[identity]] function.
+    * The parser uses the [[scala.Predef.identity identity]] function.
     *
     * @return a parser for string build metadata
     */
@@ -25,7 +25,7 @@ object BuildMetadata {
       * Parses a string into build metadata.
       *
       * @param metadata the string to parse
-      * @throws IllegalArgumentException if the metadata is invalid
+      * @throws scala.IllegalArgumentException if the metadata is invalid
       * @return the metadata represented by the string
       */
     @throws[IllegalArgumentException]("if the metadata is invalid")

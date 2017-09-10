@@ -10,7 +10,7 @@ trait Extractor {
     *
     * @param ev the extended version from which to extract values
     * @tparam E the type of the extension
-    * @return an [[Option]] containing the version and extension
+    * @return an [[scala.Option Option]] containing the version and extension
     */
   def unapply[E](ev: ExtendedVersion[E]): Some[(Version, E)] = Some(ev.version -> ev.extension)
 }

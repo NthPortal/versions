@@ -2,21 +2,25 @@ organization := "com.nthportal"
 name := "versions"
 description := "A Scala library for representing versions as objects."
 
-val rawVersion = "2.1.0"
+val rawVersion = "3.0.0"
 isSnapshot := true
 version := rawVersion + { if (isSnapshot.value) "-SNAPSHOT" else "" }
 
-scalaVersion := "2.12.2"
+scalaVersion := "2.12.3"
 crossScalaVersions := Seq(
   "2.12.0",
   "2.12.1",
-  "2.12.2"
+  "2.12.2",
+  "2.12.3"
 )
 
 libraryDependencies ++= Seq(
+  "com.nthportal" %% "convert" % "0.3.0",
   "com.nthportal" %% "extra-predef" % "1.+",
   "org.scalatest" %% "scalatest" % "3.0.+" % Test
 )
+
+autoAPIMappings := true
 
 scalacOptions ++= {
   if (isSnapshot.value) Seq()

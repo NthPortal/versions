@@ -1,6 +1,8 @@
 package com.nthportal.versions
 package extensions
 
+import com.nthportal.convert.Convert
+
 /**
   * A version extension supporting pre-alpha, alpha, beta,
   * release-candidate, and release extensions.
@@ -58,13 +60,13 @@ object AlphaBeta extends RichExtensionParser[AlphaBeta] {
       * @param num the number of the release candidate
       * @return a release candidate with the specified number
       */
-    def apply(num: Int): AlphaBeta = RC(num)
+    def apply(num: Int): AlphaBeta = create(num)(Convert.Valid)
 
     /**
       * Extracts the release candidate number from a release candidate.
       *
       * @param ab an [[AlphaBeta]]
-      * @return an [[Option]] containing the number of the release candidate,
+      * @return an [[scala.Option Option]] containing the number of the release candidate,
       *         if the AlphaBeta is one
       */
     def unapply(ab: AlphaBeta): Option[Int] = ab match {
@@ -72,9 +74,15 @@ object AlphaBeta extends RichExtensionParser[AlphaBeta] {
       case _ => None
     }
 
-    private final case class RC(num: Int) extends AlphaBeta(3) {
-      require(num >= 1, "release candidate number must be positive")
+    private[AlphaBeta] def create(num: Int)(implicit c: Convert): c.Result[AlphaBeta] = {
+      import c._
+      conversion {
+        require(num >= 1, "release candidate number must be positive")
+        RC(num)
+      }
+    }
 
+    private final case class RC(num: Int) extends AlphaBeta(3) {
       override def compare(that: AlphaBeta) = that match {
         case RC(n) => num compare n
         case _ => super.compare(that)
@@ -90,18 +98,24 @@ object AlphaBeta extends RichExtensionParser[AlphaBeta] {
   implicit val extensionDef: ExtensionDef[AlphaBeta] = ExtensionDef.fromOrdered(release)
 
   @throws[IllegalArgumentException]
-  override def parse(extension: String): AlphaBeta = extension match {
-    case this.preAlphaToString => preAlpha
-    case this.alphaToString => alpha
-    case this.betaToString => beta
-    case e => e split '.' match {
-      case Array(this.rcPrefix, num) =>
-        try {
-          rc(num.toInt)
-        } catch {
-          case e: IllegalArgumentException => invalidExtension(extension, e)
+  override def parse(extension: String)(implicit c: Convert): c.Result[AlphaBeta] = {
+    import c._
+    conversion {
+      import AutoUnwrap._
+      extension match {
+        case this.preAlphaToString => preAlpha
+        case this.alphaToString => alpha
+        case this.betaToString => beta
+        case e => e split '.' match {
+          case Array(this.rcPrefix, num) =>
+            try {
+              rc.create(parseInt(num))
+            } catch {
+              case e: IllegalArgumentException => invalidExtension(extension, e)
+            }
+          case _ => invalidExtension(extension)
         }
-      case _ => invalidExtension(extension)
+      }
     }
   }
 }

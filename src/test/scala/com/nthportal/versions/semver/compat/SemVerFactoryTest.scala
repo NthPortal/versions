@@ -2,6 +2,7 @@ package com.nthportal.versions
 package semver
 package compat
 
+import com.nthportal.convert.Convert
 import com.nthportal.versions.extensions.Maven._
 import com.nthportal.versions.v3.compat.VersionFactory
 
@@ -12,8 +13,8 @@ class SemVerFactoryTest extends SimpleSpec {
   behavior of "SemVer factories"
 
   they should "parse versions without metadata correctly" in {
+    import Convert.Valid.Implicit.ref
     val factory = SemVerWithoutMetadataFactory(versionFactory)
-
     val v = factory.parseVersion("1.0.0-SNAPSHOT")
 
     v shouldEqual (v3.Version(1)(0)(0) -- Snapshot)

@@ -15,4 +15,3 @@ project/project
 !LICENSE
 !*.md
 !.travis.yml
-!.coveralls.yml

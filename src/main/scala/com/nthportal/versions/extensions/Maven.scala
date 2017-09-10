@@ -1,6 +1,8 @@
 package com.nthportal.versions
 package extensions
 
+import com.nthportal.convert.Convert
+
 /**
   * A simple [[https://maven.apache.org/ Maven]] version extension,
   * supporting snapshot and release types.
@@ -43,8 +45,13 @@ object Maven extends RichExtensionParser[Maven] {
   def parser: ExtensionParser[Maven] = this
 
   @throws[IllegalArgumentException]
-  override def parse(extension: String): Maven = extension match {
-    case this.snapshotToStr => Snapshot
-    case _ => invalidExtension(extension)
+  override def parse(extension: String)(implicit c: Convert): c.Result[Maven] = {
+    import c._
+    conversion {
+      extension match {
+        case this.snapshotToStr => Snapshot
+        case _ => invalidExtension(extension)
+      }
+    }
   }
 }

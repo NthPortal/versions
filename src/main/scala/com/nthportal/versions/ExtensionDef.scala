@@ -30,7 +30,8 @@ final case class ExtensionDef[E](default: Option[E], ordering: Ordering[E]) exte
 
 object ExtensionDef {
   /**
-    * Defines an extension type from an [[Ordered]] type, with no default extension value.
+    * Defines an extension type from an [[scala.Ordered Ordered]] type,
+    * with no default extension value.
     *
     * @tparam E the type of the extension
     * @return an extension definition for the given type
@@ -38,7 +39,8 @@ object ExtensionDef {
   def fromOrdered[E <: Ordered[E]]: ExtensionDef[E] = apply(None, _ compare _)
 
   /**
-    * Defines an extension type from an [[Ordered]] type, with the given default extension value.
+    * Defines an extension type from an [[scala.Ordered Ordered]] type,
+    * with the given default extension value.
     *
     * @param default the default extension value
     * @tparam E the type of the extension
@@ -47,7 +49,8 @@ object ExtensionDef {
   def fromOrdered[E <: Ordered[E]](default: E): ExtensionDef[E] = apply(Some(default), _ compare _)
 
   /**
-    * Defines an extension type from a [[Comparable]] type, with no default extension value.
+    * Defines an extension type from a [[java.lang.Comparable Comparable]] type,
+    * with no default extension value.
     *
     * @tparam E the type of the extension
     * @return an extension definition for the given type
@@ -55,7 +58,8 @@ object ExtensionDef {
   def fromComparable[E <: Comparable[E]]: ExtensionDef[E] = apply(None, _ compareTo _)
 
   /**
-    * Defines an extension type from a [[Comparable]] type, with the given default extension value.
+    * Defines an extension type from a [[java.lang.Comparable Comparable]] type,
+    * with the given default extension value.
     *
     * @param default the default extension value
     * @tparam E the type of the extension

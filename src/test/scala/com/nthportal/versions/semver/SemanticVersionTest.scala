@@ -1,6 +1,7 @@
 package com.nthportal.versions
 package semver
 
+import com.nthportal.convert.Convert
 import com.nthportal.versions.extensions.Maven._
 import com.nthportal.versions.semver.BuildMetadata._
 
@@ -15,6 +16,8 @@ class SemanticVersionTest extends SimpleSpec {
   }
 
   it should "define equality correctly" in {
+    import Convert.Valid.Implicit.ref
+
     val v0 = parseSemVer("1.0.0-SNAPSHOT+build.12654")
     v0.buildMetadata.value shouldBe "build.12654"
 
