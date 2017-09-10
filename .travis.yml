@@ -11,5 +11,6 @@ cache:
     - $HOME/.ivy2/cache
 script:
   - sbt ++$TRAVIS_SCALA_VERSION clean coverage test
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then sbt ++$TRAVIS_SCALA_VERSION mimaReportBinaryIssues ; fi
 after_success:
   - sbt ++$TRAVIS_SCALA_VERSION coverageReport coveralls
