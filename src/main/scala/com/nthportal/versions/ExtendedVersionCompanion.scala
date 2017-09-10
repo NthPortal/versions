@@ -53,15 +53,16 @@ abstract class ExtendedVersionCompanion[V <: VersionBase[V, EV], EV[E] <: Extend
                       ep: ExtensionParser[E]): c.Result[EV[E]] = {
     import c._
     conversion {
+      import AutoUnwrap._
       version.split("-", 2) match {
         case Array(ver, extension) =>
           try {
-            unwrap(companion.parseVersion(ver)) -- unwrap(ep.parse(extension))
+            companion.parseVersion(ver) -- ep.parse(extension)
           } catch {
             case e: IllegalArgumentException => fail(new VersionFormatException(version, e))
           }
         case Array(ver) => ed.default match {
-          case Some(extension) => unwrap(companion.parseVersion(ver)) -- extension
+          case Some(extension) => companion.parseVersion(ver) -- extension
           case None =>
             fail(new VersionFormatException(version, new UnsupportedOperationException("No default extension")))
         }

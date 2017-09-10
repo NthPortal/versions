@@ -101,6 +101,7 @@ object AlphaBeta extends RichExtensionParser[AlphaBeta] {
   override def parse(extension: String)(implicit c: Convert): c.Result[AlphaBeta] = {
     import c._
     conversion {
+      import AutoUnwrap._
       extension match {
         case this.preAlphaToString => preAlpha
         case this.alphaToString => alpha
@@ -108,7 +109,7 @@ object AlphaBeta extends RichExtensionParser[AlphaBeta] {
         case e => e split '.' match {
           case Array(this.rcPrefix, num) =>
             try {
-              unwrap(rc.create(unwrap(parseInt(num))))
+              rc.create(parseInt(num))
             } catch {
               case e: IllegalArgumentException => invalidExtension(extension, e)
             }

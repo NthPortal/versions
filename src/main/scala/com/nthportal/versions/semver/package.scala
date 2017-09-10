@@ -37,10 +37,10 @@ package object semver {
         version split '+' match {
           case Array(ver, meta) =>
             validateSemVerSection(meta, "build metadata")
-            SemanticVersion(unwrap(parseExtendedVersion(ver)(c)), Some(mp.parse(meta)))
+            SemanticVersion(parseExtendedVersion(ver)(c), Some(mp.parse(meta)))
           case Array(ver) =>
             require(!version.endsWith("+"), "build metadata cannot be empty")
-            SemanticVersion(unwrap(parseExtendedVersion(ver)(c)), None)
+            SemanticVersion(parseExtendedVersion(ver)(c), None)
           case _ => fail(new IllegalArgumentException("SemVer versions may only have a single build metadata section"))
         }
       } catch {
@@ -183,16 +183,18 @@ package object semver {
   private def parseExtendedVersion[E](version: String)
                                      (c: Convert)
                                      (implicit ep: ExtensionParser[E],
-                                      ed: ExtensionDef[E]): c.Result[v3.ExtendedVersion[E]] = {
-    v3.ExtendedVersion.parseVersion(version)(c, ed, new ExtensionParser[E] {
-      override def parse(extension: String)(implicit c2: Convert): c2.Result[E] = {
-        import c2._
-        conversion {
-          validateSemVerSection(extension, "extension")
-          unwrap(ep.parse(extension))
+                                      ed: ExtensionDef[E]): v3.ExtendedVersion[E] = {
+    c.unwrap {
+      v3.ExtendedVersion.parseVersion(version)(c, ed, new ExtensionParser[E] {
+        override def parse(extension: String)(implicit c2: Convert): c2.Result[E] = {
+          import c2._
+          conversion {
+            validateSemVerSection(extension, "extension")
+            unwrap(ep.parse(extension))
+          }
         }
-      }
-    })
+      })
+    }
   }
 
   implicit final class RichVersion(private val ver: v3.Version) extends AnyVal {
