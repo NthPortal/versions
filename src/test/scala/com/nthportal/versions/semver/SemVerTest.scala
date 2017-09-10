@@ -1,6 +1,7 @@
 package com.nthportal.versions
 package semver
 
+import com.nthportal.convert.Convert
 import com.nthportal.versions.extensions.Maven._
 import com.nthportal.versions.semver.BuildMetadata._
 
@@ -8,6 +9,7 @@ class SemVerTest extends SimpleSpec {
   behavior of "SemVer package object"
 
   it should "parse versions correctly" in {
+    import Convert.Valid.Implicit.ref
     val v = parseSemVer("1.0.0-SNAPSHOT+build.12654").extendedVersion
 
     v should equal (v3.Version(1)(0)(0) -- Snapshot)
@@ -20,7 +22,10 @@ class SemVerTest extends SimpleSpec {
   }
 
   it should "only allow valid SemVer extensions and metadata" in {
-    implicit val extensionParser: ExtensionParser[String] = identity(_)
+    import Convert.Valid.Implicit.ref
+    implicit val extensionParser: ExtensionParser[String] = new ExtensionParser[String] {
+      override def parse(extension: String)(implicit c: Convert) = c.conversion { extension }
+    }
     implicit val extensionDef: ExtensionDef[String] = ExtensionDef(None, _ compare _)
 
     a [VersionFormatException] should be thrownBy {parseSemVer("1.0.0-SNAP_SHOT")}
@@ -49,12 +54,13 @@ class SemVerTest extends SimpleSpec {
 
   it should "parse versions correctly as `Option`s" in {
     import BuildMetadata.stringMetadataParser
+    import Convert.Any.Implicit.ref
 
-    parseSemVerAsOption("1.0.0-SNAPSHOT+build.12654").value shouldEqual (v3.Version(1)(0)(0) -- Snapshot).withBuildMetadata("build.12654")
-    parseSemVerAsOption("1.0.0").value shouldEqual (v3.Version(1)(0)(0) -- Release).withNoMetadata[String]
+    parseSemVer("1.0.0-SNAPSHOT+build.12654").value shouldEqual (v3.Version(1)(0)(0) -- Snapshot).withBuildMetadata("build.12654")
+    parseSemVer("1.0.0").value shouldEqual (v3.Version(1)(0)(0) -- Release).withNoMetadata[String]
 
-    parseSemVerAsOption("1.0.0-SNAPSHOT+") shouldBe empty
-    parseSemVerAsOption("1.0.0-SNAPSHOT+build+12654") shouldBe empty
+    parseSemVer("1.0.0-SNAPSHOT+") shouldBe empty
+    parseSemVer("1.0.0-SNAPSHOT+build+12654") shouldBe empty
   }
 
   it should "pattern match versions correctly" in {

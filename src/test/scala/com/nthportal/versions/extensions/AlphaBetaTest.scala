@@ -1,6 +1,7 @@
 package com.nthportal.versions
 package extensions
 
+import com.nthportal.convert.Convert
 import com.nthportal.versions.extensions.AlphaBeta._
 
 class AlphaBetaTest extends SimpleSpec {
@@ -31,6 +32,8 @@ class AlphaBetaTest extends SimpleSpec {
   }
 
   it should "parse extension values correctly" in {
+    import Convert.Valid.Implicit.ref
+
     parse("pre-alpha") shouldBe preAlpha
     parse("alpha") shouldBe alpha
     parse("beta") shouldBe beta

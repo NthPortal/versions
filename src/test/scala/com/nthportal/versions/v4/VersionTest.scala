@@ -1,6 +1,8 @@
 package com.nthportal.versions
 package v4
 
+import com.nthportal.convert.Convert
+
 class VersionTest extends SimpleSpec {
 
   behavior of "Version (4)"
@@ -37,6 +39,8 @@ class VersionTest extends SimpleSpec {
   }
 
   it should "parse versions correctly" in {
+    import Convert.Valid.Implicit.ref
+
     Version parseVersion "1.2.5.4" shouldEqual Version(1)(2)(5)(4)
     Version parseVersion "0.0.0.0" shouldEqual Version(0)(0)(0)(0)
 
@@ -49,15 +53,17 @@ class VersionTest extends SimpleSpec {
   }
 
   it should "parse versions as options correctly" in {
-    Version.parseAsOption("1.2.5.4").value shouldEqual Version(1)(2)(5)(4)
-    Version.parseAsOption("0.0.0.0").value shouldEqual Version(0)(0)(0)(0)
+    import Convert.Any.Implicit.ref
 
-    Version parseAsOption "1.0.0.0." shouldBe empty
-    Version parseAsOption "-1.0.0.0" shouldBe empty
-    Version parseAsOption "1.0.0" shouldBe empty
-    Version parseAsOption "1.0.0.0.0" shouldBe empty
-    Version parseAsOption "1.f.0.0" shouldBe empty
-    Version parseAsOption "really not a version" shouldBe empty
+    Version.parseVersion("1.2.5.4").value shouldEqual Version(1)(2)(5)(4)
+    Version.parseVersion("0.0.0.0").value shouldEqual Version(0)(0)(0)(0)
+
+    Version parseVersion "1.0.0.0." shouldBe empty
+    Version parseVersion "-1.0.0.0" shouldBe empty
+    Version parseVersion "1.0.0" shouldBe empty
+    Version parseVersion "1.0.0.0.0" shouldBe empty
+    Version parseVersion "1.f.0.0" shouldBe empty
+    Version parseVersion "really not a version" shouldBe empty
   }
 
   it should "pattern match versions correctly" in {
@@ -73,6 +79,7 @@ class VersionTest extends SimpleSpec {
   }
 
   it should "convert to other types correctly" in {
+    import Convert.Valid.Implicit.ref
     val v = Version(1, 2, 5, 4)
 
     v to Version shouldEqual v
@@ -83,12 +90,13 @@ class VersionTest extends SimpleSpec {
   }
 
   it should "convert as an option to other types correctly" in {
+    import Convert.Any.Implicit.ref
     val v = Version(1, 2, 5, 4)
 
-    v.toOptionOf(Version).value shouldEqual v
-    v.toOptionOf(variable.Version).value shouldEqual variable.Version(1, 2, 5, 4)
+    v.to(Version).value shouldEqual v
+    v.to(variable.Version).value shouldEqual variable.Version(1, 2, 5, 4)
 
-    v toOptionOf v2.Version shouldBe empty
-    v toOptionOf v3.Version shouldBe empty
+    v to v2.Version shouldBe empty
+    v to v3.Version shouldBe empty
   }
 }

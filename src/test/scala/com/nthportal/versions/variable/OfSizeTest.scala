@@ -1,6 +1,8 @@
 package com.nthportal.versions
 package variable
 
+import com.nthportal.convert.Convert
+
 class OfSizeTest extends SimpleSpec {
   behavior of "Version.ofSize"
 
@@ -23,6 +25,7 @@ class OfSizeTest extends SimpleSpec {
   }
 
   it should "parse versions correctly" in {
+    import Convert.Valid.Implicit.ref
     val V = Version.ofSize(1 to 2)
 
     V parseVersion "1.3" shouldEqual V(1, 3)
@@ -38,18 +41,19 @@ class OfSizeTest extends SimpleSpec {
   }
 
   it should "parse versions as options correctly" in {
+    import Convert.Any.Implicit.ref
     val V = Version.ofSize(1 to 2)
 
-    V.parseAsOption("1.3").value shouldEqual V(1, 3)
-    V.parseAsOption("0.0").value shouldEqual V(0, 0)
-    V.parseAsOption("12").value shouldEqual V(12)
+    V.parseVersion("1.3").value shouldEqual V(1, 3)
+    V.parseVersion("0.0").value shouldEqual V(0, 0)
+    V.parseVersion("12").value shouldEqual V(12)
 
-    V parseAsOption "" shouldBe empty
-    V parseAsOption "1.2.5" shouldBe empty
-    V parseAsOption "1.0." shouldBe empty
-    V parseAsOption "-1.0" shouldBe empty
-    V parseAsOption "1.f" shouldBe empty
-    V parseAsOption "really not a version" shouldBe empty
+    V parseVersion "" shouldBe empty
+    V parseVersion "1.2.5" shouldBe empty
+    V parseVersion "1.0." shouldBe empty
+    V parseVersion "-1.0" shouldBe empty
+    V parseVersion "1.f" shouldBe empty
+    V parseVersion "really not a version" shouldBe empty
   }
 
   it should "pattern match versions correctly" in {
@@ -79,6 +83,7 @@ class OfSizeTest extends SimpleSpec {
   }
 
   it should "convert to other types correctly" in {
+    import Convert.Valid.Implicit.ref
     val v1 = Version(1, 2, 5)
 
     v1 to Version.ofSize(2 to 3) shouldEqual v1
@@ -91,14 +96,15 @@ class OfSizeTest extends SimpleSpec {
   }
 
   it should "convert as an option to other types correctly" in {
+    import Convert.Any.Implicit.ref
     val v1 = Version(1, 2, 5)
 
-    v1.toOptionOf(Version.ofSize(2 to 3)).value shouldEqual v1
-    v1 toOptionOf Version.ofSize(1 to 2) shouldBe empty
+    v1.to(Version.ofSize(2 to 3)).value shouldEqual v1
+    v1 to Version.ofSize(1 to 2) shouldBe empty
 
     val v2 = Version.ofSize(1 to 2)(1)
 
-    v2.toOptionOf(Version).value shouldEqual v2
-    v2 toOptionOf Version.ofSize(2 to 3) shouldBe empty
+    v2.to(Version).value shouldEqual v2
+    v2 to Version.ofSize(2 to 3) shouldBe empty
   }
 }

@@ -1,6 +1,7 @@
 package com.nthportal.versions
 package extensions
 
+import com.nthportal.convert.Convert
 import com.nthportal.versions.extensions.Maven._
 
 class MavenTest extends SimpleSpec {
@@ -17,6 +18,8 @@ class MavenTest extends SimpleSpec {
   }
 
   it should "parse extension values correctly" in {
+    import Convert.Valid.Implicit.ref
+
     parse("SNAPSHOT") should be theSameInstanceAs Snapshot
     an [IllegalArgumentException] should be thrownBy {parse("INVALID")}
     an [IllegalArgumentException] should be thrownBy {parse("")}
