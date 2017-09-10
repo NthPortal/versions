@@ -53,3 +53,6 @@ pomExtra :=
         <url>https://github.com/NthPortal</url>
       </developer>
     </developers>
+
+mimaPreviousArtifacts := Set(
+)
