@@ -1,6 +1,8 @@
 package com.nthportal
 package versions
 
+import com.nthportal.convert.Convert
+
 import scala.language.higherKinds
 
 /**
@@ -37,23 +39,12 @@ trait ExtendedVersionBase[V <: VersionBase[V, EV], E, EV[X] <: ExtendedVersionBa
     */
   @throws[IllegalArgumentException]("if this version cannot be converted to the other type")
   def to[V2 <: VersionBase[V2, EV2], EV2[X] <: ExtendedVersionBase[V2, X, EV2]]
-  (companion: ExtendedVersionCompanion[V2, EV2]): EV2[E] = {
-    if (companion eq version.extendedCompanion) this.asInstanceOf[EV2[E]]
-    else companion(version to companion.baseCompanion, extension, extensionDef)
-  }
-
-  /**
-    * Converts this extended version to another type, if possible.
-    *
-    * @param companion a [[ExtendedVersionCompanion companion]] of the type
-    *                  of version to which this should be converted
-    * @return an [[Option]] containing this version converted to
-    *         the other type, if it can be represented by the other type
-    */
-  def toOptionOf[V2 <: VersionBase[V2, EV2], EV2[X] <: ExtendedVersionBase[V2, X, EV2]]
-  (companion: ExtendedVersionCompanion[V2, EV2]): Option[EV2[E]] = {
-    if (companion eq version.extendedCompanion) Some(this.asInstanceOf[EV2[E]])
-    else version toOptionOf companion.baseCompanion map { companion(_, extension, extensionDef) }
+  (companion: ExtendedVersionCompanion[V2, EV2])(implicit c: Convert): c.Result[EV2[E]] = {
+    import c._
+    conversion {
+      if (companion eq version.extendedCompanion) this.asInstanceOf[EV2[E]]
+      else companion(unwrap(version to companion.baseCompanion), extension, extensionDef)
+    }
   }
 
   /**

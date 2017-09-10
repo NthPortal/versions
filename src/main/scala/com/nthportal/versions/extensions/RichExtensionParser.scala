@@ -1,6 +1,8 @@
 package com.nthportal.versions
 package extensions
 
+import com.nthportal.convert.Convert
+
 /**
   * An [[ExtensionParser]] with extra utility methods.
   *
@@ -25,7 +27,7 @@ private[extensions] trait RichExtensionParser[E] extends ExtensionParser[E] {
     */
   @inline
   @throws[IllegalArgumentException]
-  protected def invalidExtension(extension: String, cause: Throwable = null): Nothing = {
-    throw new IllegalArgumentException(s"Invalid extension: $extension", cause)
+  protected def invalidExtension(extension: String, cause: Throwable = null)(implicit c: Convert): Nothing = {
+    c.fail(new IllegalArgumentException(s"Invalid extension: $extension", cause))
   }
 }

@@ -1,5 +1,7 @@
 package com.nthportal.versions
 
+import com.nthportal.convert.Convert
+
 import scala.language.higherKinds
 
 /**
@@ -45,26 +47,15 @@ trait VersionBase[V <: VersionBase[V, EV], EV[E] <: ExtendedVersionBase[V, E, EV
     */
   @throws[IllegalArgumentException]("if this version cannot be converted to the other type")
   def to[V2 <: VersionBase[V2, EV2], EV2[E] <: ExtendedVersionBase[V2, E, EV2]]
-  (companion: VersionCompanion[V2, EV2]): V2 = {
-    if (companion eq this.companion) this.asInstanceOf[V2]
-    else {
-      companion.versionFromSeq.applyOrElse(toSeq,
-        (_: Seq[Int]) => throw new IllegalArgumentException(s"$this cannot be converted to $companion"))
+  (companion: VersionCompanion[V2, EV2])(implicit c: Convert): c.Result[V2] = {
+    import c._
+    conversion {
+      if (companion eq this.companion) this.asInstanceOf[V2]
+      else {
+        companion.versionFromSeq.applyOrElse(toSeq,
+          (_: Seq[Int]) => fail(new IllegalArgumentException(s"$this cannot be converted to $companion")))
+      }
     }
-  }
-
-  /**
-    * Converts this version to another type, if possible.
-    *
-    * @param companion a [[VersionCompanion companion]] of the type of version
-    *                  to which this should be converted
-    * @return an [[Option]] containing this version converted to
-    *         the other type, if it can be represented by the other type
-    */
-  def toOptionOf[V2 <: VersionBase[V2, EV2], EV2[E] <: ExtendedVersionBase[V2, E, EV2]]
-  (companion: VersionCompanion[V2, EV2]): Option[V2] = {
-    if (companion eq this.companion) Some(this.asInstanceOf[V2])
-    else companion.versionFromSeq.lift(toSeq)
   }
 
   override def dash[E](extension: E)(implicit ed: ExtensionDef[E]) = {

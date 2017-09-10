@@ -1,6 +1,8 @@
 package com.nthportal
 package versions
 
+import com.nthportal.convert.Convert
+
 /**
   * A package containing utilities related to
   * [[http://semver.org/spec/2.0.0.html SemVer 2.0.0]] versions.
@@ -23,21 +25,25 @@ package object semver {
     */
   @throws[VersionFormatException]("if the given string is not a valid SemVer version")
   def parseSemVer[E, M](version: String)
-                       (implicit ed: ExtensionDef[E],
+                       (implicit c: Convert,
+                        ed: ExtensionDef[E],
                         ep: ExtensionParser[E],
-                        mp: BuildMetadata.Parser[M]): SemanticVersion[E, M] = {
-    try {
-      version split '+' match {
-        case Array(ver, meta) =>
-          validateSemVerSection(meta, "build metadata")
-          SemanticVersion(parseExtendedVersion(ver), Some(mp.parse(meta)))
-        case Array(ver) =>
-          require(!version.endsWith("+"), "build metadata cannot be empty")
-          SemanticVersion(parseExtendedVersion(ver), None)
-        case _ => throw new IllegalArgumentException("SemVer versions may only have a single build metadata section")
+                        mp: BuildMetadata.Parser[M]): c.Result[SemanticVersion[E, M]] = {
+    import c._
+    conversion {
+      try {
+        version split '+' match {
+          case Array(ver, meta) =>
+            validateSemVerSection(meta, "build metadata")
+            SemanticVersion(unwrap(parseExtendedVersion(ver)(c)), Some(mp.parse(meta)))
+          case Array(ver) =>
+            require(!version.endsWith("+"), "build metadata cannot be empty")
+            SemanticVersion(unwrap(parseExtendedVersion(ver)(c)), None)
+          case _ => fail(new IllegalArgumentException("SemVer versions may only have a single build metadata section"))
+        }
+      } catch {
+        case e: IllegalArgumentException => fail(new VersionFormatException(version, e))
       }
-    } catch {
-      case e: IllegalArgumentException => throw new VersionFormatException(version, e)
     }
   }
 
@@ -55,34 +61,19 @@ package object semver {
     */
   @throws[VersionFormatException]("if the given string is not a valid SemVer version or contains build metadata")
   def parseSemVerWithoutMetadata[E](version: String)
-                                   (implicit ed: ExtensionDef[E],
-                                    ep: ExtensionParser[E]): v3.ExtendedVersion[E] = {
-    try {
-      val semVer = parseSemVer(version)
-      require(semVer.buildMetadata.isEmpty, "version contains build metadata")
-      semVer.extendedVersion
-    } catch {
-      case e: IllegalArgumentException => throw new VersionFormatException(version, e)
+                                   (implicit c: Convert,
+                                    ed: ExtensionDef[E],
+                                    ep: ExtensionParser[E]): c.Result[v3.ExtendedVersion[E]] = {
+    import c._
+    conversion {
+      try {
+        val semVer = unwrap(parseSemVer(version))
+        require(semVer.buildMetadata.isEmpty, "version contains build metadata")
+        semVer.extendedVersion
+      } catch {
+        case e: IllegalArgumentException => fail(new VersionFormatException(version, e))
+      }
     }
-  }
-
-  /**
-    * Parses a version string into a [[SemanticVersion SemVer version]].
-    *
-    * @param version the version string to parse
-    * @param ed      the [[ExtensionDef extension definition]] with which to parse
-    * @param ep      a [[ExtensionParser parser]] for extensions
-    * @tparam E the type of the extension
-    * @throws VersionFormatException if the given string is not a valid SemVer version
-    * @return an [[Option]] containing the SemVer version represented by the
-    *         version string; [[None]] if the string did not represent a valid
-    *         SemVer version
-    */
-  def parseSemVerAsOption[E, M](version: String)
-                               (implicit ed: ExtensionDef[E],
-                                ep: ExtensionParser[E],
-                                mp: BuildMetadata.Parser[M]): Option[SemanticVersion[E, M]] = {
-    formatCheckToOption { parseSemVer(version) }
   }
 
   /**
@@ -106,7 +97,8 @@ package object semver {
                      (implicit ed: ExtensionDef[E],
                       ep: ExtensionParser[E],
                       mp: BuildMetadata.Parser[M]): Option[(v3.Version, E, Option[M])] = {
-      parseSemVerAsOption(version) map { semVer => (semVer.version, semVer.extension, semVer.buildMetadata) }
+      import Convert.Any.Implicit.ref
+      parseSemVer(version) map { semVer => (semVer.version, semVer.extension, semVer.buildMetadata) }
     }
   }
 
@@ -179,18 +171,24 @@ package object semver {
 
   @inline
   @throws[IllegalArgumentException]
-  private def validateSemVerSection(contents: String, sectionName: String): Unit = {
-    require(sectionRegex.pattern.matcher(contents).matches(), s"Invalid $sectionName: " + contents)
+  private def validateSemVerSection(contents: String, sectionName: String)(implicit c: Convert): Unit = {
+    c.require(sectionRegex.pattern.matcher(contents).matches(), s"Invalid $sectionName: " + contents)
   }
 
   @inline
   @throws[IllegalArgumentException]
   private def parseExtendedVersion[E](version: String)
+                                     (c: Convert)
                                      (implicit ep: ExtensionParser[E],
-                                      ed: ExtensionDef[E]): v3.ExtendedVersion[E] = {
-    v3.ExtendedVersion.parseVersion(version)(ed, extension => {
-      validateSemVerSection(extension, "extension")
-      ep.parse(extension)
+                                      ed: ExtensionDef[E]): c.Result[v3.ExtendedVersion[E]] = {
+    v3.ExtendedVersion.parseVersion(version)(c, ed, new ExtensionParser[E] {
+      override def parse(extension: String)(implicit c2: Convert): c2.Result[E] = {
+        import c2._
+        conversion {
+          validateSemVerSection(extension, "extension")
+          unwrap(ep.parse(extension))
+        }
+      }
     })
   }
 

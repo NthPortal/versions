@@ -1,6 +1,8 @@
 package com.nthportal.versions
 package variable
 
+import com.nthportal.convert.Convert
+
 /**
   * A [[VersionCompanion companion]] for [[Version]]s.
   */
@@ -51,7 +53,7 @@ abstract class Companion private[variable]() extends VersionCompanion[Version, E
     *         [[None]] if the string did not represent a valid version
     *         or was of invalid size
     */
-  def unapplySeq(version: String): Option[Seq[Int]] = parseAsOption(version) map { _.values }
+  def unapplySeq(version: String): Option[Seq[Int]] = parseVersion(version)(Convert.Any) map { _.values }
 }
 
 private object Companion {

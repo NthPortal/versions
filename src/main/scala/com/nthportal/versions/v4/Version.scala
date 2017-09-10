@@ -2,6 +2,8 @@ package com.nthportal
 package versions
 package v4
 
+import com.nthportal.convert.Convert
+
 /**
   * A version of the form `_1`.`_2`.`_3`.`_4` (such as, for example, `1.2.5.4`).
   *
@@ -41,5 +43,5 @@ object Version extends VersionCompanion[Version, ExtendedVersion] with Of[Dot[Do
     * @return an [[Option]] containing the four version numbers;
     *         [[None]] if the string did not represent a valid version
     */
-  def unapply(version: String): Option[(Int, Int, Int, Int)] = parseAsOption(version) flatMap unapply
+  def unapply(version: String): Option[(Int, Int, Int, Int)] = parseVersion(version)(Convert.Any) flatMap unapply
 }

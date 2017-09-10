@@ -1,5 +1,7 @@
 package com.nthportal.versions
 
+import com.nthportal.convert.Convert
+
 /**
   * Something which parses a version extension from a string.
   *
@@ -15,5 +17,5 @@ trait ExtensionParser[E] {
     * @return the extension represented by the specified string
     */
   @throws[IllegalArgumentException]("if the string provided does not represent a valid extension")
-  def parse(extension: String): E
+  def parse(extension: String)(implicit c: Convert): c.Result[E]
 }

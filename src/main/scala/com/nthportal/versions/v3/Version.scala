@@ -2,6 +2,8 @@ package com.nthportal
 package versions
 package v3
 
+import com.nthportal.convert.Convert
+
 /**
   * A version of the form `major`.`minor`.`patch` (such as, for example, `1.2.5`).
   *
@@ -42,5 +44,5 @@ object Version extends VersionCompanion[Version, ExtendedVersion] with Of[Dot[Do
     * @return an [[Option]] containing the major, minor and patch version numbers;
     *         [[None]] if the string did not represent a valid version
     */
-  def unapply(version: String): Option[(Int, Int, Int)] = parseAsOption(version) flatMap unapply
+  def unapply(version: String): Option[(Int, Int, Int)] = parseVersion(version)(Convert.Any) flatMap unapply
 }

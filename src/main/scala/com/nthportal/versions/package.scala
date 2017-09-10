@@ -1,5 +1,7 @@
 package com.nthportal
 
+import com.nthportal.convert.Convert
+
 package object versions {
 
   /**
@@ -24,12 +26,10 @@ package object versions {
     */
   val dash : --.type = --
 
-  @inline
-  private[versions] def formatCheckToOption[V](v: => V): Option[V] = {
-    try {
-      Some(v)
-    } catch {
-      case _: VersionFormatException => None
+  private[versions] def parseInt(s: String)(implicit c: Convert): c.Result[Int] = {
+    import c._
+    conversion {
+      wrapException[NumberFormatException, Int](s.toInt)
     }
   }
 }

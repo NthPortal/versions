@@ -2,6 +2,7 @@ package com.nthportal.versions
 package semver
 package compat
 
+import com.nthportal.convert.Convert
 import com.nthportal.versions.v3.compat.VersionFactory
 
 /**
@@ -25,6 +26,6 @@ final case class SemanticVersionFactory[E, M](factory: VersionFactory[E], parser
     */
   @throws[VersionFormatException]("if the given string is not a valid SemVer version")
   def parseVersion(version: String): SemanticVersion[E, M] = {
-    parseSemVer(version)(factory.extensionDef, factory.parser, parser)
+    parseSemVer(version)(Convert.Valid, factory.extensionDef, factory.parser, parser)
   }
 }
