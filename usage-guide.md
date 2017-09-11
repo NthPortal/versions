@@ -40,10 +40,11 @@ Version of 1 dot 3
 Additionally, a version can be parsed from a string, either directly as a `Version`, or as an `Option` (if the string might not represent a valid version):
 
 ```scala
+import com.nthportal.convert.Convert
 import com.nthportal.versions.v2._
 
+implicit val c = Convert.Valid // or `Convert.Any`
 Version.parseVersion("1.3")
-Version.parseAsOption("1.3")
 ```
 
 Fields can be extracted from either a `Version` or a string as well:
@@ -74,10 +75,11 @@ Version of 1 dot 2 dot 5
 Additionally, a version can be parsed from a string, either directly as a `Version`, or as an `Option` (if the string might not represent a valid version):
 
 ```scala
+import com.nthportal.convert.Convert
 import com.nthportal.versions.v3._
 
+implicit val c = Convert.Valid // or `Convert.Any`
 Version.parseVersion("1.2.5")
-Version.parseAsOption("1.2.5")
 ```
 
 Fields can be extracted from either a `Version` or a string as well:
@@ -108,10 +110,11 @@ Version of 1 dot 2 dot 5 dot 4
 Additionally, a version can be parsed from a string, either directly as a `Version`, or as an `Option` (if the string might not represent a valid version):
 
 ```scala
+import com.nthportal.convert.Convert
 import com.nthportal.versions.v4._
 
+implicit val c = Convert.Valid // or `Convert.Any`
 Version.parseVersion("1.2.5.4")
-Version.parseAsOption("1.2.5.4")
 ```
 
 Fields can be extracted from either a `Version` or a string as well:
@@ -207,16 +210,17 @@ As with a `Version`, an `ExtendedVersion` can be parsed from a string either dir
 An `ExtendedVersion[Maven]` can be parsed from a string as follows:
 
 ```scala
+import com.nthportal.convert.Convert
 import com.nthportal.versions.v3._
 import com.nthportal.versions.extensions.Maven._
 
+implicit val c = Convert.Valid // or `Convert.Any`
+
 // Version(1, 2, 5) -- Snapshot
 ExtendedVersion.parseVersion("1.2.5-SNAPSHOT")
-ExtendedVersion.parseAsOption("1.2.5-SNAPSHOT")
 
 // Version(1, 2, 5) -- Release
 ExtendedVersion.parseVersion("1.2.5")
-ExtendedVersion.parseAsOption("1.2.5")
 ```
 
 ### Extractors for Extended Versions
@@ -262,6 +266,7 @@ Thus, the following pairs of statements are equivalent:
 ```scala
 import com.nthportal.versions._, v3._
 import com.nthportal.versions.extensions.Maven._
+import com.nthportal.convert.Convert.Valid.Implicit.ref // or `Convert.Any.Implicit.ref`
 
 V(1, 2, 5) // is equivalent to
 Version(1, 2, 5)
@@ -328,22 +333,25 @@ A simple `BuildMetadata.Parser[String]`, which merely takes any string as the me
 A SemVer version can be parsed from a string either directly as a `SemanticVersion`, or as an `Option` (if the string might not represent a valid SemVer version), as follows:
 
 ```scala
+import com.nthportal.convert.Convert
 import com.nthportal.versions.v3._
 import com.nthportal.versions.semver._
 import com.nthportal.versions.semver.BuildMetadata.stringMetadataParser
 import com.nthportal.versions.extensions.Maven._
 
+implicit val c = Convert.Valid // or `Convert.Any`
 parseSemVer("1.2.5-SNAPSHOT+commit.386bda5")
-parseSemVerAsOption("1.2.5-SNAPSHOT+commit.386bda5")
 ```
 
 Additionally, if a SemVer version contains no metadata, it can be parsed directly as a `v3.ExtendedVersion`:
 
 ```scala
+import com.nthportal.convert.Convert
 import com.nthportal.versions.v3._
 import com.nthportal.versions.semver._
 import com.nthportal.versions.extensions.Maven._
 
+implicit val c = Convert.Valid // or `Convert.Any`
 parseSemVerWithoutMetadata("1.2.5-SNAPSHOT")
 ```
 
