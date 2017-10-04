@@ -12,6 +12,7 @@ import com.nthportal.convert.Convert
   */
 package object semver {
   private val sectionRegex = """[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*""".r
+  private val digitRegex = """\d+""".r
 
   /**
     * Parses a version string into a [[SemanticVersion SemVer version]].
@@ -190,6 +191,12 @@ package object semver {
           import c2._
           conversion {
             validateSemVerSection(extension, "extension")
+            extension split '.' foreach { part =>
+              require(!part.startsWith("0")
+                || part.length == 1
+                || !digitRegex.pattern.matcher(part).matches(),
+                "Numeric identifier has leading zero(es): " + part)
+            }
             unwrap(ep.parse(extension))
           }
         }

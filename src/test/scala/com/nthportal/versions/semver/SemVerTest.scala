@@ -33,12 +33,14 @@ class SemVerTest extends SimpleSpec {
     a [VersionFormatException] should be thrownBy {parseSemVer("1.0.0-SNAPSHOT?")}
     a [VersionFormatException] should be thrownBy {parseSemVer("1.0.0-.SNAPSHOT")}
     a [VersionFormatException] should be thrownBy {parseSemVer("1.0.0-SNAP.SHOT.")}
+    a [VersionFormatException] should be thrownBy {parseSemVer("1.0.0-beta.0123")}
 
     noException should be thrownBy {parseSemVer("1.0.0-SNAP.SHOT")}
     noException should be thrownBy {parseSemVer("1.0.0-SNAP-SHOT")}
     noException should be thrownBy {parseSemVer("1.0.0--SNAPSHOT")}
     noException should be thrownBy {parseSemVer("1.0.0-SNAP--SHOT")}
     noException should be thrownBy {parseSemVer("1.0.0-SNAPSHOT-")}
+    noException should be thrownBy {parseSemVer("1.0.0-beta.123")}
 
     a [VersionFormatException] should be thrownBy {parseSemVer("1.0.0-SNAPSHOT+build..12654")}
     a [VersionFormatException] should be thrownBy {parseSemVer("1.0.0-SNAPSHOT+.build.12654")}
