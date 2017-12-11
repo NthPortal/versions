@@ -34,7 +34,7 @@ class ExtendedVersionTest extends SimpleSpec {
   }
 
   it should "parse versions correctly" in {
-    implicit val c = Convert.Valid
+    implicit val c = Convert.Throwing
 
     ExtendedVersion parseVersion "1.2.5.4.16" should equal (Version(1, 2, 5, 4, 16) -- Release)
     ExtendedVersion parseVersion "0.0.0.0.0-SNAPSHOT" should equal (Version(0, 0, 0, 0, 0) -- Snapshot)
@@ -52,7 +52,7 @@ class ExtendedVersionTest extends SimpleSpec {
   }
 
   it should "parse versions as options correctly" in {
-    implicit val c = Convert.Any
+    implicit val c = Convert.AsOption
 
     ExtendedVersion.parseVersion("1.2.5.4.16").value should equal (Version(1, 2, 5, 4, 16) -- Release)
     ExtendedVersion.parseVersion("0.0.0.0.0-SNAPSHOT").value should equal (Version(0, 0, 0, 0, 0) -- Snapshot)
@@ -82,7 +82,7 @@ class ExtendedVersionTest extends SimpleSpec {
   }
 
   it should "convert to other types correctly" in {
-    import Convert.Valid.Implicit.ref
+    import Convert.Throwing.Implicit.ref
 
     Version(1, 2, 5, 4, 16) -- Snapshot to ExtendedVersion shouldEqual Version(1, 2, 5, 4, 16) -- Snapshot
     Version(1, 3) -- Snapshot to v2.ExtendedVersion shouldEqual v2.Version(1, 3) -- Snapshot
@@ -98,7 +98,7 @@ class ExtendedVersionTest extends SimpleSpec {
   }
 
   it should "convert as an option to other types correctly" in {
-    import Convert.Any.Implicit.ref
+    import Convert.AsOption.Implicit.ref
 
     (Version(1, 2, 5, 4, 16) -- Snapshot).to(ExtendedVersion).value shouldEqual Version(1, 2, 5, 4, 16) -- Snapshot
     (Version(1, 3) -- Snapshot).to(v2.ExtendedVersion).value shouldEqual v2.Version(1, 3) -- Snapshot

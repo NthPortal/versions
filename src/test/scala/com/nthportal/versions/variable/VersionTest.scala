@@ -59,7 +59,7 @@ class VersionTest extends SimpleSpec {
   }
 
   it should "convert to other types correctly" in {
-    import Convert.Valid.Implicit.ref
+    import Convert.Throwing.Implicit.ref
 
     Version(1, 2, 5, 4, 16) to Version shouldEqual Version(1, 2, 5, 4, 16)
     Version(1, 3) to v2.Version shouldEqual v2.Version(1, 3)
@@ -75,7 +75,7 @@ class VersionTest extends SimpleSpec {
   }
 
   it should "convert as an option to other types correctly" in {
-    import Convert.Any.Implicit.ref
+    import Convert.AsOption.Implicit.ref
 
     Version(1, 2, 5, 4, 16).to(Version).value shouldEqual Version(1, 2, 5, 4, 16)
     Version(1, 3).to(v2.Version).value shouldEqual v2.Version(1, 3)

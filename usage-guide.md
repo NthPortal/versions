@@ -43,7 +43,7 @@ Additionally, a version can be parsed from a string, either directly as a `Versi
 import com.nthportal.convert.Convert
 import com.nthportal.versions.v2._
 
-implicit val c = Convert.Valid // or `Convert.Any`
+implicit val c = Convert.Throwing // or `Convert.AsOption`
 Version.parseVersion("1.3")
 ```
 
@@ -78,7 +78,7 @@ Additionally, a version can be parsed from a string, either directly as a `Versi
 import com.nthportal.convert.Convert
 import com.nthportal.versions.v3._
 
-implicit val c = Convert.Valid // or `Convert.Any`
+implicit val c = Convert.Throwing // or `Convert.AsOption`
 Version.parseVersion("1.2.5")
 ```
 
@@ -113,7 +113,7 @@ Additionally, a version can be parsed from a string, either directly as a `Versi
 import com.nthportal.convert.Convert
 import com.nthportal.versions.v4._
 
-implicit val c = Convert.Valid // or `Convert.Any`
+implicit val c = Convert.Throwing // or `Convert.AsOption`
 Version.parseVersion("1.2.5.4")
 ```
 
@@ -214,7 +214,7 @@ import com.nthportal.convert.Convert
 import com.nthportal.versions.v3._
 import com.nthportal.versions.extensions.Maven._
 
-implicit val c = Convert.Valid // or `Convert.Any`
+implicit val c = Convert.Throwing // or `Convert.AsOption`
 
 // Version(1, 2, 5) -- Snapshot
 ExtendedVersion.parseVersion("1.2.5-SNAPSHOT")
@@ -266,7 +266,7 @@ Thus, the following pairs of statements are equivalent:
 ```scala
 import com.nthportal.versions._, v3._
 import com.nthportal.versions.extensions.Maven._
-import com.nthportal.convert.Convert.Valid.Implicit.ref // or `Convert.Any.Implicit.ref`
+import com.nthportal.convert.Convert.Throwing.Implicit.ref // or `Convert.AsOption.Implicit.ref`
 
 V(1, 2, 5) // is equivalent to
 Version(1, 2, 5)
@@ -339,7 +339,7 @@ import com.nthportal.versions.semver._
 import com.nthportal.versions.semver.BuildMetadata.stringMetadataParser
 import com.nthportal.versions.extensions.Maven._
 
-implicit val c = Convert.Valid // or `Convert.Any`
+implicit val c = Convert.Throwing // or `Convert.AsOption`
 parseSemVer("1.2.5-SNAPSHOT+commit.386bda5")
 ```
 
@@ -351,7 +351,7 @@ import com.nthportal.versions.v3._
 import com.nthportal.versions.semver._
 import com.nthportal.versions.extensions.Maven._
 
-implicit val c = Convert.Valid // or `Convert.Any`
+implicit val c = Convert.Throwing // or `Convert.AsOption`
 parseSemVerWithoutMetadata("1.2.5-SNAPSHOT")
 ```
 

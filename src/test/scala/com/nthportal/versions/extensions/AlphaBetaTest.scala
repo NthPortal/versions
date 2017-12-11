@@ -32,7 +32,7 @@ class AlphaBetaTest extends SimpleSpec {
   }
 
   it should "parse extension values correctly" in {
-    import Convert.Valid.Implicit.ref
+    import Convert.Throwing.Implicit.ref
 
     parse("pre-alpha") shouldBe preAlpha
     parse("alpha") shouldBe alpha

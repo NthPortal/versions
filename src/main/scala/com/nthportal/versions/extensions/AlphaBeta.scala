@@ -60,7 +60,7 @@ object AlphaBeta extends RichExtensionParser[AlphaBeta] {
       * @param num the number of the release candidate
       * @return a release candidate with the specified number
       */
-    def apply(num: Int): AlphaBeta = create(num)(Convert.Valid)
+    def apply(num: Int): AlphaBeta = create(num)(Convert.Throwing)
 
     /**
       * Extracts the release candidate number from a release candidate.

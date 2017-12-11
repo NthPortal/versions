@@ -36,7 +36,7 @@ class VersionTest extends SimpleSpec {
   }
 
   it should "parse versions correctly" in {
-    import Convert.Valid.Implicit.ref
+    import Convert.Throwing.Implicit.ref
 
     Version parseVersion "1.2.5" shouldEqual Version(1)(2)(5)
     Version parseVersion "0.0.0" shouldEqual Version(0)(0)(0)
@@ -50,7 +50,7 @@ class VersionTest extends SimpleSpec {
   }
 
   it should "parse versions as options correctly" in {
-    import Convert.Any.Implicit.ref
+    import Convert.AsOption.Implicit.ref
 
     Version.parseVersion("1.2.5").value shouldEqual Version(1)(2)(5)
     Version.parseVersion("0.0.0").value shouldEqual Version(0)(0)(0)
@@ -76,7 +76,7 @@ class VersionTest extends SimpleSpec {
   }
 
   it should "convert to other types correctly" in {
-    import Convert.Valid.Implicit.ref
+    import Convert.Throwing.Implicit.ref
     val v = Version(1, 2, 5)
 
     v to Version shouldEqual v
@@ -87,7 +87,7 @@ class VersionTest extends SimpleSpec {
   }
 
   it should "convert as an option to other types correctly" in {
-    import Convert.Any.Implicit.ref
+    import Convert.AsOption.Implicit.ref
     val v = Version(1, 2, 5)
 
     v.to(Version).value shouldEqual v

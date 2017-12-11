@@ -82,7 +82,7 @@ abstract class ExtendedVersionCompanion[V <: VersionBase[V, EV], EV[E] <: Extend
     *         extended version
     */
   def unapply[E](version: String)(implicit ed: ExtensionDef[E], ep: ExtensionParser[E]): Option[(V, E)] = {
-    import Convert.Any.Implicit.ref
+    import Convert.AsOption.Implicit.ref
     parseVersion(version) map { ev => (ev.version, ev.extension) }
   }
 }

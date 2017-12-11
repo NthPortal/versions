@@ -18,7 +18,7 @@ class MavenTest extends SimpleSpec {
   }
 
   it should "parse extension values correctly" in {
-    import Convert.Valid.Implicit.ref
+    import Convert.Throwing.Implicit.ref
 
     parse("SNAPSHOT") should be theSameInstanceAs Snapshot
     an [IllegalArgumentException] should be thrownBy {parse("INVALID")}

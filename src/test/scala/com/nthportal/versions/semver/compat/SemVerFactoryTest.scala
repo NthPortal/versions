@@ -13,7 +13,7 @@ class SemVerFactoryTest extends SimpleSpec {
   behavior of "SemVer factories"
 
   they should "parse versions without metadata correctly" in {
-    import Convert.Valid.Implicit.ref
+    import Convert.Throwing.Implicit.ref
     val factory = SemVerWithoutMetadataFactory(versionFactory)
     val v = factory.parseVersion("1.0.0-SNAPSHOT")
 

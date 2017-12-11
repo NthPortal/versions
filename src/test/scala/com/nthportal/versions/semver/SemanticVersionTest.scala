@@ -16,7 +16,7 @@ class SemanticVersionTest extends SimpleSpec {
   }
 
   it should "define equality correctly" in {
-    import Convert.Valid.Implicit.ref
+    import Convert.Throwing.Implicit.ref
 
     val v0 = parseSemVer("1.0.0-SNAPSHOT+build.12654")
     v0.buildMetadata.value shouldBe "build.12654"

@@ -25,7 +25,7 @@ class OfSizeTest extends SimpleSpec {
   }
 
   it should "parse versions correctly" in {
-    import Convert.Valid.Implicit.ref
+    import Convert.Throwing.Implicit.ref
     val V = Version.ofSize(1 to 2)
 
     V parseVersion "1.3" shouldEqual V(1, 3)
@@ -41,7 +41,7 @@ class OfSizeTest extends SimpleSpec {
   }
 
   it should "parse versions as options correctly" in {
-    import Convert.Any.Implicit.ref
+    import Convert.AsOption.Implicit.ref
     val V = Version.ofSize(1 to 2)
 
     V.parseVersion("1.3").value shouldEqual V(1, 3)
@@ -83,7 +83,7 @@ class OfSizeTest extends SimpleSpec {
   }
 
   it should "convert to other types correctly" in {
-    import Convert.Valid.Implicit.ref
+    import Convert.Throwing.Implicit.ref
     val v1 = Version(1, 2, 5)
 
     v1 to Version.ofSize(2 to 3) shouldEqual v1
@@ -96,7 +96,7 @@ class OfSizeTest extends SimpleSpec {
   }
 
   it should "convert as an option to other types correctly" in {
-    import Convert.Any.Implicit.ref
+    import Convert.AsOption.Implicit.ref
     val v1 = Version(1, 2, 5)
 
     v1.to(Version.ofSize(2 to 3)).value shouldEqual v1
