@@ -11,10 +11,16 @@ A Scala library for representing versions as objects
 
 ### SBT
 
+**Scala 2.13**
+
+```sbtshell
+"com.nthportal" %% "versions" % "2.0.2"
+```
+
 **Scala 2.12**
 
 ```sbtshell
-"com.nthportal" %% "versions" % "2.0.1"
+"com.nthportal" %% "versions" % "2.0.2"
 ```
 
 **Scala 2.11**
@@ -24,6 +30,16 @@ A Scala library for representing versions as objects
 ```
 
 ### Maven
+
+**Scala 2.13**
+
+```xml
+<dependency>
+  <groupId>com.nthportal</groupId>
+  <artifactId>versions_2.13</artifactId>
+  <version>2.0.2</version>
+</dependency>
+```
 
 **Scala 2.12**
 
