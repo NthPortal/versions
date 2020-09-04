@@ -13,7 +13,7 @@ crossScalaVersions := Seq(
 )
 
 libraryDependencies ++= Seq(
-  "com.nthportal" %% "extra-predef" % "1.1.1+",
+  "com.nthportal" %% "extra-predef" % "2.0.0",
   "org.scalatest" %% "scalatest" % "3.1.+" % Test
 )
 

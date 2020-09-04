@@ -25,9 +25,7 @@ final case class Version(major: Int, minor: Int, patch: Int) extends VersionBase
 
 object Version extends VersionCompanion[Version, ExtendedVersion] with Of[Dot[Dot[Version]]] {
   override private[versions] val ordering: Ordering[Version] =
-    Ordering.by[Version, Int](_.major)
-      .thenBy(_.minor)
-      .thenBy(_.patch)
+    Ordering.by[Version, (Int, Int, Int)](v => (v.major, v.minor, v.patch))
 
   override def of(major: Int): Dot[Dot[Version]] = minor => patch => apply(major, minor, patch)
 
