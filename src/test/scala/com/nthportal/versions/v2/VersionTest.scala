@@ -7,13 +7,13 @@ class VersionTest extends SimpleSpec {
 
   it should "have consistent constructors" in {
     val v = Version(1)(3)
-    v should equal (Version of 1 dot 3)
+    v should equal(Version of 1 dot 3)
     v shouldEqual Version(1, 3)
   }
 
   it should "not allow negative version values" in {
-    an [IllegalArgumentException] should be thrownBy {Version(-1)(0)}
-    an [IllegalArgumentException] should be thrownBy {Version(0)(-1)}
+    an[IllegalArgumentException] should be thrownBy { Version(-1)(0) }
+    an[IllegalArgumentException] should be thrownBy { Version(0)(-1) }
   }
 
   it should "compare correctly" in {
@@ -34,12 +34,12 @@ class VersionTest extends SimpleSpec {
     Version parseVersion "1.3" shouldEqual Version(1)(3)
     Version parseVersion "0.0" shouldEqual Version(0)(0)
 
-    a [VersionFormatException] should be thrownBy {Version parseVersion "1.0."}
-    a [VersionFormatException] should be thrownBy {Version parseVersion "-1.0"}
-    a [VersionFormatException] should be thrownBy {Version parseVersion "1"}
-    a [VersionFormatException] should be thrownBy {Version parseVersion "1.0.0"}
-    a [VersionFormatException] should be thrownBy {Version parseVersion "1.f"}
-    a [VersionFormatException] should be thrownBy {Version parseVersion "really not a version"}
+    a[VersionFormatException] should be thrownBy { Version parseVersion "1.0." }
+    a[VersionFormatException] should be thrownBy { Version parseVersion "-1.0" }
+    a[VersionFormatException] should be thrownBy { Version parseVersion "1" }
+    a[VersionFormatException] should be thrownBy { Version parseVersion "1.0.0" }
+    a[VersionFormatException] should be thrownBy { Version parseVersion "1.f" }
+    a[VersionFormatException] should be thrownBy { Version parseVersion "really not a version" }
   }
 
   it should "parse versions as options correctly" in {

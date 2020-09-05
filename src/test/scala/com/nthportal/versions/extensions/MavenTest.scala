@@ -18,7 +18,7 @@ class MavenTest extends SimpleSpec {
 
   it should "parse extension values correctly" in {
     parse("SNAPSHOT") should be theSameInstanceAs Snapshot
-    an [IllegalArgumentException] should be thrownBy {parse("INVALID")}
-    an [IllegalArgumentException] should be thrownBy {parse("")}
+    an[IllegalArgumentException] should be thrownBy { parse("INVALID") }
+    an[IllegalArgumentException] should be thrownBy { parse("") }
   }
 }

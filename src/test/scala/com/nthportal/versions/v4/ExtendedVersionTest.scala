@@ -23,7 +23,7 @@ class ExtendedVersionTest extends SimpleSpec {
     v2 should be < Version(2)(0)(0)(1) -- Snapshot
     v2 should be > Version(2)(0)(0)(0) -- Snapshot
 
-    an [IllegalArgumentException] should be thrownBy {
+    an[IllegalArgumentException] should be thrownBy {
       v1.compare(Version(1)(2)(5)(4).dash(Snapshot)(ExtensionDef.fromOrdered[Maven]))
     }
   }
@@ -34,24 +34,24 @@ class ExtendedVersionTest extends SimpleSpec {
   }
 
   it should "parse versions correctly" in {
-    ExtendedVersion parseVersion "1.2.5.4" should equal (Version(1)(2)(5)(4) -- Release)
-    ExtendedVersion parseVersion "0.0.0.0-SNAPSHOT" should equal (Version(0)(0)(0)(0) -- Snapshot)
+    ExtendedVersion parseVersion "1.2.5.4" should equal(Version(1)(2)(5)(4) -- Release)
+    ExtendedVersion parseVersion "0.0.0.0-SNAPSHOT" should equal(Version(0)(0)(0)(0) -- Snapshot)
 
-    a [VersionFormatException] should be thrownBy {ExtendedVersion parseVersion "1.0.0.0-INVALID"}
-    a [VersionFormatException] should be thrownBy {ExtendedVersion parseVersion "1.0.0.0-RELEASE"}
-    a [VersionFormatException] should be thrownBy {ExtendedVersion parseVersion "1.0.0.0-snapshot"}
-    a [VersionFormatException] should be thrownBy {ExtendedVersion parseVersion "1.0.0.0-SNAPSHOT-4"}
-    a [VersionFormatException] should be thrownBy {ExtendedVersion parseVersion "really not a version"}
+    a[VersionFormatException] should be thrownBy { ExtendedVersion parseVersion "1.0.0.0-INVALID" }
+    a[VersionFormatException] should be thrownBy { ExtendedVersion parseVersion "1.0.0.0-RELEASE" }
+    a[VersionFormatException] should be thrownBy { ExtendedVersion parseVersion "1.0.0.0-snapshot" }
+    a[VersionFormatException] should be thrownBy { ExtendedVersion parseVersion "1.0.0.0-SNAPSHOT-4" }
+    a[VersionFormatException] should be thrownBy { ExtendedVersion parseVersion "really not a version" }
 
     // Missing default extension
-    a [VersionFormatException] should be thrownBy {
+    a[VersionFormatException] should be thrownBy {
       ExtendedVersion.parseVersion("1.0.0.0")(ExtensionDef.fromOrdered[Maven], extensionParser)
     }
   }
 
   it should "parse versions as options correctly" in {
-    ExtendedVersion.parseAsOption("1.2.5.4").value should equal (Version(1)(2)(5)(4) -- Release)
-    ExtendedVersion.parseAsOption("0.0.0.0-SNAPSHOT").value should equal (Version(0)(0)(0)(0) -- Snapshot)
+    ExtendedVersion.parseAsOption("1.2.5.4").value should equal(Version(1)(2)(5)(4) -- Release)
+    ExtendedVersion.parseAsOption("0.0.0.0-SNAPSHOT").value should equal(Version(0)(0)(0)(0) -- Snapshot)
 
     ExtendedVersion parseAsOption "1.0.0.0-INVALID" shouldBe empty
     ExtendedVersion parseAsOption "1.0.0.0-RELEASE" shouldBe empty

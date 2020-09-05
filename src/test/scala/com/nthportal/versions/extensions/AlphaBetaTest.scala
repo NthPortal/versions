@@ -17,8 +17,8 @@ class AlphaBetaTest extends SimpleSpec {
   }
 
   it should "only allow positive release candidate numbers" in {
-    an [IllegalArgumentException] should be thrownBy { rc(-1) }
-    an [IllegalArgumentException] should be thrownBy { rc(0) }
+    an[IllegalArgumentException] should be thrownBy { rc(-1) }
+    an[IllegalArgumentException] should be thrownBy { rc(0) }
     noException should be thrownBy { rc(1) }
   }
 
@@ -37,12 +37,12 @@ class AlphaBetaTest extends SimpleSpec {
     parse("rc.1") shouldBe rc(1)
     parse("rc.2") shouldBe rc(2)
 
-    an [IllegalArgumentException] should be thrownBy { parse("invalid") }
-    an [IllegalArgumentException] should be thrownBy { parse("rc1") }
-    an [IllegalArgumentException] should be thrownBy { parse("rc.0") }
-    an [IllegalArgumentException] should be thrownBy { parse("rc.-1") }
-    an [IllegalArgumentException] should be thrownBy { parse("rc.NaN") }
-    an [IllegalArgumentException] should be thrownBy { parse("") }
+    an[IllegalArgumentException] should be thrownBy { parse("invalid") }
+    an[IllegalArgumentException] should be thrownBy { parse("rc1") }
+    an[IllegalArgumentException] should be thrownBy { parse("rc.0") }
+    an[IllegalArgumentException] should be thrownBy { parse("rc.-1") }
+    an[IllegalArgumentException] should be thrownBy { parse("rc.NaN") }
+    an[IllegalArgumentException] should be thrownBy { parse("") }
   }
 
   it should "match extensions" in {
