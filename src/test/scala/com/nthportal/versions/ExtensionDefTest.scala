@@ -15,20 +15,20 @@ class ExtensionDefTest extends SimpleSpec {
   }
 
   it should "create definitions with the correct ordering" in {
-    fromOrdered[Maven].compare(Release, Snapshot) should equal (Release compare Snapshot)
-    fromOrdered[Maven].compare(Snapshot, Release) should equal (Snapshot compare Release)
-    fromOrdered[Maven].compare(Release, Release) should equal (Release compare Release)
+    fromOrdered[Maven].compare(Release, Snapshot) should equal(Release compare Snapshot)
+    fromOrdered[Maven].compare(Snapshot, Release) should equal(Snapshot compare Release)
+    fromOrdered[Maven].compare(Release, Release) should equal(Release compare Release)
 
-    fromOrdered[Maven](Snapshot).compare(Release, Snapshot) should equal (Release compare Snapshot)
-    fromOrdered[Maven](Snapshot).compare(Snapshot, Release) should equal (Snapshot compare Release)
-    fromOrdered[Maven](Snapshot).compare(Release, Release) should equal (Release compare Release)
+    fromOrdered[Maven](Snapshot).compare(Release, Snapshot) should equal(Release compare Snapshot)
+    fromOrdered[Maven](Snapshot).compare(Snapshot, Release) should equal(Snapshot compare Release)
+    fromOrdered[Maven](Snapshot).compare(Release, Release) should equal(Release compare Release)
 
-    fromComparable[Maven].compare(Release, Snapshot) should equal (Release compare Snapshot)
-    fromComparable[Maven].compare(Snapshot, Release) should equal (Snapshot compare Release)
-    fromComparable[Maven].compare(Release, Release) should equal (Release compare Release)
+    fromComparable[Maven].compare(Release, Snapshot) should equal(Release compare Snapshot)
+    fromComparable[Maven].compare(Snapshot, Release) should equal(Snapshot compare Release)
+    fromComparable[Maven].compare(Release, Release) should equal(Release compare Release)
 
-    fromComparable[Maven](Snapshot).compare(Release, Snapshot) should equal (Release compare Snapshot)
-    fromComparable[Maven](Snapshot).compare(Snapshot, Release) should equal (Snapshot compare Release)
-    fromComparable[Maven](Snapshot).compare(Release, Release) should equal (Release compare Release)
+    fromComparable[Maven](Snapshot).compare(Release, Snapshot) should equal(Release compare Snapshot)
+    fromComparable[Maven](Snapshot).compare(Snapshot, Release) should equal(Snapshot compare Release)
+    fromComparable[Maven](Snapshot).compare(Release, Release) should equal(Release compare Release)
   }
 }

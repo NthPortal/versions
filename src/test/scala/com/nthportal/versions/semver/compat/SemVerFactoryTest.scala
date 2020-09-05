@@ -19,18 +19,18 @@ class SemVerFactoryTest extends SimpleSpec {
     v shouldEqual (v3.Version(1)(0)(0) -- Snapshot)
     v shouldEqual parseSemVer("1.0.0-SNAPSHOT+build.12654").extendedVersion
 
-    a [VersionFormatException] should be thrownBy {factory.parseVersion("1.0.0-SNAPSHOT+12654")}
-    a [VersionFormatException] should be thrownBy {factory.parseVersion("1.0.0-SNAPSHOT+")}
-    a [VersionFormatException] should be thrownBy {factory.parseVersion("1.0.0-SNAPSHOT+build+12654")}
+    a[VersionFormatException] should be thrownBy { factory.parseVersion("1.0.0-SNAPSHOT+12654") }
+    a[VersionFormatException] should be thrownBy { factory.parseVersion("1.0.0-SNAPSHOT+") }
+    a[VersionFormatException] should be thrownBy { factory.parseVersion("1.0.0-SNAPSHOT+build+12654") }
   }
 
   they should "parse versions correctly" in {
     val factory = SemanticVersionFactory(versionFactory, BuildMetadata.stringMetadataParser)
 
     val v = factory.parseVersion("1.0.0-SNAPSHOT+build.12654")
-    v should equal (v3.Version(1)(0)(0) -- Snapshot + "build.12654")
+    v should equal(v3.Version(1)(0)(0) -- Snapshot + "build.12654")
 
-    a [VersionFormatException] should be thrownBy {factory.parseVersion("1.0.0-SNAPSHOT+")}
-    a [VersionFormatException] should be thrownBy {factory.parseVersion("1.0.0-SNAPSHOT+build+12654")}
+    a[VersionFormatException] should be thrownBy { factory.parseVersion("1.0.0-SNAPSHOT+") }
+    a[VersionFormatException] should be thrownBy { factory.parseVersion("1.0.0-SNAPSHOT+build+12654") }
   }
 }
