@@ -8,16 +8,7 @@
 
 A Scala library for representing versions as objects.
 
-This library is in maintenance-only mode; it is slated for deprecation when
-[`v`](https://github.com/NthPortal/v) is stable and feature-complete (or
-surpasses this library's features), and will not receive any new feature
-updates. As of the time this paragraph was last updated (2020-09-05),
-`v` supports basic versions (e.g. `1.0.2`), but does not support more
-complex versions (e.g. `1.0-alpha`). If you are an author/maintainer of an
-application, script or private library, and `v` supports the features
-you need, we strongly recommended that you use `v` instead. That being said,
-PRs for basic maintenance (such as updating dependencies) will likely
-be accepted.
+This library is deprecated; please use [**v**](https://github.com/NthPortal/v) instead.
 
 ## Add as a Dependency
 
